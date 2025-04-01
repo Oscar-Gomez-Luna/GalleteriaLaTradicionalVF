@@ -1,8 +1,6 @@
-<<<<<<< HEAD
 from flask import Flask, render_template, request, redirect, url_for
 from extensions import csrf, db
 from config import DevelopmentConfig
-from extensions import db
 from controller.controller_administracion import admin_bp
 from controller.controller_venta import venta_bp
 from flask_wtf import CSRFProtect
@@ -11,14 +9,19 @@ from controller.controller_insumo import insumo_bp
 from controller.controller_ordenes import orden_bp
 from controller.controller_produccion import produccion_bp
 from controller.controller_galletas import galletas_bp
+from flask_login import LoginManager
+from controller.usuarios_controller import usuarios_bp
+from controller.dashboard_controller import dashboard_bp
 
+
+# Inicializar la aplicación Flask
 app = Flask(__name__, template_folder='view')
 app.config.from_object(DevelopmentConfig)
 csrf = CSRFProtect(app)
 db.init_app(app)
 csrf.init_app(app)
 
-app.config['SECRET_KEY'] = 'clave-secreta-segura'
+app.config['SECRET_KEY'] = 'tu_clave_secreta_aqui'
 app.config['WTF_CSRF_ENABLED'] = True
 
 app.register_blueprint(admin_bp, url_prefix='/administracion')
@@ -104,30 +107,6 @@ def clientes():
 def recetas():
     return render_template("layout_clientes.html", active_page="recetas")
 
-
-if __name__ == '__main__':    
-    with app.app_context():
-        db.create_all()
-=======
-# app.py
-from flask import Flask, redirect, url_for
-from flask_login import LoginManager
-from config import DevelopmentConfig
-from controller.usuarios_controller import usuarios_bp
-from controller.dashboard_controller import dashboard_bp
-from extensions import db, csrf
-
-# Inicializar la aplicación Flask
-app = Flask(__name__, template_folder='view')  # Especificamos que las plantillas están en 'view/'
-app.config.from_object(DevelopmentConfig)
-
-# Asegurarse de que la SECRET_KEY esté definida
-app.config['SECRET_KEY'] = 'tu_clave_secreta_aqui'  # Reemplaza con una clave secreta única y segura
-
-# Inicializar extensiones con la app
-db.init_app(app)
-csrf.init_app(app)
-
 # Inicializar otras extensiones
 login_manager = LoginManager(app)
 login_manager.login_view = 'usuarios.index'  # Cambiado a usuarios.index, que ahora es /login/
@@ -149,8 +128,11 @@ def load_user(user_id):
 # Ruta raíz para redirigir a /login/
 @app.route('/')
 def index():
-    return redirect(url_for('usuarios.index'))  # Esto redirigirá a /login/
+    return redirect(url_for('usuarios.index'))
 
-if __name__ == '__main__':
+
+if __name__ == '__main__':    
+    with app.app_context():
+        db.create_all()
+
     app.run(host='0.0.0.0', debug=True, port=3000)
->>>>>>> d51ee743d9402abed0e6c4d66aeb8ce5ccdecca8
