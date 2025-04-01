@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos_ticket.css', _external=True) }}"/>
+    <title>Ticket de Venta</title>
+</head>
+<body>
+    <div class="ticket">
+        <h2>Ticket de Venta</h2>
+        <p><strong>Ticket:</strong> {{ ticket_num }}</p>
+        <p><strong>Fecha:</strong> {{ fecha }}</p>
+        <p><strong>Hora:</strong> {{ hora }}</p>
+        <div class="line"></div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cant.</th>
+                    <th>Precio</th>
+                    <th>Importe</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>{{ item.nombre }}</td>
+                    <td>{{ item.cantidad }}</td>
+                    <td>${{ "%.2f"|format(item.precio) }}</td>
+                    <td>${{ "%.2f"|format(item.subtotal) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="line"></div>
+        <div class="total">
+            <p>Subtotal: ${{ "%.2f"|format(total) }}</p>
+            <p>Total: ${{ "%.2f"|format(total) }}</p>
+        </div>
+        <div class="line"></div>
+        <p style="text-align: center;">¡Gracias por su compra!</p>
+    </div>
+</body>
+</html>

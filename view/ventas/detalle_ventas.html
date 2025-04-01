@@ -1,0 +1,58 @@
+{%extends "layaut.html"%}
+{% block links %}
+    <link href="{{ url_for('static', filename='css/estilos_detalle_venta.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ url_for('static', filename='css/estilos_forms.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ url_for('static', filename='css/estilos_cruds.css') }}" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+{% endblock %}
+{% block container %}
+    <div class="venta-card">
+        <div class="venta-card-header">
+            <h4>Detalle de Venta</h4>
+        </div>
+        <div class="venta-card-body">
+            <div class="venta-info-row">
+                <div class="venta-info-col">
+                    <p class="venta-info-text"><span class="venta-info-label">Fecha y Hora:</span> {{ venta.fecha }} {{ venta.hora }}</p>
+                    <p class="venta-info-text"><span class="venta-info-label">Total:</span> ${{ "{:,.2f}".format(venta.total) }}</p>
+                </div>
+                <div class="venta-info-col">
+                    <p class="venta-info-text"><span class="venta-info-label">Tipo de Venta:</span> {{ venta.tipoVenta }}</p>
+                    <p class="venta-info-text"><span class="venta-info-label">Ticket:</span> {{ venta.id_venta }}</p>
+                </div>
+            </div>
+
+            <h5 class="venta-products-title">Productos Vendidos</h5>
+            <div class="custom-table-container">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Tipo</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unitario</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for detalle, nombre_galleta, tipo_galleta, precio_unitario in detalles %}
+                        <tr>
+                            <td>{{ nombre_galleta }}</td>
+                            <td>{{ tipo_galleta }}</td>
+                            <td>{{ detalle.cantidad }}</td>
+                            <td>${{ "{:,.2f}".format(precio_unitario) }}</td>
+                            <td>${{ "{:,.2f}".format(detalle.subtotal) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="button-container">
+                <a href="{{ url_for('venta.ventas') }}" class="btnVolver" style="text-decoration: none;">
+                    <i class="fas fa-arrow-circle-left"></i> Regresar
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,69 @@
+.custom-table-container {
+    max-height: 320px; 
+    overflow-y: auto;
+}
+
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #ECC4A6; 
+}
+
+.custom-table th {
+    background-color: #F1B384;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.custom-table th,
+.custom-table td {
+    border: 1px solid #a65323;
+    padding: 15px;
+    text-align: center;
+}
+.custom-main {
+    padding: 20px;
+}
+.custom-extra-section {
+    background-color: #ECC4A6;
+    padding: 20px;
+    margin-top: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.custom-button-container {
+    margin-bottom: 0px;
+    display: flex;
+    justify-content: space-around;
+    gap: 15px;
+}
+.custom-button-container .custom-btn {
+    background-color: #a65323;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.custom-button-container .custom-btn:hover {
+    background-color: #e09566;
+}
+.custom-btn {
+    background-color: #f5c19b;
+    border: 1px solid #a65323;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #a65323;
+}
+.custom-btn:hover {
+    background-color: #e09566;
+    color: #fff;
+}
+.inactivos {
+    color: white; 
+    font-weight: bold;
+}

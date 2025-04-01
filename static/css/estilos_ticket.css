@@ -1,0 +1,43 @@
+body {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 10px;
+    margin: 0;
+    padding: 0;
+    width: 210px; /* Ancho para tickets pequeños */
+}
+.ticket {
+    padding: 10px;
+    text-align: left;
+    width: 100%;
+}
+.ticket h2 {
+    margin: 0;
+    font-size: 12px;
+    text-align: center;
+}
+.ticket p {
+    margin: 2px 0;
+}
+.ticket table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-size: 10px;
+}
+.ticket th, .ticket td {
+    border: 1px solid #000;
+    padding: 3px;
+    text-align: center;
+}
+.ticket th {
+    font-weight: bold;
+}
+.ticket .total {
+    margin-top: 10px;
+    font-weight: bold;
+    text-align: left;
+}
+.ticket .line {
+    border-top: 1px dashed #000;
+    margin: 5px 0;
+}

@@ -1,0 +1,77 @@
+{%extends "layaut.html"%}
+{%block links%}
+    <link href="{{ url_for('static', filename='css/estilos_ventas.css') }}" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+{%endblock%}
+
+{%block container%}
+    <main class="custom-main">
+        {%import "_macros.html" as macro%}
+        <div class="custom-table-container">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div style="display: flex; justify-content: center;">
+                    {% for category, message in messages %}
+                        <div style="width: 800px; margin-top: 10px;" class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% endwith %}
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>Fecha de Compra</th>
+                        <th>Total</th>
+                        <th>Hora</th>
+                        <th>Tipo de venta</th>
+                        <th>Ticket</th>
+                        <th>Detalles</th>
+                    </tr>
+                </thead>
+                <tbody id="tblDetalleVenta">
+                    {% for venta in ventas %}
+                        <tr>
+                            <td>{{ venta.fecha }}</td>
+                            <td>$ {{ venta.total }}</td>
+                            <td>{{ venta.hora }}</td>
+                            <td>{{ venta.tipoVenta }}</td>
+                            <td>
+                                <a href="#" class="custom-btn ticket-link" data-id="{{ venta.id_venta }}"style="text-decoration: none;"><i class="fa-solid fa-clipboard-list"></i> Imprimir ticket...</a>
+                            </td>
+                            <td>
+                                <div class="d-flex justify-content-center align-items-center">
+                                    <a href="{{ url_for('venta.detalles_venta', idVenta=venta.id_venta) }}" 
+                                        class="btn btn-link text-dark" title="Detalles">
+                                        <i class="fa-solid fa-circle-info"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="custom-extra-section">
+            <div class="custom-button-container">
+                <div class="filtro-form d-flex flex-row align-items-center">
+                    <i class="fa-solid fa-magnifying-glass" style="color: gray; margin-right: 5px;"></i>Buscar...
+                    <input type="date" class="form-control me-2" onkeyup="" id="buscar">
+                </div>
+                <a href="{{ url_for('venta.pedido_portal') }}" class="custom-btn" style="text-decoration: none;">
+                    <i class="fa-solid fa-earth-americas"></i> Pedidos Portal
+                </a>
+                <a href="{{ url_for('venta.corte_caja') }}" class="custom-btn" style="text-decoration: none;">
+                    <i class="fa-solid fa-coins"></i> Corte Caja
+                </a>
+                <a href="{{ url_for('venta.merma_galletas') }}" class="custom-btn" style="text-decoration: none;">
+                    <i class="fa-solid fa-arrow-down-short-wide"></i> Merma
+                </a>
+                <a href="{{ url_for('venta.registrar_venta') }}" class="custom-btn" style="text-decoration: none;">
+                    <i class="fa-solid fa-circle-plus"></i> Agregar
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script src="/static/js/ventas.js"></script>
+{%endblock%}

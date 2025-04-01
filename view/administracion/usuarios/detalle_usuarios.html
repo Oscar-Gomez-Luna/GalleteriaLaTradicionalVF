@@ -1,0 +1,115 @@
+{%extends "layaut_administracion.html"%}
+{% block links2 %}
+    <link href="{{ url_for('static', filename='css/estilos_forms.css') }}" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+{% endblock %}
+{% block contenido %}
+    <div class="card-user">
+        {% if empleado.persona.genero == 'H' %}
+            <img src="https://cdn-icons-png.flaticon.com/512/4140/4140048.png" alt="Hombre">
+        {% elif empleado.persona.genero == 'M' %}
+            <img src="https://cdn-icons-png.flaticon.com/512/4140/4140047.png" alt="Mujer">
+        {% else %}
+            <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Otro">
+        {% endif %}
+
+        <h3>Consulta de Datos</h3>
+        <h5>Usuario Empleado</h5>
+
+        <div class="form-grid">
+            <div class="form-item">
+                <label>Nombre:</label>
+                <p>{{ empleado.persona.nombre }}</p>
+            </div>
+            <div class="form-item">
+                <label>Apellido Paterno:</label>
+                <p>{{ empleado.persona.apPaterno }}</p>
+            </div>
+            <div class="form-item">
+                <label>Apellido Materno:</label>
+                <p>{{ empleado.persona.apMaterno }}</p>
+            </div>
+            <div class="form-item">
+                <label>Género:</label>
+                <p>{{ "Hombre" if empleado.persona.genero == 'H' else "Mujer" if empleado.persona.genero == 'M' else "Otro" }}</p>
+            </div>
+            <div class="form-item">
+                <label>Teléfono:</label>
+                <p>{{ empleado.persona.telefono }}</p>
+            </div>
+            <div class="form-item">
+                <label>Calle:</label>
+                <p>{{ empleado.persona.calle }}</p>
+            </div>
+            <div class="form-item">
+                <label>Número:</label>
+                <p>{{ empleado.persona.numero }}</p>
+            </div>
+            <div class="form-item">
+                <label>Colonia:</label>
+                <p>{{ empleado.persona.colonia }}</p>
+            </div>
+            <div class="form-item">
+                <label>Código Postal:</label>
+                <p>{{ empleado.persona.codigoPostal }}</p>
+            </div>
+            <div class="form-item">
+                <label>Email:</label>
+                <p>{{ empleado.persona.email }}</p>
+            </div>
+            <div class="form-item">
+                <label>Fecha de Nacimiento:</label>
+                <p>{{ empleado.persona.fechaNacimiento }}</p>
+            </div>
+            <div class="form-item">
+                <label>Puesto:</label>
+                <p>{{ empleado.puesto }}</p>
+            </div>
+            <div class="form-item">
+                <label>CURP:</label>
+                <p>{{ empleado.curp }}</p>
+            </div>
+            <div class="form-item">
+                <label>RFC:</label>
+                <p>{{ empleado.rfc }}</p>
+            </div>
+            <div class="form-item">
+                <label>Salario:</label>
+                <p>{{ empleado.salarioBruto}} </p>
+            </div>
+            <div class="form-item">
+                <label>Fecha Ingreso:</label>
+                <p>{{ empleado.fechaIngreso }} </p>
+            </div>
+            <div class="form-item">
+                <label>Nombre:</label>
+                <p>{{ empleado.persona.nombre }}</p>
+            </div>
+            <div class="form-item">
+                <label>Nombre de Usuario:</label>
+                <p>{{ empleado.usuario.nombreUsuario }}</p>
+            </div>
+            <div class="form-item">
+                <label>Contraseña:</label>
+                <p>{{ empleado.usuario.contrasenia }}</p>
+            </div>
+            <div class="form-item">
+                <label>Estatus:</label>
+                <p>{{ "Activo" if empleado.usuario.estatus == 1 else "Inactivo" }}</p>
+            </div>
+            <div class="form-item">
+                <label>Rol:</label>
+                <p>{{ empleado.usuario.rol }}</p>
+            </div>
+            <div class="form-item">
+                <label>Ultima Conexión:</label>
+                <p>{{ empleado.usuario.ultima_conexion }}</p>
+            </div>
+        </div>
+        <div class="button-container">
+            <a href="{{ url_for('administracion.usuario.empleados') }}" class="btnVolver" style="text-decoration: none;">
+                <i class="fas fa-arrow-circle-left"></i> Regresar
+            </a>
+        </div>
+    </div>
+{% endblock %}

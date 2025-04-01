@@ -1,0 +1,95 @@
+{%extends "layaut_administracion.html"%}
+{% block links2 %}
+    <link href="{{ url_for('static', filename='css/estilos_forms.css') }}" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+{% endblock %}
+{% block contenido %}
+    <div class="card-user">
+        {% if form.genero.data == 'H' %}
+        <img src="https://cdn-icons-png.flaticon.com/512/4140/4140048.png" alt="Hombre">
+        {% elif form.genero.data == 'M' %}
+        <img src="https://cdn-icons-png.flaticon.com/512/4140/4140047.png" alt="Mujer">
+        {% else %}
+        <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Usuario">
+        {% endif %}
+
+        <h3>Editar Datos</h3>
+        <h5>Usuario Empleado</h5>
+
+        {%import "_macros.html" as macro%}
+        <form action="" method="post" novalidate>
+            {{ form.csrf_token }}
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <div class="form-grid">
+                <div class="form-item">
+                    {{macro.camposNuevos(form.nombre, class="form-control", placeholder="Nombre") }}
+                </div>
+                <div class="form-item">
+                    {{macro.camposNuevos(form.apPaterno, class="form-control", placeholder="Apellido Paterno")}}
+                </div>
+                <div class="form-item">
+                    {{macro.camposNuevos(form.apMaterno, class="form-control", placeholder="Apellido Materno")}}
+                </div>
+                <div class="form-item">
+                    {{macro.camposNuevos(form.genero, class="form-select")}}
+                </div>
+                <div class="form-item">
+                    {{macro.camposNuevos(form.telefono, class="form-control", placeholder="Teléfono")}}
+                </div>
+                <div class="form-item">
+                    {{macro.camposNuevos(form.email, class="form-control", placeholder="Email")}}
+                </div>
+                <div class="form-item">
+                    {{macro.camposNuevos(form.calle, class="form-control", placeholder="Calle")}}
+                </div>
+                <div class="form-item">
+                    {{macro.camposNuevos(form.numero, class="form-control", placeholder="Número")}}
+                </div>
+                <div class="form-item">
+                    {{macro.camposNuevos(form.colonia, class="form-control", placeholder="Colonia")}}
+                </div>
+                <div class="form-item">
+                    {{macro.camposNuevos(form.codigoPostal, class="form-control", placeholder="Codígo Postal")}}
+                </div>
+                <div class="form-item">
+                    {{macro.camposNuevos(form.fechaNacimiento, class="form-control")}}
+                </div>
+                <div class="form-item">
+                    {{macro.camposNuevos(form.nombreUsuario, class="form-control", placeholder="Nombre Usuario")}}
+                </div>
+                <div class="form-item">
+                    {{macro.camposNuevos(form.contrasenia, class="form-control" , placeholder="Contraseña")}}
+                </div>
+                <div class="form-item">
+                    {{macro.camposNuevos(form.rol, class="form-select")}}
+                </div>
+                <div class="form-item">
+                    {{macro.camposNuevos(form.curp, class="form-control", placeholder="CURP")}}
+                </div>
+                <div class="form-item">
+                    {{macro.camposNuevos(form.rfc, class="form-control", placeholder="RFC")}}
+                </div>
+                <div class="form-item">
+                    {{macro.camposNuevos(form.salarioBruto, class="form-control", placeholder="Salario")}}
+                </div>
+                <div class="form-item">
+                    {{macro.camposNuevos(form.fechaIngreso, class="form-control")}}
+                </div>
+            </div>
+            <div class="text-center">
+                <div class="custom-button-container">
+                    <a href="{{ url_for('administracion.usuario.empleados') }}" class="custom-btn" style="text-decoration: none;">
+                        <i class="fas fa-arrow-circle-left"></i> Regresar
+                    </a>
+                    <button type="submit" class="custom-btn btn-guardar-cambios"
+                            title="Modificar">
+                        <i class="fas fa-edit"></i> Guardar cambios
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script src="/static/js/usuarios.js"></script>
+{% endblock %}

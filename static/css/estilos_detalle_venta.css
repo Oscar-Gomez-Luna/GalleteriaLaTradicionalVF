@@ -1,0 +1,167 @@
+/* estilos_detalle_venta.css */
+
+/* Card styling */
+.venta-card {
+    background-color: #A97458;
+    color: #000;
+    border-radius: 20px;
+    box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.2);
+    padding: 30px;
+    max-width: 900px;
+    margin: 40px auto;
+}
+
+.venta-card-header h4 {
+    color: #fff;
+    margin: 0;
+    font-weight: bold;
+    text-align: center;
+    font-size: 1.5rem;
+}
+
+.venta-card-body {
+    padding: 25px;
+    background-color: #A97458;
+}
+
+/* Sale info section styling */
+.venta-info-row {
+    background-color: #ECC4A6;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.venta-info-col {
+    flex: 0 0 50%;
+    max-width: 50%;
+}
+
+.venta-info-text {
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+
+.venta-info-label {
+    color: #a65323;
+    font-weight: bold;
+}
+
+/* Products table section */
+.venta-products-title {
+    color: #fff;
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-align: center;
+    font-size: 1.3rem;
+    border-bottom: 2px solid #fff;
+    padding-bottom: 10px;
+}
+
+.venta-table-container {
+    max-height: 400px;
+    overflow-y: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.venta-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #ECC4A6;
+    margin-bottom: 0;
+}
+
+.venta-table th {
+    background-color: #F1B384;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    color: #a65323;
+    font-weight: bold;
+    text-align: center;
+    padding: 15px;
+    border: 1px solid #a65323;
+}
+
+.venta-table td {
+    border: 1px solid #a65323;
+    padding: 12px;
+    text-align: center;
+    color: #333;
+}
+
+.venta-table tbody tr:nth-of-type(odd) {
+    background-color: #f1d1b8;
+}
+
+.venta-table tbody tr:nth-of-type(even) {
+    background-color: #ECC4A6;
+}
+
+/* Button styling */
+.venta-button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 25px;
+}
+
+.venta-btn-volver {
+    background-color: #a65323;
+    color: white;
+    padding: 10px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.venta-btn-volver:hover {
+    background-color: #e09566;
+    transform: scale(1.05);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .venta-info-row {
+        display: block;
+    }
+    
+    .venta-info-col {
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 15px;
+    }
+    
+    .venta-table {
+        font-size: 0.9rem;
+    }
+    
+    .venta-table th, 
+    .venta-table td {
+        padding: 10px 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .venta-card {
+        margin: 20px 10px;
+    }
+    
+    .venta-card-body {
+        padding: 15px;
+    }
+    
+    .venta-table {
+        font-size: 0.8rem;
+    }
+    
+    .venta-table th, 
+    .venta-table td {
+        padding: 8px 5px;
+    }
+}

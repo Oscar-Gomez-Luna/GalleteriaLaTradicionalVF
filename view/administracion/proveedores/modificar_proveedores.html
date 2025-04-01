@@ -1,0 +1,62 @@
+{%extends "layaut_administracion.html"%}
+{% block links2 %}
+    <link href="{{ url_for('static', filename='css/estilos_forms.css') }}" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+{% endblock %}
+{% block contenido %}
+    <div class="card-user">
+        <img src="https://cdn-icons-png.flaticon.com/128/7902/7902033.png" alt="Proveedor">
+
+        <h3>Modificar Datos</h3>
+        <h5>Proovedor</h5>
+
+        {%import "_macros.html" as macro%}
+        <form action="" method="post" novalidate>
+            {{ form.csrf_token }}
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <div class="form-grid">
+                <div class="form-item">
+                    {{macro.camposNuevos(form.empresa, class="form-control", placeholder="Nombre Empresa") }}
+                </div>
+                <div class="form-item">
+                    {{macro.camposNuevos(form.fechaRegistro, class="form-control")}}
+                </div>
+                <div class="form-item">
+                    {{macro.camposNuevos(form.calle, class="form-control", placeholder="Calle")}}
+                </div>
+                <div class="form-item">
+                    {{macro.camposNuevos(form.numero, class="form-control", placeholder="Número")}}
+                </div>
+                <div class="form-item">
+                    {{macro.camposNuevos(form.colonia, class="form-control", placeholder="Colonia")}}
+                </div>
+                <div class="form-item">
+                    {{macro.camposNuevos(form.codigoPostal, class="form-control", placeholder="Código Postal")}}
+                </div>
+                <div class="form-item">
+                    {{macro.camposNuevos(form.telefono, class="form-control", placeholder="Teléfono")}}
+                </div>
+                <div class="form-item">
+                    {{macro.camposNuevos(form.email, class="form-control", placeholder="Email")}}
+                </div>
+                <div class="form-item">
+                    {{macro.camposNuevos(form.rfc, class="form-control", placeholder="RFC")}}
+                </div>
+            </div>
+            <div class="text-center">
+                <div class="custom-button-container">
+                    <a href="{{ url_for('administracion.proveedor.proveedores') }}" class="custom-btn" style="text-decoration: none;">
+                        <i class="fas fa-arrow-circle-left"></i> Regresar
+                    </a>
+                    <button type="submit" class="custom-btn btn-guardar-cambios"
+                            title="Modificar">
+                        <i class="fas fa-edit"></i> Guardar cambios
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script src="/static/js/proveedores.js"></script>
+{% endblock %}

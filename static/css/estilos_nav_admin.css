@@ -1,0 +1,26 @@
+.nav_admin {
+    width: 50%;
+    margin-top: 40px;
+    margin-left: 370px;
+    margin-bottom: 20px;  
+    padding: 10px 20px;  
+    border-radius: 25px;  
+    background-color: #E5A87B;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.nav_admin a {
+    color: #000000;
+    text-decoration: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.nav_admin a.activo {
+    font-weight: bold;
+    color: #8B4513;
+    text-decoration: underline;
+}

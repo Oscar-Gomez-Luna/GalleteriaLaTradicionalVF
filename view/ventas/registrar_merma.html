@@ -1,0 +1,62 @@
+{%extends "layaut.html"%}
+{% block links %}
+    <link href="{{ url_for('static', filename='css/estilos_forms.css') }}" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+{% endblock %}
+{% block container %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div style="display: flex; justify-content: center;">
+            {% for category, message in messages %}
+                <div style="width: 800px; margin-top: 10px;" class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% endwith %}
+    <div class="card-user">
+        <img src="https://cdn-icons-png.flaticon.com/128/14477/14477534.png" alt="Merma">
+
+        <h3>Registrar Datos</h3>
+        <h5>Merma Galletas</h5>
+
+        {%import "_macros.html" as macro%}
+        <form action="" method="post" novalidate>
+            {{ form.csrf_token }}
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div class="form-grid">
+                <div class="form-item">
+                    <label for="lote">Lotes:</label>
+                    <select name="lote_merma" id="lote_merma" class="form-select" required>
+                        <option value="">Eligá lote...</option>
+                    </select>
+                </div>
+                <div class="form-item">
+                    {{macro.camposNuevos(form.cantidad, class="form-control", placeholder="Cantidad") }}
+                </div>
+                <div class="form-item">
+                    {{macro.camposNuevos(form.tipo_merma, class="form-control")}}
+                </div>
+                <div class="form-item">
+                    {{macro.camposNuevos(form.fecha, class="form-control", placeholder="Calle")}}
+                </div>
+                <div class="form-item">
+                    {{macro.camposNuevos(form.descripcion, class="form-control", placeholder="Descripció...")}}
+                </div>
+            </div>
+            
+            <div class="text-center">
+                <div class="custom-button-container">
+                    <a href="{{ url_for('venta.ventas') }}" class="custom-btn" style="text-decoration: none;">
+                        <i class="fas fa-arrow-left"></i> Regresar
+                    </a>
+                    <button type="submit" class="custom-btn btn-merma"
+                            title="Registrar">
+                        <i class="fa-solid fa-arrow-down-short-wide"></i> Registrar
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script src="/static/js/ventas.js"></script>
+{% endblock %}
