@@ -1,0 +1,418 @@
+.main {
+    padding: 20px; 
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background-color: #ECC4A6;
+}
+
+.table th,
+.table td {
+    border: 1px solid #a65323;
+    padding: 10px;
+    text-align: center;
+}
+
+.table th {
+    background-color: #F1B384;
+}
+
+.btn {
+    background-color: #f5c19b;
+    border: 1px solid #a65323;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #a65323;
+}
+
+.btn:hover {
+    background-color: #e09566;
+    color: #fff;
+}
+
+/* Estilos para el formulario */
+.form-container {
+    background-color: #A97458; /* Nuevo color de fondo */
+    color: #fff; /* Texto en blanco */
+    border-radius: 20px; /* Bordes redondeados */
+    box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.2); /* Sombra */
+    padding: 20px; /* Más padding */
+    max-width: 500px; /* Ancho máximo */
+    margin: -15px auto; /* Centrado */
+    overflow-y: auto; /* Scroll vertical si es necesario */
+}
+
+.form-group {
+    margin-bottom: 5px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 3px;
+    color: #fff; /* Texto en blanco */
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px; /* Bordes más redondeados */
+    border: 1px solid #ccc;
+    background-color: #fff; /* Fondo blanco para inputs */
+    color: #000; /* Texto en negro */
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.form-buttons .btn {
+    margin-top: -10;
+    padding: 10px 20px; /* Más padding */
+    background-color: #a65323; /* Nuevo color de fondo */
+    color: white;
+    border: none;
+    border-radius: 8px; /* Bordes más redondeados */
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 15px;
+    transition: all 0.3s; /* Transición suave */
+}
+
+.form-buttons .btn:hover {
+    background-color: #e09566; /* Color hover */
+    transform: scale(1.05); /* Efecto de escala */
+}
+
+.extra-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ECC4A6;
+    padding: 20px;
+    margin-top: 10px;
+    border-radius: 8px;
+    height: 125px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.extra-section h3,
+.extra-section h4 {
+    margin-top: -50px;
+}
+
+.extra-section h4 {
+    font-weight: normal;
+}
+
+.extra-section>div:last-child {
+    display: flex;
+    gap: 10px;
+}
+
+#boton_compra {
+    background-color: #ECC4A6;
+    border: none;
+    cursor: pointer;
+    padding: 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+#boton_compra:hover {
+    background-color: #e09566;
+}
+
+#boton_compra img {
+    width: 50px;
+    height: 50px;
+}
+
+.table-container {
+    width: auto;
+    height: 325px;
+    overflow: auto;
+}
+
+.table-container table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.alert-success {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
+
+.alert-error {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}
+
+/* Estilos para el modal */
+.modal {
+    display: none; /* Oculta el modal por defecto */
+    position: fixed;
+    top: 5%; /* Posiciona el modal un 5% desde la parte superior */
+    left: 30%; /* Posiciona el modal un 30% desde la izquierda */
+    width: 40%; /* Ancho del modal */
+    height: 80%; /* Alto del modal */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-dialog {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    width: 100%; /* Ocupa el 100% del ancho del modal */
+    max-width: 500px; /* Limita el ancho máximo */
+    border: 1px solid #a65323; /* Color del borde */
+    max-height: 90%; /* Limita el alto máximo del modal */
+    overflow-y: auto; /* Habilita el scroll vertical */
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #a65323; /* Color del borde */
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.modal-title {
+    margin: 0;
+    color: #a65323; /* Color del texto */
+}
+
+.close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #a65323; /* Color del botón de cierre */
+}
+
+.close:hover {
+    color: #7a3a1a; /* Color al hacer hover */
+}
+
+.modal-body {
+    margin-bottom: 20px;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.modal-buttons button {
+    padding: 10px 20px;
+    background-color: #964b28; /* Color de fondo del botón */
+    color: white; /* Color del texto */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.modal-buttons button:hover {
+    background-color: #7a3a1a; /* Color al hacer hover */
+}
+
+/* Estilos para enlaces que se ven como el botón #boton_compra */
+.btn-compra-link {
+    display: inline-block; /* Hace que el enlace se comporte como un botón */
+    background-color: #ECC4A6; /* Mismo color de fondo que #boton_compra */
+    border: none; /* Sin borde */
+    cursor: pointer; /* Cambia el cursor a pointer, como un botón */
+    padding: 20px; /* Mismo padding que #boton_compra */
+    border-radius: 5px; /* Mismo radio de borde que #boton_compra */
+    transition: background-color 0.3s ease; /* Misma transición que #boton_compra */
+    text-decoration: none; /* Elimina el subrayado predeterminado de los enlaces */
+    color: inherit; /* Hereda el color del texto */
+    text-align: center; /* Centra el contenido */
+}
+
+.btn-compra-link:hover {
+    background-color: #e09566; /* Mismo color de hover que #boton_compra */
+}
+
+.btn-compra-link img {
+    width: 50px; /* Mismo tamaño de imagen que #boton_compra */
+    height: 50px; /* Mismo tamaño de imagen que #boton_compra */
+}
+
+.btn-compra-links img {
+    width: 10px;
+    height: 30px;
+    margin: 0 10px;
+    background-color: aqua;
+    border-radius: 8%;
+}
+
+/* Estilos para el formulario en 3 columnas */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Tres columnas de igual tamaño */
+    gap: 20px; /* Espacio entre columnas */
+}
+
+.form-grid .form-group {
+    margin-bottom: 10px;
+}
+
+.form-grid .form-group label {
+    display: block;
+    margin-bottom: 3px;
+    color: #fff; /* Texto en blanco */
+    font-weight: bold;
+}
+
+.form-grid .form-group input,
+.form-grid .form-group select {
+    width: 100%;
+    padding: 7px;
+    border-radius: 10px; /* Bordes más redondeados */
+    border: 1px solid #ccc;
+    background-color: #fff; /* Fondo blanco para inputs */
+    color: #000; /* Texto en negro */
+}
+
+.table-containe {
+    width: auto;
+    height: 260px;
+    overflow: auto;
+}
+
+/* ========== ESTILOS PARA RECETA ========== */
+.receta-container {
+    max-width: 550px;
+    margin: 0 auto;
+    background-color: #A97458;
+    color: white;
+    border-radius: 20px;
+    box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+.receta-header {
+    background-color: #A97458;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.header-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.receta-title {
+    margin-bottom: 0;
+    text-align: center;
+    font-weight: bold;
+}
+
+.receta-badge {
+    background-color: white;
+    color: #A97458;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.receta-body {
+    padding: 20px;
+    background-color: #A97458;
+}
+
+.receta-subtitle {
+    text-align: center;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.receta-textarea,
+.ingrediente-input,
+.ingrediente-unidad {
+    background-color: white !important;
+    color: black !important;
+    border: 1px solid white !important;
+    border-radius: 10px !important;
+}
+
+.receta-textarea {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    overflow-y: auto;
+}
+
+.ingrediente-label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.receta-alert {
+    background-color: #A97458;
+    color: white;
+    border: 1px solid white;
+    padding: 15px;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.receta-btn {
+    background-color: white;
+    color: #A97458;
+    border: 1px solid white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.receta-btn:hover {
+    background-color: #e09566;
+    color: white;
+}
+
+/* Estilo para el textarea con scroll y tamaño fijo */
+.textarea-merma {
+    height: 120px; /* Altura fija */
+    min-height: 120px; /* Altura mínima */
+    max-height: 200px; /* Altura máxima para scroll */
+    resize: vertical; /* Permite redimensionar solo verticalmente */
+    overflow-y: auto; /* Scroll vertical cuando sea necesario */
+    width: 100%; /* Ancho completo del contenedor */
+    padding: 8px 12px; /* Espaciado interno */
+    border: 1px solid #ced4da; /* Borde similar a otros inputs */
+    border-radius: 4px; /* Bordes redondeados */
+    font-family: inherit; /* Mantiene la fuente consistente */
+    font-size: 1rem; /* Tamaño de fuente estándar */
+}

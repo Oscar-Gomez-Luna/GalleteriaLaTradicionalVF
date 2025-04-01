@@ -10,7 +10,11 @@ class Galleta(db.Model):
     galleta = db.Column(db.String(100), nullable=False)
     existencia = db.Column(db.Integer, nullable=False)
     receta_id = db.Column(db.Integer, db.ForeignKey('receta.idReceta'), nullable=False)
-    tipo = db.relationship('TipoGalleta', backref='galletas')
+    
 
     # Relación con receta
     receta = db.relationship('Receta', backref=db.backref('galletas', lazy=True))
+    
+    # Relaciones
+    detalles_venta = db.relationship('DetalleVentaOrden', backref='galleta', lazy=True)
+    tipo = db.relationship('TipoGalleta', back_populates='galletas')

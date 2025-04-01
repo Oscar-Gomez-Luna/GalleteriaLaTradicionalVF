@@ -27,6 +27,7 @@
     {% if field.errors %}
     <ul class="errors">
         {% for error in field.errors %}
+<<<<<<< HEAD
         <li style="color: black;">{{ error }}</li>
         {% endfor %}
     </ul>
@@ -62,3 +63,10 @@
         {% endif %}
     </div>
 {% endmacro %}
+=======
+        <li style="color: red;">{{ error }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+{% endmacro %}
+>>>>>>> b889815efcad80dd780a42fff6f67154d69c9bea

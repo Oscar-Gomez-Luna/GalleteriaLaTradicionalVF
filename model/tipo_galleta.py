@@ -3,9 +3,10 @@ from extensions import db
 class TipoGalleta(db.Model):
     _tablename_ = 'tipo_galleta'
     
-    id_tipo_galleta = db.Column(db.Integer, primary_key=True)
+    id_tipo_galleta = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nombre = db.Column(db.String(50), nullable=False)
     costo = db.Column(db.Numeric(10, 2), nullable=False)
     
-    # Relación con galletas
-    galletas = db.relationship('Galleta', backref='tipo_galleta_rel', lazy=True)
+    # Relacion con Galleta
+    galletas = db.relationship('Galleta', back_populates='tipo', lazy=True)
+

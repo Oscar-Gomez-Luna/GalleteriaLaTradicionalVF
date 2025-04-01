@@ -1,13 +1,23 @@
+<<<<<<< HEAD
 body {
+=======
+.custom-background {
+>>>>>>> b889815efcad80dd780a42fff6f67154d69c9bea
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
     background-color: #d17a45;
 }
 
+<<<<<<< HEAD
 .header {
     margin-left: 200px;
     margin-top: 55px;
+=======
+.custom-header {
+    margin-left: 200px;
+    margin-top: 30px;
+>>>>>>> b889815efcad80dd780a42fff6f67154d69c9bea
     margin-bottom: 20px;
     background-color: #a65323;
     color: #fff;
@@ -18,8 +28,12 @@ body {
     border-radius: 50px;
 }
 
+<<<<<<< HEAD
 .logo {
     margin-top: 13px;
+=======
+.custom-logo {
+>>>>>>> b889815efcad80dd780a42fff6f67154d69c9bea
     margin-left: 15px;
     width: 125px;
     height: 125px;
@@ -28,11 +42,16 @@ body {
     left: 20px;
 }
 
+<<<<<<< HEAD
 .nav {
+=======
+.custom-nav {
+>>>>>>> b889815efcad80dd780a42fff6f67154d69c9bea
     margin-top: 20px;
     margin-bottom: 20px;
 }
 
+<<<<<<< HEAD
 .nav {
     display: flex;
     justify-content: center;
@@ -42,6 +61,9 @@ body {
 }
 
 .nav a {
+=======
+.custom-nav a {
+>>>>>>> b889815efcad80dd780a42fff6f67154d69c9bea
     color: #fff;
     text-decoration: none;
     margin: 0 15px;
@@ -50,6 +72,7 @@ body {
     padding-right: 10px;
 }
 
+<<<<<<< HEAD
 .nav a.activo {
     color: white;
     font-weight: bold;
@@ -74,3 +97,10 @@ body {
     background-color: #F1B384;
 }
 
+=======
+.custom-nav a.custom-active {
+    color: white;
+    font-weight: bold;
+    text-decoration: underline;
+}
+>>>>>>> b889815efcad80dd780a42fff6f67154d69c9bea

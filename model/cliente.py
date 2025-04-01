@@ -9,7 +9,8 @@ class Cliente(db.Model):
     idPersona = db.Column(db.Integer, db.ForeignKey('persona.idPersona'), nullable=False)
     idUsuario = db.Column(db.Integer, db.ForeignKey('usuario.idUsuario'), nullable=False)
 
-    # Relaciones con las tablas Persona y Usuario
 
     persona = db.relationship('Persona', backref=db.backref('clientes', lazy=True))
     usuario = db.relationship('Usuario', backref=db.backref('clientes', lazy=True))
+    
+    usuario = db.relationship('Usuario', back_populates='cliente')

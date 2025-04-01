@@ -18,4 +18,4 @@ class Orden(db.Model):
 
     # Relaciones
     cliente = db.relationship('Cliente', backref=db.backref('ordenes', lazy=True))
-    detalles = db.relationship('DetalleVentaOrden', backref='orden_rel', lazy=True, cascade='all, delete-orphan')
+    detalles = db.relationship('DetalleVentaOrden', backref='orden', lazy=True)
