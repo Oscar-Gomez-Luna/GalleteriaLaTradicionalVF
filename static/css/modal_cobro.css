@@ -1,0 +1,82 @@
+/* Estilos del Modal de Registro de Pago */
+.modal-registro-pago {
+    display: none; /* Oculto por defecto */
+    justify-content: center; /* Centrado horizontal */
+    align-items: center; /* Centrado vertical */
+    position: fixed;
+    z-index: 1000;
+    left: 50%; /* Centrado horizontal */
+    top: 50%; /* Centrado vertical */
+    transform: translate(-50%, -50%); /* Asegura que se centre completamente */
+    width: 80%; /* Ajusta el ancho del modal */
+    max-width: 500px; /* Limita el ancho máximo */
+    height: auto; /* El alto se ajustará automáticamente */
+}
+
+.modal-registro-pago.active {
+    display: flex; /* Activa el contenedor flex */
+}
+
+
+.modal-registro-pago-content {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    width: 400px;
+    margin: auto;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    position: relative;
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+}
+
+.modal-registro-pago-content h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.modal-registro-pago-body label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    text-align: left;
+}
+
+.modal-registro-pago-body input {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f5f5f5;
+    font-size: 16px;
+}
+
+.modal-registro-pago-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.modal-registro-pago-btn-ticket {
+    background-color: #8B4513;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.modal-registro-pago-btn-ticket:hover {
+    background-color: #A0522D;
+}
+
+.modal-registro-pago-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+}

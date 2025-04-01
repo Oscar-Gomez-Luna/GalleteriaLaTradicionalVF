@@ -1,0 +1,394 @@
+{% extends "layout_galleta.html" %}
+
+
+{% block title %}Módulo Galletas - Galletería Don Galleto{% endblock %}
+
+{% block styles %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/estilos_galletas.css') }}" rel="stylesheet">
+<style>
+    .tab-buttons {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .tab-buttons button {
+        background: #d4a373;
+        border: none;
+        padding: 10px 15px;
+        font-size: 16px;
+        margin: 5px;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+
+    .tab-buttons button.active {
+        background: #b97a56;
+        color: white;
+    }
+
+    .tabla-contenedor {
+        display: none;
+    }
+
+    .table {
+        background-color: #fff;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .table thead {
+        background-color: #b97a56;
+        color: white;
+        text-align: center;
+    }
+
+    .table tbody tr:hover {
+        background-color: #f4d4b5;
+    }
+
+
+
+
+
+
+    /* ======================= MODAL AGREGAR GALLETA ======================= */
+
+    /* Fondo del modal */
+    .modal-galleta {
+        position: fixed;
+        z-index: 999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(58, 32, 15, 0.5);
+        /* Café oscuro con transparencia */
+    }
+
+    /* Contenedor del modal */
+    .modal-content-galleta {
+        background-color: #fbe8d2;
+        margin: 8% auto;
+        padding: 25px;
+        border-radius: 12px;
+        width: 450px;
+        box-shadow: 0 0 10px #3a200f;
+        position: relative;
+        font-family: 'Georgia', serif;
+    }
+
+    /* Título */
+    .modal-content-galleta h2 {
+        font-weight: bold;
+        font-size: 24px;
+        color: #3a200f;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    /* Botón de cerrar */
+    .close-galleta {
+        position: absolute;
+        top: 10px;
+        right: 14px;
+        font-size: 26px;
+        text-decoration: none;
+        color: #3a200f;
+        font-weight: bold;
+    }
+
+    .close-galleta:hover {
+        color: #7a3a1a;
+    }
+
+    /* Contenedor de botones */
+    .modal-buttons {
+        text-align: center;
+        margin-top: 25px;
+    }
+
+    /* Botones del modal */
+    .modal-buttons .btn-receive,
+    .modal-buttons .btn-cancel {
+        background-color: #964b28;
+        color: white;
+        border: none;
+        padding: 10px 22px;
+        border-radius: 6px;
+        font-weight: bold;
+        text-decoration: none;
+        margin: 0 10px;
+        display: inline-block;
+        font-size: 16px;
+    }
+
+    .modal-buttons .btn-receive:hover,
+    .modal-buttons .btn-cancel:hover {
+        background-color: #7a3a1a;
+        cursor: pointer;
+    }
+
+    /* Campos del formulario */
+    .input-field {
+        background-color: #f3d3b0;
+        border: 1px solid #a65323;
+        color: #3a200f;
+        border-radius: 6px;
+        padding: 10px;
+        font-size: 16px;
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+    .input-field:focus {
+        outline: none;
+        border-color: #7a3a1a;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="centered-box">
+        <button id="btn-unidad" class="active" onclick="mostrarTabla('unidad')">Unidad</button>
+        <button id="btn-caja-kilo" onclick="mostrarTabla('caja-kilo')">Caja de un kilo</button>
+        <button id="btn-caja-medio" onclick="mostrarTabla('caja-medio')">Caja de 700g</button>
+    </div>
+
+    <!-- UNIDAD -->
+    <div id="tabla-unidad" class="tabla-scroll-contenedor" style="display: block;">
+        <table class="table tabla-scroll">
+            <thead>
+                <tr>
+                    <th>Tipo</th>
+                    <th>Galleta</th>
+                    <th>Costo</th>
+                    <th>Existencia</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for galleta in galletas_unidad %}
+                <tr>
+                    <td>{{ galleta.tipo_empaquetado }}</td>
+                    <td>{{ galleta.nombre_galleta }}</td>
+                    <td>${{ galleta.costo }}</td>
+                    <td>{{ galleta.existencia }}</td>
+                    <td class="acciones">
+                        <div class="btn-agregar-galleta">
+                            <form method="POST" action="{{ url_for('galletas.galletas') }}">
+                                {{ nueva_form.hidden_tag() }}
+                                <input type="hidden" name="abrir_modal_galleta" value="1">
+                                <button type="submit" class="btn btn-outline-dark">
+                                    <i class="bi bi-plus-circle" style="font-size: 25px;"></i>
+                                </button>
+                            </form>
+                        </div>
+                        <button onclick="abrirModalMerma('{{ g.id_galleta }}', 1)">
+                            <i class="fas fa-trash"></i>
+                          </button>
+                        
+
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" class="text-center text-muted">No hay datos disponibles</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- CAJA DE UN KILO -->
+    <div id="tabla-caja-kilo" class="tabla-scroll-contenedor" style="display: none;">
+        <table class="table tabla-scroll">
+            <thead>
+                <tr>
+                    <th>Tipo</th>
+                    <th>Galleta</th>
+                    <th>Costo</th>
+                    <th>Existencia</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for galleta in galletas_caja_kilo %}
+                <tr>
+                    <td>{{ galleta.tipo_empaquetado }}</td>
+                    <td>{{ galleta.nombre_galleta }}</td>
+                    <td>${{ galleta.costo }}</td>
+                    <td>{{ galleta.existencia }}</td>
+                    <td class="acciones">
+                        <button onclick="abrirModalMerma('{{ g.id_galleta }}', 25)">
+                            <i class="fas fa-trash"></i>
+                          </button>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" class="text-center text-muted">No hay datos disponibles</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- CAJA DE 700g -->
+    <div id="tabla-caja-medio" class="tabla-scroll-contenedor" style="display: none;">
+        <table class="table tabla-scroll">
+            <thead>
+                <tr>
+                    <th>Tipo</th>
+                    <th>Galleta</th>
+                    <th>Costo</th>
+                    <th>Existencia</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for galleta in galletas_caja_medio_kilo %}
+                <tr>
+                    <td>{{ galleta.tipo_empaquetado }}</td>
+                    <td>{{ galleta.nombre_galleta }}</td>
+                    <td>${{ galleta.costo }}</td>
+                    <td>{{ galleta.existencia }}</td>
+                    <td class="acciones">
+                        <button onclick="abrirModalMerma('{{ g.id_galleta }}', 20)">
+                            <i class="fas fa-trash"></i>
+                          </button>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" class="text-center text-muted">No hay datos disponibles</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="modalMermasGalleta" class="modal-mermas" style="display: none;">
+    <div class="modal-content-mermas">
+        <span class="close-mermas" onclick="cerrarModal('modalMermasGalleta')">&times;</span>
+        <h2 style="text-align: center;">Merma de Galletas</h2>
+
+        <!-- Presentación dinámica (opcional) -->
+        <p id="presentacionTexto" style="text-align: center; font-weight: bold; margin-bottom: 10px;"></p>
+
+        <form method="POST" action="{{ url_for('galletas.merma_galleta') }}" id="mermaFormGalletas">
+            {{ merma_form.hidden_tag() }}
+
+            <!-- Tipo de merma -->
+            <label for="tipo_merma">Tipo:</label>
+            {{ merma_form.tipo_merma(id="tipo_merma", class="form-control") }}
+
+            <!-- Select de galleta -->
+            <label for="galleta_id">Selecciona una galleta:</label>
+            {{ merma_form.galleta_id(id="galleta_id", class="form-control") }}
+
+            <!-- Cantidad -->
+            <label for="cantidad">Cantidad:</label>
+            {{ merma_form.cantidad(id="cantidad") }}
+
+            <!-- Descripción -->
+            <label for="descripcion">Descripción:</label>
+            {{ merma_form.descripcion(id="descripcion", class="form-control", placeholder="Escribe una descripción...") }}
+
+            <!-- Fecha -->
+            <label for="fecha">Fecha:</label>
+            {{ merma_form.fecha(id="fecha", value=fecha_hoy) }}
+
+
+            <!-- Botones -->
+            <div class="modal-buttons">
+                {{ merma_form.submit(value="Aceptar") }}
+                <button type="button" onclick="cerrarModal('modalMermasGalleta')">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+{% if mostrar_modal %}
+<div id="modalAgregarGalleta" class="modal-galleta" style="display: block;">
+    {% else %}
+    <div id="modalAgregarGalleta" class="modal-galleta" style="display: none;">
+        {% endif %}
+        <div class="modal-content-galleta">
+            <!-- Botón cerrar -->
+            <a href="{{ url_for('galletas.galletas') }}" class="close-galleta">&times;</a>
+
+            <h2 class="modal-title">Agregar Nueva Galleta</h2>
+
+            <form method="POST" action="{{ url_for('galletas.agregar_galleta') }}">
+                {{ nueva_form.hidden_tag() }}
+
+                <label class="label-large" for="receta_id">Receta:</label>
+                {{ nueva_form.receta_id(id="receta_id", class="input-field input-large") }}
+
+                <label class="label-large" for="nombre_galleta">Nombre:</label>
+                {{ nueva_form.nombre_galleta(id="nombre_galleta", class="input-field input-large") }}
+
+                <div class="modal-buttons">
+                    {{ nueva_form.submit(class="btn-receive") }}
+                    <a href="{{ url_for('galletas.galletas') }}" class="btn-cancel">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        function abrirModalMerma(galletaId, cantidad, presentacion = '') {
+            const modal = document.getElementById('modalMermasGalleta');
+            modal.style.display = 'block';
+        
+            // Asignar ID de galleta y cantidad
+            document.getElementById('galleta_id').value = galletaId;
+            document.getElementById('cantidad').value = cantidad;
+        
+            // Mostrar el tipo de presentación
+            const texto = document.getElementById('presentacionTexto');
+            if (presentacion && texto) {
+                texto.innerText = `Presentación: ${presentacion}`;
+            } else {
+                texto.innerText = '';
+            }
+        
+            // Asignar fecha de hoy en el campo fecha
+            const fechaInput = document.getElementById('fecha');
+            const hoy = new Date().toISOString().split('T')[0]; // formato yyyy-mm-dd
+            fechaInput.value = hoy;
+        }
+        
+        function cerrarModal(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+        </script>
+        
+        
+
+
+
+    <script>
+        function mostrarTabla(tipo) {
+            const tablas = ['unidad', 'caja-kilo', 'caja-medio'];
+            tablas.forEach(id => {
+                document.getElementById('tabla-' + id).style.display = 'none';
+                document.getElementById('btn-' + id).classList.remove('active');
+            });
+
+            document.getElementById('tabla-' + tipo).style.display = 'block';
+            document.getElementById('btn-' + tipo).classList.add('active');
+        }
+    </script>
+    {% endblock %}

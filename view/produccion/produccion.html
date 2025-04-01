@@ -1,0 +1,290 @@
+{% extends "layout_produccion.html" %}
+
+{% block title %}Producción de Galletas{% endblock %}
+
+
+
+{% block content %}
+
+
+<div class="contenedor-tabla">
+
+    <table>
+        <thead>
+            <tr>
+                <th>Galleta</th>
+                <th>Existencia</th>
+                <th>Estado</th>
+                <th>Receta</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for g in galletas %}
+            <tr>
+                <td>{{ g.galleta }}</td>
+                <td>{{ g.existencia }}</td>
+                <td>
+                    {% if g.existencia > 0 %}
+                    Activa
+                    {% else %}
+                    Agotada
+                    {% endif %}
+                </td>
+                <td>{{ g.nombreReceta }}</td>
+                <td class="acciones">
+
+                    <!-- Botones de acción -->
+                    <div class="modal-buttons">
+                        <button type="button" class="btn-merma-insumo" onclick="abrirModal('modalMermasInsumo')">
+                            <img src="{{ url_for('static', filename='img/eliminar.png') }}" width="20" height="20"
+                                alt="Registrar Merma" />
+                        </button>
+
+                        <form method="GET" action="{{ url_for('produccion.produccion') }}">
+                            <input type="hidden" name="galleta_id" value="{{ g.id_galleta }}">
+                            <button type="submit" title="Producir lote">
+                                <img src="{{ url_for('static', filename='img/produccion.png') }}" width="20" height="20"
+                                    alt="Agregar Lote" />
+                            </button>
+                        </form>
+
+                        <form method="GET" action="{{ url_for('produccion.produccion') }}">
+                            <input type="hidden" name="merma_lote_id" value="{{ g.id_lote }}">
+                            <button type="submit" title="Merma de Galletas">
+                                <img src="{{ url_for('static', filename='img/galleta.png') }}" width="20" height="20"
+                                    alt="Merma Galletas" />
+                            </button>
+                        </form>
+
+                        <form method="POST" action="{{ url_for('produccion.eliminar_lote') }}"
+                            class="form-eliminar-lote">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                            <input type="hidden" name="lote_id" value="{{ g.id_lote }}">
+                            <input type="hidden" name="galleta_nombre" value="{{ g.galleta }}">
+                            <button type="button" class="btn-eliminar" data-galleta="{{ g.galleta }}">
+                                <img src="{{ url_for('static', filename='img/borrarmerma.png') }}" width="20"
+                                    height="20" alt="Eliminar Lote" />
+                            </button>
+                        </form>
+
+
+                    </div>
+
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% if mostrar_modal %}
+<!-- Modal para producción de lotes -->
+<div class="modal" id="nuevoLoteModal" style="display:block;">
+    {% else %}
+    <div class="modal" id="nuevoLoteModal" style="display:none;">
+        {% endif %}
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <span>Producción de Lote</span>
+                <a href="{{ url_for('produccion.produccion') }}" class="close">&times;</a>
+            </div>
+            <div class="modal-body">
+                <form id="formProduccion" method="POST" action="{{ url_for('produccion.produccion') }}"
+                    class="form-container">
+                    {{ form.hidden_tag() }}
+
+                    <label for="galleta">Galleta:</label>
+                    <select class="form-control" id="galleta" name="galleta_id">
+                        {% for g in form.galleta_id.choices %}
+                        <option value="{{ g[0] }}" {% if form.galleta_id.data==g[0] %}selected{% endif %}>
+                            {{ g[1] }}
+                        </option>
+                        {% endfor %}
+                    </select>
+
+
+                    <label for="fechaProduccion">Fecha de Producción:</label>
+                    <input type="date" class="form-control" id="fecha_produccion" name="fechaProduccion"
+                        value="{{ fecha_hoy }}" required>
+
+                    <label for="fechaCaducidad">Fecha de Caducidad:</label>
+                    <input type="date" class="form-control" id="fecha_caducidad" name="fechaCaducidad"
+                        value="{{ fecha_caducidad }}" readonly>
+
+                    <label for="cantidad">Cantidad:</label>
+                    <input type="number" class="form-control" id="cantidad" name="cantidad" min="1"
+                        value="{{ form.cantidad.data or '' }}" required>
+
+                    <label for="costo">Costo de Producción:</label>
+                    <input type="text" class="form-control" id="costo" name="costo" value="{{ form.costo.data or '' }}"
+                        readonly>
+
+                    <input type="hidden" id="existencia" name="existencia" value="{{ form.existencia.data or '' }}">
+
+                    <button type="submit" class="btn-guardar">Producir</button>
+                    <a href="{{ url_for('produccion.produccion') }}" class="btn-cancelar">Cancelar</a>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% if mostrar_modal_merma and lote_merma %}
+    <div id="modalMermasGalleta" class="modal-mermas" style="display: block;">
+        {% else %}
+        <div id="modalMermasGalleta" class="modal-mermas" style="display: none;">
+            {% endif %}
+            <div class="modal-content-mermas">
+                <span class="close-mermas" onclick="cerrarModal('modalMermasGalleta')">&times;</span>
+                <h2 style="text-align: center;">Merma galletas</h2>
+
+                <form method="POST" action="{{ url_for('produccion.produccion') }}" id="mermaFormGalletas">
+                    {{ merma_form.hidden_tag() }}
+
+                    <!-- Tipo editable (solo una vez) -->
+                    <label for="tipo_merma">Tipo:</label>
+                    {{ merma_form.tipo_merma(id="tipo_merma", class="form-control") }}
+
+                    <!-- Galleta y lote seleccionado -->
+                    <label for="galleta">Galleta:</label>
+                    {% if lote_merma %}
+                    <input type="text" class="form-control" value="{{ lote_merma.galleta.galleta }}" readonly>
+                    <input type="hidden" name="lote_id" value="{{ lote_merma.id_lote }}">
+                    {% else %}
+                    {{ merma_form.lote_id(id="lote_id") }}
+                    {% endif %}
+
+                    <!-- Cantidad -->
+                    <label for="cantidad">Cantidad:</label>
+                    {{ merma_form.cantidad(id="cantidad") }}
+                    <!-- Descripción -->
+                    <label for="descripcion">Descripción:</label>
+                    {{ merma_form.descripcion(id="descripcion", class="form-control", placeholder="Escribe una
+                    descripción...") }}
+
+                    <!-- Fecha -->
+                    <label for="fecha">Fecha:</label>
+                    {{ merma_form.fecha(id="fecha", value=fecha_hoy) }}
+
+                    <!-- Botones -->
+                    <div class="modal-buttons">
+                        {{ merma_form.submit(value="Aceptar") }}
+                        <button type="button" onclick="cerrarModal('modalMermasGalleta')">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+        {% if mostrar_modal_merma_insumo %}
+        <div id="modalMermasInsumo" class="modal-mermas" style="display: block;">
+            {% else %}
+            <div id="modalMermasInsumo" class="modal-mermas" style="display: none;">
+                {% endif %}
+                <div class="modal-content-mermas">
+                    <span class="close-mermas" onclick="cerrarModal('modalMermasInsumo')">&times;</span>
+                    <h2 style="text-align: center;">Merma Insumos</h2>
+
+                    <form method="POST" action="{{ url_for('produccion.merma_insumo') }}" id="mermaFormInsumo">
+                        {{ merma_insumo_form.hidden_tag() }}
+
+                        <!-- Selección de insumo (todos los registrados en la base) -->
+                        <label for="insumo">Insumo:</label>
+                        {{ merma_insumo_form.insumo_id(class="form-control") }}
+
+                        <!-- Cantidad -->
+                        <label for="cantidad">Cantidad a descontar:</label>
+                        {{ merma_insumo_form.cantidad(id="cantidad", class="form-control") }}
+
+                        <!-- Tipo de merma -->
+                        <label for="tipo_merma">Tipo de merma:</label>
+                        {{ merma_insumo_form.tipo_merma(class="form-control") }}
+
+                        <!-- Descripción -->
+                        <label for="descripcion">Descripción:</label>
+                        {{ merma_insumo_form.descripcion(class="form-control", placeholder="Escribe una descripción...")
+                        }}
+
+                        <!-- Fecha -->
+                        <label for="fecha">Fecha:</label>
+                        {{ merma_insumo_form.fecha(id="fecha", value=fecha_hoy) }}
+
+                        <!-- Botones -->
+                        <div class="modal-buttons">
+                            {{ merma_insumo_form.submit(value="Aceptar") }}
+                            <button type="button" onclick="cerrarModal('modalMermasInsumo')">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+
+            <div class="alertas-recuadro">
+                <h3>Alertas de galletas</h3>
+                <ul>
+                    {% for alerta in alertas_agotamiento %}
+                    <li style="color: red;">
+                        La galleta <strong>{{ alerta.nombre.replace("_", " ").title() }}</strong> está a punto de acabarse: hay {{ alerta.total }} en existencia.
+                    </li>
+                    {% endfor %}
+            
+                    {% for alerta in alertas_caducidad %}
+                    <li style="color: #eeb50c;">
+                        {% if alerta.dias_restantes < 0 %}
+                            Las galletas <strong>{{ alerta.nombre.replace("_", " ").title() }}</strong> del lote con {{ alerta.existencia }} en existencia <strong>ya se caducaron</strong>.
+                        {% elif alerta.dias_restantes == 0 %}
+                            Las galletas <strong>{{ alerta.nombre.replace("_", " ").title() }}</strong> del lote con {{ alerta.existencia }} en existencia <strong>se caducan hoy</strong>.
+                        {% else %}
+                            Las galletas <strong>{{ alerta.nombre.replace("_", " ").title() }}</strong> del lote con {{ alerta.existencia }} en existencia se caducan en {{ alerta.dias_restantes }} días.
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            
+            
+            
+
+
+
+            <script>
+                function abrirModal(id) {
+                    document.getElementById(id).style.display = 'block';
+                }
+
+                function cerrarModal(id) {
+                    document.getElementById(id).style.display = 'none';
+                }
+            </script>
+
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const botonesEliminar = document.querySelectorAll('.btn-eliminar');
+
+                    botonesEliminar.forEach(boton => {
+                        boton.addEventListener('click', function () {
+                            const form = this.closest('form');
+                            const nombreGalleta = this.dataset.galleta;
+
+                            Swal.fire({
+                                title: `¿Eliminar lote de '${nombreGalleta}'?`,
+                                text: "Esta acción no se puede deshacer.",
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#d33',
+                                cancelButtonColor: '#6c757d',
+                                confirmButtonText: 'Sí, eliminar',
+                                cancelButtonText: 'Cancelar'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    form.submit();
+                                }
+                            });
+                        });
+                    });
+                });
+            </script>
+
+            {% endblock %}

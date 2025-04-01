@@ -1,0 +1,372 @@
+/* Estilos generales del body */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #d17a45;
+}
+
+/* Encabezado */
+.header {
+    margin-left: 200px;
+    margin-top: 70px;
+    margin-bottom: 40px;
+    background-color: #a65323;
+    color: #fff;
+    text-align: center;
+    padding: 5px;
+    position: relative;
+    width: 85%;
+    border-radius: 50px;
+}
+
+.logo {
+    margin-top: 30px;
+    margin-left: 20px;
+    width: 130px;
+    height: 130px;
+    position: absolute;
+    top: 10px;
+    left: 20px;
+}
+
+.header h1 {
+    font-size: 24px;
+    margin: 0;
+    line-height: 60px;
+}
+
+.nav {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.nav a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 15px;
+    font-weight: bold;
+    font-size: 20px;
+    padding-right: 70px;
+}
+
+.nav a:focus {
+    text-decoration: underline;
+}
+.nav a.activo {
+    color: white; /* Color de texto azul */
+    font-weight: bold; /* Negrita para destacar */
+    text-decoration: underline;
+}
+
+.main {
+    padding: 20px;
+}
+
+/* Estilos del formulario de selección */
+.select-container {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.select-container label {
+    font-weight: bold;
+    margin-bottom: 30px;
+    color: #fff;
+}
+
+.select-container select {
+    padding: 20px;
+    border-radius: 20px;
+    border: none;
+    width: 700px;
+}
+
+/* Estilos de la tabla */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background-color: #ECC4A6;
+}
+
+.table th,
+.table td {
+    border: 1px solid #a65323;
+    padding: 15px;
+    text-align: center;
+}
+
+.table th {
+    background-color: #F1B384;
+}
+
+.titulo-modal {
+    text-align: center;
+}
+
+.btn-delete {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-delete img {
+    width: 20px;
+    height: 20px;
+}
+
+/* Contenedor de botones */
+.buttons-container {
+    display: flex;
+    justify-content: space-evenly;
+    gap: 5px;
+}
+
+.btn {
+    background-color: #f5c19b;
+    border: 1px solid #a65323;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #a65323;
+}
+
+.btn:hover {
+    background-color: #e09566;
+    color: #fff;
+}
+
+.modal {
+    display: none;
+}
+
+#modalVENTAS .modal-content {
+    width: 80%; /* Ajusta el ancho del modal (puedes modificar el porcentaje) */
+    max-width: 1200px; /* Ancho máximo mayor para el modal de ventas */
+    max-height: 90vh; /* Asegura que no exceda el 90% de la altura de la ventana */
+    overflow-y: auto; /* Habilita scroll si el contenido es muy grande */
+    padding: 40px; /* Aumenta el padding para más espacio */
+}
+
+/* Estilos del Modal */
+.modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #888;
+    
+    max-width: 600px; /* Limita el ancho máximo del modal */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    overflow: hidden; /* Evita que el contenido se desborde */
+}
+
+.modal-content input,
+.modal-content select {
+    width: 100%; /* Ajusta la anchura de los inputs al 100% del contenedor */
+    box-sizing: border-box; /* Incluye el padding y el borde en el tamaño total del elemento */
+    padding: 8px; /* Añade un espacio interno para los inputs */
+    margin-bottom: 10px; /* Añade espacio entre los inputs */
+    border: 1px solid #ccc; /* Borde ligero */
+    border-radius: 4px;
+    font-size: 16px; /* Texto legible */
+}
+
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover, .close:focus {
+    color: black;
+    text-decoration: none;
+}
+/* Estilo de los botones del modal */
+.modal-buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+/* Estilos del botón en general */
+button {
+    padding: 10px 20px;
+    background-color: #964b28;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #7a3a1a;
+}
+
+/* Estilo de los campos de texto */
+input, select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+/* Tabla dentro del modal */
+.tabla-compras {
+    width: 60%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+}
+
+.tabla-compras th,
+.tabla-compras td {
+    border: 1px solid #ccc;
+    text-align: left;
+    padding: 8px;
+}
+
+.tabla-compras th {
+    background-color: #ddd;
+}
+
+/* Descripción de la compra */
+.descripcion-compra {
+    width: 35%;
+    background: #D9D9D9;
+    padding: 10px;
+    font-family: Arial, sans-serif;
+    border-radius: 4px;
+    overflow: auto;
+}
+
+/* Contenedor de la tabla y la descripción */
+.modal-body {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.tabla-compras {
+    width: 60%;
+}
+
+.descripcion-compra {
+    width: 35%;
+}
+
+
+/* Nueva sección debajo de la tabla */
+.extra-section {
+    background-color: #ECC4A6;
+    padding: 20px;
+    margin-top: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Contenedor de los botones */
+.button-container {
+    display: flex;
+    justify-content: space-around;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.button-container .btn {
+    background-color: #a65323;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.button-container .btn:hover {
+    background-color: #e09566;
+}
+
+/* Estilos para el botón con ícono */
+.icon-btn {
+    background-color: transparent;
+    border: 2px solid #a65323;
+    padding: 10px;
+    width: 75px;
+    height: 57px;
+}
+
+.icon-btn .icon-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* Mostrar el precio reflejado */
+.total-price {
+    font-size: 20px;
+    color: #a65323;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.total-price span {
+    font-size: 16px;
+    color: #444;
+}
+
+
+
+/* Estilos del Modal */
+.modalsito {
+    display: none; /* El modal está oculto por defecto */
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    padding-top: 100px;
+    margin-left: 25%;
+}
+
+
+/* Estilos generales para la tabla */
+.tabla-ventas {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tabla-ventas th, .tabla-ventas td {
+    border: 1px solid #000000;
+    padding: 8px;
+    text-align: left;
+}
+
+
+.tabla-ventas th {
+    background-color: #D9D9D9;
+    font-weight: bold;
+}
+
+
+.tabla-ventas tr {
+    background-color: #D9D9D9;
+}
+
+
+.tabla-ventas tr:hover {
+    background-color: #D9D9D9;
+}

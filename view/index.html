@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galletería Don Galleto</title>
+    <link href="{{ url_for('static', filename='css/estilos.css') }}" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+    <header class="header">
+        <img src="{{ url_for('static', filename='img/galleto.png') }}" alt="Logo Don Galleto" class="logo">
+        <h1>GALLETERÍA DON GALLETO</h1>
+    </header>
+    <main class="main">
+        <div class="grid">
+            <a href="{{ url_for('insumos') }}" class="grid-item">
+                <img src="{{ url_for('static', filename='img/insumitos.png') }}" alt="Insumos"/>
+                <p>Insumos</p>
+            </a>
+            <a href="{{ url_for('ventas') }}" class="grid-item">
+                <img src="{{ url_for('static', filename='img/ventas.png') }}" alt="Ventas"/>
+                <p>Ventas</p>
+            </a>
+            <a href="{{ url_for('produccion.produccion') }}" class="grid-item">
+
+                <img src="{{ url_for('static', filename='img/produccion.png') }}" alt="Producción"/>
+                <p>Producción</p>
+            </a>
+            <a href="{{ url_for('galletas.galletas') }}" class="grid-item">
+                <img src="{{ url_for('static', filename='img/galletas.png') }}" alt="Galletas"/>
+                <p>Galletas</p>
+            </a>
+            <a href="{{ url_for('ordenes') }}" class="grid-item">
+                <img src="{{ url_for('static', filename='img/compras.png') }}" alt="Compras"/>
+                <p>Compras</p>
+            </a>
+            <a href="{{ url_for('ganancias') }}" class="grid-item">
+                <img src="{{ url_for('static', filename='img/costos.png') }}" alt="Ganancias y Costos"/>
+                <p>Ganancias y costos</p>
+            </a>
+        </div>
+    </main>
+    
+</body>
+</html>

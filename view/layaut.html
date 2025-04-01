@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Galletería - La tradicional{% endblock %}</title>
+
+    <!-- Estilos generales -->
+    <link href="{{ url_for('static', filename='css/estilos_nav.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ url_for('static', filename='css/estilos.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ url_for('static', filename='css/estilos_galletas.css') }}" rel="stylesheet" type="text/css" />
+
+    <!-- Librerías externas -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.6/dist/sweetalert2.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auUomF+OP1CDiZzhe8fvC92e2poIecS+ch+N0p" crossorigin="anonymous">
+
+    {% block styles %}{% endblock %}
+</head>
+
+<body class="custom-background">
+    <!-- Logo -->
+    <img src="{{ url_for('static', filename='img/galleto.png') }}" alt="Logo" class="custom-logo">
+
+    <!-- Navegación -->
+    <header class="custom-header">
+        <nav class="custom-nav">
+            <a href="{{ url_for('galletas.galletas') }}"
+               class="{{ 'custom-active' if active_page == 'galletas' else '' }}">Galletas</a>
+            <a href="{{ url_for('ventas') }}"
+               class="{{ 'custom-active' if active_page == 'ventas' else '' }}">Ventas</a>
+            <a href="{{ url_for('produccion.produccion') }}"
+               class="{{ 'custom-active' if active_page == 'produccion' else '' }}">Producción</a>
+            <a href="{{ url_for('insumos') }}"
+               class="{{ 'custom-active' if active_page == 'insumos' else '' }}">Insumos</a>
+            <a href="{{ url_for('ordenes') }}"
+               class="{{ 'custom-active' if active_page == 'ordenes' else '' }}">Ordenes</a>
+            <a href="{{ url_for('ganancias') }}"
+               class="{{ 'custom-active' if active_page == 'ganancias' else '' }}">Ganancias</a>
+        </nav>
+    </header>
+    {% with messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+      <div class="container mt-3">
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+  
+
+    {% block container %}{% endblock %}
+    <!-- Contenido principal -->
+    <main class="main">
+        {% block content %}{% endblock %}
+    </main>
+
+  
+
+    <!-- Scripts -->
+    {% block scripts %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            console.log("Script cargado correctamente");
+            inicializar();
+        });
+
+        function inicializar() {
+            configurarEventos();
+            mostrarTabla("unidad");
+        }
+
+        function configurarEventos() {
+            document.getElementById("btn-unidad")?.addEventListener("click", () => mostrarTabla("unidad"));
+            document.getElementById("btn-caja-kilo")?.addEventListener("click", () => mostrarTabla("caja-kilo"));
+            document.getElementById("btn-caja-medio")?.addEventListener("click", () => mostrarTabla("caja-medio"));
+        }
+
+        function mostrarTabla(tipo) {
+            let tablas = {
+                "unidad": "tabla-unidad",
+                "caja-kilo": "tabla-caja-kilo",
+                "caja-medio": "tabla-caja-medio"
+            };
+
+            let botones = {
+                "unidad": "btn-unidad",
+                "caja-kilo": "btn-caja-kilo",
+                "caja-medio": "btn-caja-medio"
+            };
+
+            Object.values(tablas).forEach(id => {
+                const tabla = document.getElementById(id);
+                if (tabla) tabla.style.display = "none";
+            });
+
+            Object.values(botones).forEach(id => {
+                const btn = document.getElementById(id);
+                if (btn) btn.classList.remove("active");
+            });
+
+            document.getElementById(tablas[tipo])?.style.display = "block";
+            document.getElementById(botones[tipo])?.classList.add("active");
+        }
+    </script>
+    {% endblock %}
+
+    <!-- Scripts externos -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz4fnFO9gybBogGzogI1cDcsc0yQX0u9LJbzoPRzB1Vp9IbB8xYh4XWBoN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9bInhZRA2NmdsCCKtxV0S2e5r5N5y3cf5LZzRHeG/4zvM1BlFvq3E64" crossorigin="anonymous"></script>
+
+</body>
+
+</html>
