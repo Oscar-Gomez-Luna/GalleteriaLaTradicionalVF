@@ -1,0 +1,68 @@
+
+{% block links %}
+    <link href="{{ url_for('static', filename='css/estilos_ventas.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block container %}
+    <main class="main">
+        <h2>Resumen de tu Pedido</h2>
+        
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Galleta</th>
+                    <th>Tipo</th>
+                    <th>Precio Unitario</th>
+                    <th>Cantidad</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>{{ item.nombre }}</td>
+                    <td>{{ item.tipo }}</td>
+                    <td>${{ "%.2f"|format(item.precio) }}</td>
+                    <td>{{ item.cantidad }}</td>
+                    <td>${{ "%.2f"|format(item.subtotal) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4" class="text-right"><strong>Total:</strong></td>
+                    <td><strong>${{ "%.2f"|format(total) }}</strong></td>
+                </tr>
+            </tfoot>
+        </table>
+        
+        <div class="button-container">
+            <button class="btn btn-secondary" onclick="window.history.back()">Seguir Comprando</button>
+            <button class="btn btn-primary" onclick="confirmarPedido()">Confirmar Pedido</button>
+        </div>
+    </main>
+    
+    <script>
+        async function confirmarPedido() {
+            try {
+                const response = await fetch('/confirmar-pedido', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert(`Pedido confirmado con éxito! Número de orden: ${data.orden_id}`);
+                    window.location.href = '/portal-cliente';
+                } else {
+                    alert('Error al confirmar el pedido: ' + (data.error || ''));
+                }
+            } catch (error) {
+                alert('Error al confirmar el pedido: ' + error.message);
+            }
+        }
+    </script>
+{% endblock %}

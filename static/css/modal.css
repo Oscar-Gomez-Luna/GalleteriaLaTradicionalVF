@@ -1,0 +1,112 @@
+/* Estilos para el modal */
+.modalReceta {
+    display: none; /* Oculta el modal por defecto */
+    position: fixed;
+    top: 5%; /* Posiciona el modal un 5% desde la parte superior */
+    left: 30%; /* Posiciona el modal un 30% desde la izquierda */
+    width: 40%; /* Ancho del modal */
+    height: 80%; /* Alto del modal */
+    justify-content: center;
+    align-items: center;
+}
+
+.modalReceta-dialog {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    width: 100%; /* Ocupa el 100% del ancho del modal */
+    max-width: 700px; /* Limita el ancho máximo */
+    border: 1px solid #a65323; /* Color del borde */
+    max-height: 90%; /* Limita el alto máximo del modal */
+    overflow-y: auto; /* Habilita el scroll vertical */
+}
+
+.modalReceta-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #a65323; /* Color del borde */
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.modalReceta-title {
+    margin: 0;
+    color: #a65323; /* Color del texto */
+}
+
+.closeReceta {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #a65323; /* Color del botón de cierre */
+}
+
+.closeReceta:hover {
+    color: #7a3a1a; /* Color al hacer hover */
+}
+
+.modalReceta-body {
+    margin-bottom: 20px;
+}
+
+.modalReceta-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.btnRecetas {
+    background-color: #f5c19b;
+    border: 1px solid #a65323;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #a65323;
+}
+
+.btnRecetas:hover {
+    background-color: #e09566;
+    color: #fff;
+}
+
+.custom-extra-section {
+    background-color: #ECC4A6;
+    padding: 20px;
+    margin-top: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.custom-button-container {
+    margin-bottom: 0px;
+    display: flex;
+    justify-content: space-around;
+    gap: 15px;
+}
+.custom-button-container .custom-btn {
+    background-color: #a65323;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.custom-button-container .custom-btn:hover {
+    background-color: #e09566;
+}
+.custom-btn {
+    background-color: #f5c19b;
+    border: 1px solid #a65323;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #a65323;
+}
+.custom-btn:hover {
+    background-color: #e09566;
+    color: #fff;
+}

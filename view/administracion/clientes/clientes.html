@@ -1,0 +1,133 @@
+{% extends "layout_administracion.html" %}
+{% import '_macros.html' as macros %}
+{% block contenido %}
+
+<head>
+    <meta charset="UTF-8">
+    <link href="{{ url_for('static', filename='css/modal.css') }}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <h1><title>Gestionar Clientes</title></h1>
+    <script>
+        function toggleSearch() {
+            const searchContainer = document.getElementById('search-input-container');
+            const isHidden = searchContainer.style.display === 'none';
+            searchContainer.style.display = isHidden ? 'flex' : 'none';
+            
+            if (isHidden) {
+                document.getElementById('buscar').focus();
+            }
+        }
+
+        function buscar_clientes() {
+            const textoBusqueda = document.getElementById('buscar').value.toLowerCase();
+            const filas = document.querySelectorAll('.table-container tbody tr');
+
+            filas.forEach(fila => {
+                const nombre = fila.cells[0].textContent.toLowerCase();
+                const datos = fila.cells[1].textContent.toLowerCase();
+                const email = fila.cells[2].textContent.toLowerCase();
+                const usuario = fila.cells[3].textContent.toLowerCase();
+
+                if (nombre.includes(textoBusqueda) || 
+                    datos.includes(textoBusqueda) || 
+                    email.includes(textoBusqueda) || 
+                    usuario.includes(textoBusqueda)) {
+                    fila.style.display = '';
+                } else {
+                    fila.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</head>
+
+<body class="container-fluid">
+    {% with messages = get_flashed_messages()%} 
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-success">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    <h2 class="mb-4 text-center">Clientes Registrados</h2>
+    <form id="filterForm" method="GET" action="{{ url_for('administracion.clientes.clientes') }}">
+      <div class="form-check form-switch" style="margin-bottom: 20px;">
+        <input onchange="this.form.submit()" 
+               class="form-check-input" 
+               type="checkbox" 
+               id="inactivos" 
+               name="inactivos" 
+               {% if request.args.get('inactivos') == 'on' %}checked{% endif %}>
+        <label class="form-check-label" for="inactivos" style="color: #ffffff;">
+            Inactivos
+        </label>
+      </div>
+    </form>
+    <div class="table-container">
+        <table class="table table-bordered align-middle table responsive">
+            <thead>
+                <tr>
+                    <th scope="col">Nombre Completo</th>
+                    <th scope="col">Datos Personales</th>
+                    <th scope="col">Correo Electrónico</th>
+                    <th scope="col">Usuario</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cliente in clientes %}
+                <tr>
+                    <td>{{ cliente.persona.nombre }} {{ cliente.persona.apPaterno }} {{ cliente.persona.apMaterno }}</td>
+                    <td>{{ cliente.persona.calle }}, {{ cliente.persona.numero }} - {{ cliente.persona.colonia }}, {{ cliente.persona.codigoPostal }} <br> Tel: {{ cliente.persona.telefono }}</td>
+                    <td>{{ cliente.persona.email }}</td>
+                    <td>{{ cliente.usuario.nombreUsuario }}</td>
+                    <td>
+                        <a href="{{ url_for('administracion.clientes.detalles_clientes', idCliente=cliente.idCliente) }}" class="btn">
+                            <i class="fa-solid fa-circle-info"></i>
+                        </a>
+                        <a href="{{ url_for('administracion.clientes.modificar_cliente', idCliente=cliente.idCliente) }}" class="btn">
+                            <i class="fas fa-edit fa-lg"></i>
+                        </a>         
+                        {% if cliente.usuario.estatus == 1 %}
+                        <a href="eliminar?idCliente={{cliente.idCliente}}" class="btn">
+                            <i class="fas fa-trash-can fa-lg"></i>
+                        </a>
+                        {% else %}
+                        <a href="activar?idCliente={{cliente.idCliente}}" class="btn">
+                            <i class="fa-solid fa-check"></i>
+                        </a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div> 
+
+    <div class="custom-extra-section">
+        <div class="custom-button-container" style="display: flex; align-items: center;">
+            <!-- Input de búsqueda (oculto inicialmente) -->
+            <div id="search-input-container" style="display: none; margin-right: 10px;">
+                <div class="filtro-form d-flex align-items-center" style="background: white; padding: 5px; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                    <input type="text" 
+                           class="form-control" 
+                           id="buscar" 
+                           placeholder="Buscar cliente..."
+                           style="width: 180px; height: 30px; padding: 0 5px; font-size: 12px; border: 1px solid #ddd;"
+                           onkeyup="buscar_clientes()">
+                    <i class="fa-solid" style="color: gray; margin-left: 5px;"></i>
+                </div>
+            </div>
+            
+            <!-- Botón de búsqueda -->
+            <button class="custom-btn" id="search-button" onclick="toggleSearch()">
+                <i class="fa-solid fa-magnifying-glass"></i> Buscar
+            </button>
+        </div>
+    </div>     
+</body>
+
+{% endblock %}

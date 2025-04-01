@@ -3,10 +3,10 @@ from extensions import db
 class Persona(db.Model):
     __tablename__ = 'persona'
     idPersona = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    genero = db.Column(db.String(1), nullable=False, default="O") 
     apPaterno = db.Column(db.String(20), nullable=False)
     apMaterno = db.Column(db.String(20), nullable=False)
     nombre = db.Column(db.String(50), nullable=False)
-    genero = db.Column(db.String(1), nullable=False, default="O") 
     telefono = db.Column(db.String(10), nullable=False)
     calle = db.Column(db.String(50), nullable=False)
     numero = db.Column(db.Integer, nullable=False)

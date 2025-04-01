@@ -1,0 +1,68 @@
+/* Estilos generales del layout */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #d17a45;
+}
+
+.header {
+    margin-left: 200px;
+    margin-top: 55px;
+    margin-bottom: 20px;
+    background-color: #a65323;
+    color: #fff;
+    text-align: center;
+    padding: 5px;
+    position: relative;
+    width: 81%;
+    border-radius: 50px;
+}
+
+.logo {
+    margin-top: 13px;
+    margin-left: 15px;
+    width: 125px;
+    height: 125px;
+    position: absolute;
+    top: 10px;
+    left: 20px;
+}
+
+.nav {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.nav a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 15px;
+    font-weight: bold;
+    font-size: 18px;
+    padding-right: 10px;
+}
+
+.nav {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding: 10px 0;
+}
+
+.nav a.activo {
+    color: white;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+/* Ajustes para el contenido principal */
+.main-content {
+    margin-left: 220px;
+    margin-right: 20px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    min-height: calc(100vh - 200px);
+}
