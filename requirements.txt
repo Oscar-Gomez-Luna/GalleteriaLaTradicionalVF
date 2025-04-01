@@ -16,3 +16,5 @@ SQLAlchemy==2.0.27
 typing_extensions==4.9.0
 Werkzeug==3.0.1
 WTForms==3.1.2
+pip==25.0.1
+setuptools==57.4.0

@@ -1,7 +1,3 @@
 env
 config.py
-<<<<<<< HEAD
 **/__pycache__
-=======
-__pycache__
->>>>>>> b889815efcad80dd780a42fff6f67154d69c9bea

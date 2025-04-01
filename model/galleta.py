@@ -11,10 +11,11 @@ class Galleta(db.Model):
     existencia = db.Column(db.Integer, nullable=False)
     receta_id = db.Column(db.Integer, db.ForeignKey('receta.idReceta'), nullable=False)
     
-
     # Relación con receta
     receta = db.relationship('Receta', backref=db.backref('galletas', lazy=True))
     
     # Relaciones
     detalles_venta = db.relationship('DetalleVentaOrden', backref='galleta', lazy=True)
     tipo = db.relationship('TipoGalleta', back_populates='galletas')
+
+    lotes = db.relationship('LoteGalletas', backref='galleta', lazy=True)

@@ -1,0 +1,552 @@
+
+/* -------------------------------------------------------------------------------Estilos generales parte superior------------------------------------------------------*/
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #d17a45;
+}
+
+.header {
+    background-color: #a65323;
+    color: #fff;
+    text-align: center;
+    padding: 15px 0;
+    position: relative;
+}
+
+.logo {
+    width: 60px;
+    height: 60px;
+    position: absolute;
+    top: 10px;
+    left: 20px;
+    cursor: pointer;
+}
+
+.nav {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 10px;
+}
+
+.nav a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 8px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.nav a:hover,
+.nav a.active {
+    background-color: #e09566;
+    text-decoration: underline;
+}
+
+.main {
+    padding: 20px;
+}
+
+/*------------------------------------------------------------------------ Estilos del submenú ---------------------------------------------------------------------------------------- */
+.submenu {
+display: flex;
+justify-content: center;
+align-items: center;
+background-color: #c89a73; /* Fondo un poquito más claro */
+border-radius: 50px; /* Bordes ovalados */
+padding: 10px 40px; /* Espaciado ajustado */
+gap: 20px; /* Espacio entre botones */
+max-width: 900px; /* Ancho máximo ajustado */
+width: 90%; /* El recuadro ocupa la mayor parte del contenedor */
+}
+
+.submenu button {
+background-color: transparent; /* Fondo transparente */
+border: none;
+font-size: 31px; /* Letras un poquito más grandes */
+font-family: "Georgia", serif; /* Fuente elegante */
+font-weight: bold; /* Negritas */
+color: #3a200f; /* Color de texto */
+cursor: pointer;
+padding: 10px 15px;
+text-decoration: none;
+}
+
+.submenu button.active {
+color: #6b3e1e; /* Color café más oscuro al estar seleccionado */
+text-decoration: underline; /* Subrayado */
+}
+
+.submenu button:hover {
+color: #6b3e1e; /* Color café al pasar el mouse */
+text-decoration: underline; /* Subrayado */
+}
+
+.centered-box {
+display: flex;
+justify-content: center; /* Centra horizontalmente */
+align-items: center; /* Centra verticalmente */
+margin: 20px auto; /* Espaciado automático */
+background-color: #c89a73; /* Fondo un poquito más claro */
+border-radius: 50px; /* Bordes ovalados */
+padding: 15px 50px; /* Espaciado interno ajustado */
+max-width: 900px; /* Máximo ancho ajustado */
+width: 90%; /* El recuadro ocupa la mayor parte del contenedor */
+box-sizing: border-box; /* Incluye padding dentro del ancho total */
+}
+
+/* Estilos para los botones */
+.centered-box button {
+background-color: transparent;
+border: none;
+font-size: 31px; /* Letras un poquito más grandes */
+font-family: "Georgia", serif; /* Fuente elegante */
+font-weight: bold; /* Negritas */
+color: #3a200f;
+cursor: pointer;
+padding: 10px 15px;
+text-align: center;
+}
+
+.centered-box button.active {
+color: #6b3e1e; /* Color café más oscuro al estar seleccionado */
+text-decoration: underline; /* Subrayado */
+}
+
+.centered-box button:hover {
+color: #6b3e1e; /* Color café al pasar el mouse */
+text-decoration: underline; /* Subrayado */
+}
+
+
+/* ---------------------------------------------------------------------- Estilos para las tablas------------------------------------------------------------------------------------ */
+/* Contenedor de las tablas */
+.tabla-contenedor {
+margin: 20px auto; /* Centrado */
+max-width: 100%; /* Ancho ligeramente mayor */
+overflow-x: auto; /* Scroll horizontal si es necesario */
+}
+
+/* Tabla general */
+.table {
+width: 100%; /* Ocupa todo el contenedor */
+border-collapse: collapse; /* Sin espacios entre bordes */
+font-family: "Georgia", serif; /* Fuente elegante */
+font-size: 18px; /* Contenido más grande */
+background-color: #f7c8a3; /* Fondo uniforme */
+color: #3a200f; /* Texto café oscuro */
+border: 1px solid #a97145; /* Borde exterior menos grueso */
+}
+
+/* Encabezados de tabla */
+.table thead th {
+background-color: #f7c8a3; /* Fondo igual al cuerpo */
+color: #3a200f; /* Texto café oscuro */
+font-weight: bold; /* Negrita */
+font-size: 20px; /* Encabezados más grandes */
+text-align: center; /* Texto centrado */
+padding: 15px; /* Espaciado interno */
+border: 1px solid #a97145; /* Líneas más suaves */
+text-transform: capitalize; /* Primera letra en mayúscula,*/
+}
+
+/* Filas de tabla */
+.table tbody td {
+padding: 15px; /* Espaciado interno */
+text-align: center; /* Texto centrado */
+font-size: 18px; /* Texto más grande en las celdas */
+border: 1px solid #a97145; /* Líneas menos marcadas */
+background-color: #f7c8a3; /* Mismo fondo */
+}
+
+/* Resaltado al pasar el mouse */
+.table tbody tr:hover {
+background-color: #f3b08d; /* Fondo ligeramente más oscuro */
+}
+
+/* Estilo para botones de acciones */
+.table tbody td .btn {
+padding: 7px 15px; /* Tamaño más grande para botones */
+font-size: 16px; /* Botones con texto más grande */
+font-weight: bold;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+text-transform: uppercase;
+}
+
+/* Botón editar */
+.table tbody td .btn-edit {
+background-color: #ffd966; /* Amarillo */
+color: #3a200f; /* Texto oscuro */
+margin-right: 5px;
+}
+
+/* Botón eliminar */
+.table tbody td .btn-delete {
+background-color: #ff6666; /* Rojo */
+color: white; /* Texto blanco */
+}
+/*----------------------------------------------------------------------- Botónes dentro de la tabla -------------------------------------------------*/
+/* Botón de icono minimalista */
+/* Botón de icono minimalista */
+.icon-btn {
+background-color: transparent;
+border: none;
+color: #3a200f; /* Café oscuro */
+cursor: pointer;
+display: inline-flex;
+justify-content: center;
+align-items: center;
+width: 45px; /* Tamaño del botón */
+height: 45px;
+padding: 0;
+margin: 0;
+}
+
+/* Botón "Agregar" personalizado */
+.icon-btn.agregar .circle {
+display: flex;
+justify-content: center;
+align-items: center;
+width: 45px; /* Tamaño del círculo */
+height: 45px;
+border: 3px solid #3a200f; /* Borde del círculo */
+border-radius: 50%; /* Forma circular */
+font-size: 26px; /* Tamaño del signo "+" */
+font-weight: bold;
+color: #3a200f; /* Café oscuro */
+}
+
+/* Botón "Eliminar" */
+.icon-btn.eliminar i {
+font-size: 28px; /* Tamaño más grande del icono del bote de basura*/
+}
+
+/* Espaciado entre los botones */
+.acciones {
+display: flex;
+gap: 40px; /* Aumentar separación entre los botones */
+justify-content: center; /* Centrar botones */
+align-items: center; /* Alinear verticalmente */
+}
+
+/* Efecto hover para los botones */
+.icon-btn:hover {
+transform: scale(1.1); /* Aumentar tamaño ligeramente */
+transition: transform 0.2s ease-in-out;
+}
+
+
+
+/*------------------------------------------------------------------------Estilos de Alertas------------------------------------------------------------------ */
+
+
+/* Recuadro para alertas */
+.alertas-recuadro {
+background-color: #f4bc90; /* Mismo color que el fondo de la tabla*/
+border: 3px solid #3a200f; /* Borde de color café */
+border-radius: 15px; /* Bordes redondeados */
+padding: 50px 80px; /* Mucho más espacio interno */
+margin-top: 30px; /* Espaciado superior */
+width: 100%; /* Abarca todo el ancho disponible */
+max-width: 1820px; /* Aumento significativo del ancho máximo */
+box-sizing: border-box; /* Incluye padding dentro del ancho total*/
+margin-left: auto;
+margin-right: auto; /* Centrado horizontal */
+}
+
+/* Título del recuadro */
+.alertas-recuadro h3 {
+font-size: 38px; /* Tamaño mucho más grande del título */
+font-weight: bold;
+color: #3a200f; /* Mismo color café */
+margin-bottom: 25px; /* Más espacio debajo del título */
+text-align: left;
+}
+
+/* Lista de alertas */
+.alertas-recuadro ul {
+list-style-type: none; /* Quitar viñetas */
+padding: 0; /* Quitar espaciado interno */
+margin: 0; /* Quitar margen */
+}
+
+.alertas-recuadro li {
+font-size: 30px; /* Tamaño mucho más grande para  alertas */
+color: #3a200f; /* Mismo color café */
+margin-bottom: 30px; /* Más separación entre elementos */
+display: flex;
+align-items: center;
+}
+
+.alertas-recuadro li::before {
+content: "🍪"; /* Icono de galleta */
+margin-right: 25px; /* Más separación entre el icono y el texto */
+font-size: 40px; /* Aumento máximo del tamaño del icono */
+}
+
+
+
+/*------------------------------------------------------------------------ Modal para agregar------------------------------------------------------------------------------------------------*/
+
+
+/* Estilo general del modal */
+.modal-content {
+background-color: #fff; /* Fondo blanco */
+border-radius: 8px;
+padding: 20px;
+box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+font-family: Arial, sans-serif;
+}
+
+/* Título del modal */
+.modal-title {
+font-weight: bold; /* Negritas */
+font-size: 1.5rem;
+color: #000; /* Negro */
+text-align: center;
+}
+
+/* Etiquetas de los campos */
+.label-large {
+font-size: 1.2rem; /* Más grande */
+font-weight: bold; /* Negritas */
+font-family: 'Arial', sans-serif; /* Consistente con otros estilos*/
+color: #333; /* Gris oscuro */
+}
+
+/* Campos de entrada */
+.input-field {
+background-color: #d3d3d3; /* Gris más oscuro */
+border: 1px solid #ccc;
+color: #000; /* Texto negro */
+border-radius: 5px;
+padding: 15px; /* Más grande */
+font-size: 1rem; /* Texto más grande */
+}
+
+.input-large {
+height: 50px; /* Mayor altura */
+}
+
+.input-field:focus {
+outline: none;
+border-color: #7a3a1a; /* Bordes marrón oscuro */
+}
+
+/* Botones */
+.btn-receive {
+background-color: #964b28; /* Marrón oscuro */
+color: white;
+border: none;
+padding: 10px 20px;
+border-radius: 5px;
+cursor: pointer;
+font-weight: bold;
+}
+
+.btn-receive:hover {
+background-color: #7a3a1a; /* Marrón más oscuro */
+}
+
+.btn-cancel {
+background-color: #964b28; /* Marrón oscuro */
+color: white;
+border: none;
+padding: 10px 20px;
+border-radius: 5px;
+cursor: pointer;
+font-weight: bold;
+}
+
+.btn-cancel:hover {
+background-color: #7a3a1a; /* Marrón más oscuro */
+}
+
+
+
+
+
+/* ---------------------------------------------------------------------------- Estilo general del modal  de eliminar o mermar galleta --------------------------------------------------*/
+
+
+
+/* Estilo general del modal */
+.modal-content {
+background-color: #fff; /* Fondo blanco */
+border-radius: 8px;
+padding: 20px;
+box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+font-family: Arial, sans-serif;
+}
+
+/* Título del modal */
+.modal-title {
+font-weight: bold; /* Negritas */
+font-size: 1.5rem;
+color: #000; /* Negro */
+text-align: center;
+}
+
+/* Etiquetas de los campos */
+.label-large {
+font-size: 1.2rem; /* Más grande */
+font-weight: bold; /* Negritas */
+font-family: 'Arial', sans-serif; /* Consistente con otros estilos*/
+color: #333; /* Gris oscuro */
+}
+
+/* Campos de entrada */
+.input-field {
+background-color: #d3d3d3; /* Gris más oscuro */
+border: 1px solid #ccc;
+color: #000; /* Texto negro */
+border-radius: 5px;
+padding: 15px; /* Más grande */
+font-size: 1rem; /* Texto más grande */
+}
+
+.input-large {
+height: 50px; /* Mayor altura */
+}
+
+.input-field:focus {
+outline: none;
+border-color: #7a3a1a; /* Bordes marrón oscuro */
+}
+
+/* Botones */
+.btn-receive {
+background-color: #964b28; /* Marrón oscuro */
+color: white;
+border: none;
+padding: 10px 20px;
+border-radius: 5px;
+cursor: pointer;
+font-weight: bold;
+}
+
+.btn-receive:hover {
+background-color: #7a3a1a; /* Marrón más oscuro */
+}
+
+.btn-cancel {
+background-color: #964b28; /* Marrón oscuro */
+color: white;
+border: none;
+padding: 10px 20px;
+border-radius: 5px;
+cursor: pointer;
+font-weight: bold;
+}
+
+.btn-cancel:hover {
+background-color: #7a3a1a; /* Marrón más oscuro */
+}
+
+
+
+/* BARRA lateral de desplazamiento */
+
+.tabla-scroll-contenedor {
+    max-height: 420px;
+    overflow-y: auto;
+    border: 1px solid #a97145;
+    margin-top: 15px;
+}
+
+/* Tabla completa */
+.tabla-scroll {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+/* Encabezados fijos */
+.tabla-scroll thead th {
+    position: sticky;
+    top: 0;
+    background-color: #f7c8a3;
+    z-index: 2;
+    text-align: center;
+    padding: 15px;
+    border: 1px solid #a97145;
+    font-weight: bold;
+}
+
+/* Celdas del cuerpo */
+.tabla-scroll tbody td {
+    text-align: center;
+    padding: 15px;
+    border: 1px solid #a97145;
+    background-color: #f7c8a3;
+}
+
+
+/* merma-------------------- */
+
+.modal-mermas {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px);
+}
+
+.modal-content-mermas {
+    background-color: white;
+    margin: auto;
+    margin-top: 80px;
+    padding: 30px;
+    width: 360px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    position: relative;
+    font-family: Arial, sans-serif;
+}
+
+.modal-content-mermas label {
+    display: block;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.modal-content-mermas input,
+.modal-content-mermas select,
+.modal-content-mermas textarea {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.modal-content-mermas .modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.close-mermas {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    font-size: 22px;
+    font-weight: bold;
+    color: black;
+    cursor: pointer;
+}
+
+
+
+

@@ -1,23 +1,25 @@
-<<<<<<< HEAD
+
 body {
-=======
-.custom-background {
->>>>>>> b889815efcad80dd780a42fff6f67154d69c9bea
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
     background-color: #d17a45;
 }
 
-<<<<<<< HEAD
+
 .header {
     margin-left: 200px;
     margin-top: 55px;
-=======
+}
+
 .custom-header {
     margin-left: 200px;
     margin-top: 30px;
->>>>>>> b889815efcad80dd780a42fff6f67154d69c9bea
+}
+
+.header {
+    margin-left: 200px;
+    margin-top: 55px;
     margin-bottom: 20px;
     background-color: #a65323;
     color: #fff;
@@ -28,12 +30,12 @@ body {
     border-radius: 50px;
 }
 
-<<<<<<< HEAD
 .logo {
     margin-top: 13px;
-=======
-.custom-logo {
->>>>>>> b889815efcad80dd780a42fff6f67154d69c9bea
+}
+
+.logo {
+    margin-top: 13px;
     margin-left: 15px;
     width: 125px;
     height: 125px;
@@ -42,17 +44,10 @@ body {
     left: 20px;
 }
 
-<<<<<<< HEAD
+
 .nav {
-=======
-.custom-nav {
->>>>>>> b889815efcad80dd780a42fff6f67154d69c9bea
     margin-top: 20px;
     margin-bottom: 20px;
-}
-
-<<<<<<< HEAD
-.nav {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
@@ -60,10 +55,8 @@ body {
     padding: 10px 0;
 }
 
+
 .nav a {
-=======
-.custom-nav a {
->>>>>>> b889815efcad80dd780a42fff6f67154d69c9bea
     color: #fff;
     text-decoration: none;
     margin: 0 15px;
@@ -72,7 +65,7 @@ body {
     padding-right: 10px;
 }
 
-<<<<<<< HEAD
+
 .nav a.activo {
     color: white;
     font-weight: bold;
@@ -97,10 +90,49 @@ body {
     background-color: #F1B384;
 }
 
-=======
+
 .custom-nav a.custom-active {
     color: white;
     font-weight: bold;
     text-decoration: underline;
 }
->>>>>>> b889815efcad80dd780a42fff6f67154d69c9bea
+
+
+
+/* Modal de ventas */
+
+
+.carta-alertas {
+    background-color: #fff8e1;
+    border-left: 5px solid #f57c00;
+    padding: 20px;
+    margin: 20px auto;
+    width: 90%;
+    border-radius: 8px;
+    font-family: Arial, sans-serif;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.carta-alertas h3 {
+    margin-top: 0;
+    color: #5d4037;
+}
+
+.alerta {
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.alerta-roja {
+    background-color: #ffebee;
+    color: #c62828;
+    border-left: 4px solid #c62828;
+}
+
+.alerta-amarilla {
+    background-color: #fffde7;
+    color: #f9a825;
+    border-left: 4px solid #f9a825;
+}

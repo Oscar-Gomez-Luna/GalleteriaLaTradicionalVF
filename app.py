@@ -8,12 +8,17 @@ from flask_wtf import CSRFProtect
 from controller.portal_controller import portal_cliente_bp
 from controller.controller_insumo import insumo_bp
 from controller.controller_ordenes import orden_bp
+from controller.controller_produccion import produccion_bp
+from controller.controller_galletas import galletas_bp
 
 app = Flask(__name__, template_folder='view')
 app.config.from_object(DevelopmentConfig)
 csrf = CSRFProtect(app)
 db.init_app(app)
 csrf.init_app(app)
+
+app.config['SECRET_KEY'] = 'clave-secreta-segura'
+app.config['WTF_CSRF_ENABLED'] = True
 
 app.register_blueprint(admin_bp, url_prefix='/administracion')
 app.register_blueprint(venta_bp, url_prefix='/venta')
@@ -56,6 +61,22 @@ def ventas():
 @app.route("/produccion")
 def produccion():
     return render_template("layout_login.html", active_page="produccion")
+
+@app.route("/")
+def home():
+    return render_template("index.html", active_page="home")
+
+@app.route("/ventas")
+def ventas():
+    return render_template("layout_galleteria.html", active_page="ventas")
+
+@app.route("/insumos")
+def insumos():
+    return render_template("insumos.html", active_page="insumos")
+
+@app.route("/administrador")
+def administrador():
+    return render_template("administrador.html", active_page="administrador")
 
 @app.route("/ordenes")
 def ordenes():

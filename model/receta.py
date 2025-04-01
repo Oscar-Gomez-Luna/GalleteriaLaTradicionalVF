@@ -2,7 +2,7 @@ from extensions import db
 
 class Receta(db.Model):
 
-    _tablename_ = 'receta'
+    __tablename__ = 'receta'
 
     idReceta = db.Column(db.Integer, primary_key=True, autoincrement=True)    
     nombreReceta = db.Column(db.String(50), nullable=False)
@@ -13,3 +13,5 @@ class Receta(db.Model):
     
     # Relacion
     galletas = db.relationship('Galleta', backref='receta', lazy=True)
+    cantidad_galletas = db.Column(db.Integer)
+

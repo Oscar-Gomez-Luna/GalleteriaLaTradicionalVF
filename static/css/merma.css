@@ -1,0 +1,79 @@
+.modal-mermas {
+    display: none; /* Ocultamos el modal por defecto */
+    position: fixed;
+    top: 50%; /* Centrado vertical */
+    left: 50%; /* Centrado horizontal */
+    transform: translate(-50%, -50%); /* Asegura que se centre completamente */
+    width: 80%; /* Ajusta el ancho del modal */
+    max-width: 500px; /* Limita el ancho máximo */
+    height: auto; /* El alto se ajustará automáticamente */
+    justify-content: center; /* Centrado horizontal */
+    align-items: center; /* Centrado vertical */
+    z-index: 1000;
+}
+
+.modal-mermas.active {
+    display: flex; /* Activa el contenedor flex */
+}
+
+.modal-content-mermas {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    margin: auto;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    position: relative;
+    text-align: center;
+}
+
+.modal-content-mermas h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.modal-mermas label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    text-align: left;
+}
+
+.modal-mermas input, .modal-mermas select {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f5f5f5;
+    font-size: 16px;
+}
+
+.modal-buttons-mermas {
+    display: flex;
+    justify-content: space-between;
+}
+
+.modal-buttons-mermas button {
+    background-color: #8B4513;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.modal-buttons-mermas button:hover {
+    background-color: #A0522D;
+}
+
+.close-mermas {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+}
