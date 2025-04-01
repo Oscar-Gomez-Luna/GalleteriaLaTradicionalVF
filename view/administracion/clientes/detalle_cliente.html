@@ -1,0 +1,81 @@
+{% extends "layout_administracion.html" %}
+{% import '_macros.html' as macros %}
+{% block contenido %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>Consulta de Cliente</title>
+    <link href="{{ url_for('static', filename='css/estilos_forms_detalles.css') }}" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <div class="card-user">
+        {% if cliente.persona.genero == 'H' %}
+            <img src="https://cdn-icons-png.flaticon.com/512/4140/4140048.png" alt="Hombre">
+        {% elif cliente.persona.genero == 'M' %}
+            <img src="https://cdn-icons-png.flaticon.com/512/4140/4140047.png" alt="Mujer">
+        {% else %}
+            <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Usuario">
+        {% endif %}
+
+        <h3>Consulta de Datos</h3>
+        <h5>Usuario Cliente</h5>
+
+        <div class="form-grid">
+            <div class="form-item">
+                <label>Nombre:</label>
+                <p>{{ cliente.persona.nombre }}</p>
+            </div>
+            <div class="form-item">
+                <label>Apellido Paterno:</label>
+                <p>{{ cliente.persona.apPaterno }}</p>
+            </div>
+            <div class="form-item">
+                <label>Apellido Materno:</label>
+                <p>{{ cliente.persona.apMaterno }}</p>
+            </div>
+            <div class="form-item">
+                <label>Género:</label>
+                <p>{{ "Hombre" if cliente.persona.genero == 'H' else "Mujer" if cliente.persona.genero == 'M' else "Otro" }}</p>
+            </div>
+            <div class="form-item">
+                <label>Teléfono:</label>
+                <p>{{ cliente.persona.telefono }}</p>
+            </div>
+            <div class="form-item">
+                <label>Calle:</label>
+                <p>{{ cliente.persona.calle }}</p>
+            </div>
+            <div class="form-item">
+                <label>Número:</label>
+                <p>{{ cliente.persona.numero }}</p>
+            </div>
+            <div class="form-item">
+                <label>Colonia:</label>
+                <p>{{ cliente.persona.colonia }}</p>
+            </div>
+            <div class="form-item">
+                <label>Código Postal:</label>
+                <p>{{ cliente.persona.codigoPostal }}</p>
+            </div>
+            <div class="form-item">
+                <label>Correo Electrónico:</label>
+                <p>{{ cliente.persona.email }}</p>
+            </div>
+            <div class="form-item">
+                <label>Fecha de Nacimiento:</label>
+                <p>{{ cliente.persona.fechaNacimiento }}</p>
+            </div>
+            <div class="form-item">
+                <label>Nombre de Usuario:</label>
+                <p>{{ cliente.usuario.nombreUsuario }}</p>
+            </div>
+        </div>
+
+        <div class="button-container">
+            <a type="button" href="{{url_for('administracion.clientes.clientes')}}" class="btnRecetas" decorate="none" style="text-decoration: none;">Regresar</a>
+        </div>
+    </div>
+</body>
+
+{% endblock %}

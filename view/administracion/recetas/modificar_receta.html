@@ -1,0 +1,112 @@
+{% extends "layout_administracion.html" %}
+{% import '_macros.html' as macros %}
+{% block contenido %}
+
+{% block links2%}
+<link href="{{ url_for('static', filename='css/modal.css') }}" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+{% endblock %}
+
+<head>
+    <meta charset="UTF-8">
+    <script>
+        function agregarIngrediente(insumo = '', cantidad = '', unidad = '') {
+            const contenedor = document.getElementById('ingredientes');
+            const campo = document.createElement('div');
+            campo.classList.add('mb-2');
+            campo.innerHTML = `
+                <div class="mb-3" style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                    <input type="text" name="insumo[]" placeholder="Nombre del insumo" 
+                           value="${insumo}" required style="flex: 1 1 30%; min-width: 110px; padding: 4px;">
+                    <input type="number" name="cantidad[]" placeholder="Cantidad" 
+                           value="${cantidad}" required style="flex: 1 1 15%; min-width: 80px; padding: 4px;">
+                    <select name="unidad[]" required style="flex: 1 1 30%; min-width: 120px; padding: 4px; height: 30px;">
+                        <option value="" ${!unidad ? 'selected' : ''}>Seleccione unidad</option>
+                        <option value="Gramos" ${unidad === 'Gramos' ? 'selected' : ''}>Gramos (g)</option>
+                        <option value="Mililitros" ${unidad === 'Mililitros' ? 'selected' : ''}>Mililitros (ml)</option>
+                        <option value="Unidad" ${unidad === 'Unidad' ? 'selected' : ''}>Piezas</option>
+                    </select>
+                    <button type="button" onclick="this.parentNode.parentNode.remove()" class="custom-btn" style="padding: 4px 8px;">
+                        <i class="fas fa-trash"></i> Eliminar
+                    </button>
+                </div>
+            `;
+            contenedor.appendChild(campo);
+        }
+
+        window.onload = function() {
+            const ingredientesData = document.getElementById('ingredientes-data');
+            if (ingredientesData) {
+                try {
+                    const ingredientes = JSON.parse(ingredientesData.textContent);
+                    ingredientes.forEach(ing => {
+                        if (ing.insumo && ing.cantidad && ing.unidad) {
+                            agregarIngrediente(ing.insumo, ing.cantidad, ing.unidad);
+                        }
+                    });
+                } catch (e) {
+                    console.error('Error al cargar ingredientes:', e);
+                }
+            }
+        };
+    </script>
+</head>
+
+<body>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-success">
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <div class="table-container">
+        <div class="form-section" style="background-color: #F1B384; padding: 20px; border-radius: 10px; margin: 20px auto; max-width: 800px;">
+            <h2 class="mb-4 text-center">Modificar Receta</h2>
+
+            <form action="{{ url_for('administracion.recetas.modificar', idReceta=idReceta) }}" method="post" novalidate>
+                {{ form.csrf_token }}
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <input type="hidden" name="idReceta" value="{{ idReceta }}">
+
+                <div class="mb-3">
+                    {{ macros.campo_form(form.nombreReceta) }}
+                </div>
+
+                <div class="mb-3">
+                    {{ macros.campo_form(form.descripcion) }}
+                </div>
+
+                <h3 class="mt-4 mb-3">Ingredientes</h3>
+                <div id="ingredientes"></div>
+                
+                <div class="custom-button-container">
+                    <button type="button" class="custom-btn" onclick="agregarIngrediente()" style="margin-bottom: 15px;">
+                        <i class="fas fa-plus"></i> Agregar ingrediente
+                    </button>
+                </div>
+
+                <div class="mb-3">
+                    {{ macros.campo_form(form.cantidad_galletas) }}
+                </div>
+
+                <div class="custom-extra-section">
+                    <div class="custom-button-container">
+                        <a href="{{ url_for('administracion.recetas.recetas') }}" class="custom-btn" style="text-decoration: none;">
+                            <i class="fas fa-arrow-left"></i> Regresar
+                        </a>
+                        <button type="submit" class="custom-btn">
+                            <i class="fas fa-save"></i> Guardar cambios
+                        </button>
+                    </div>
+                </div>
+            </form>
+            
+            <div id="ingredientes-data" style="display: none;">{{ receta.ingredientes | tojson | safe }}</div>
+        </div>
+    </div>
+</body>
+{% endblock %}

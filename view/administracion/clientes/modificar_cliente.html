@@ -1,0 +1,52 @@
+{% extends "layout_administracion.html" %}
+{% import '_macros.html' as macros %}
+{% block contenido %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>Modificar Cliente</title>
+    <link href="{{ url_for('static', filename='css/estilos_form.css') }}" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <div class="card-user">
+        {% if form.persona.genero.data == 'H' %}
+        <img src="https://cdn-icons-png.flaticon.com/512/4140/4140048.png" alt="Hombre">
+        {% elif form.persona.genero.data == 'M' %}
+        <img src="https://cdn-icons-png.flaticon.com/512/4140/4140047.png" alt="Mujer">
+        {% else %}
+        <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Usuario">
+        {% endif %}
+
+        <h3>Editar Datos</h3>
+        <h5>Usuario Cliente</h5>
+
+        <form action="{{ url_for('administracion.clientes.modificar_cliente', idCliente=idCliente) }}" method="post" novalidate>
+            {{ form.csrf_token }}
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            {{ form.idPersona(type="hidden") }}
+            {{ form.idUsuario(type="hidden") }}
+
+            <div class="form-grid">
+                {{ macros.campo_form(form.persona.nombre) }}
+                {{ macros.campo_form(form.persona.apPaterno) }}
+                {{ macros.campo_form(form.persona.apMaterno) }}
+                {{ macros.campo_form(form.persona.genero) }}
+                {{ macros.campo_form(form.persona.telefono) }}
+                {{ macros.campo_form(form.persona.calle) }}
+                {{ macros.campo_form(form.persona.numero) }}
+                {{ macros.campo_form(form.persona.colonia) }}
+                {{ macros.campo_form(form.persona.codigoPostal) }}
+                {{ macros.campo_form(form.persona.email) }}
+                {{ macros.campo_form(form.persona.fechaNacimiento) }}
+                {{ macros.campo_form(form.usuario.nombreUsuario) }}
+            </div>
+
+            <div class="button-container">
+                <a type="button" href="{{url_for('administracion.clientes.clientes')}}" class="btnRecetas" style="text-decoration: none;">Regresar</a>
+                <button type="submit" class="btnRecetas">Guardar</button>
+            </div>
+        </form>
+    </div>
+</body>
+{% endblock %}

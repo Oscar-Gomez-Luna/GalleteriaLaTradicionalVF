@@ -1,0 +1,197 @@
+{% extends "portal/layout_portal.html" %}
+{% block links %}
+    <link href="{{ url_for('static', filename='css/estilos_ventas.css') }}" rel="stylesheet">
+{% endblock %}
+{% block container %}
+<div class="main-content">
+    <!-- Hero Section -->
+    <div class="welcome-hero" style="background: linear-gradient(rgba(166, 83, 35, 0.8), rgba(241, 179, 132, 0.8)), url('https://images.unsplash.com/photo-1587241321921-91a834d6d191?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80'); background-size: cover; background-position: center;">
+        <div class="container-fluid text-center py-5">
+            <h1 class="display-4 fw-bold text-white">¡Bienvenido Pastelero!</h1>
+            <p class="lead text-light">"La Tradicional" Donde cada galleta es una obra de arte</p>
+            <a href="{{ url_for('portal_cliente.portal_cliente') }}" class="btn btn-lg btn-warning mt-3">
+                Ordenar ahora <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+    <div class="container-fluid py-5" style="background-color: #F1B384;">
+        <div class="row justify-content-center g-4">
+            <!-- Misión -->
+            <div class="col-md-4 text-center">
+                <div class="feature-card p-4 rounded" style="background-color: #ECC4A6; min-height: 300px;">
+                    <i class="bi bi-bullseye display-4 text-dark mb-3"></i>
+                    <h3 class="text-dark">Misión</h3>
+                    <p class="text-dark">Elaborar galletas artesanales de la más alta calidad, utilizando ingredientes premium y recetas tradicionales, para endulzar los momentos especiales de nuestros clientes.</p>
+                </div>
+            </div>
+            
+            <!-- Visión -->
+            <div class="col-md-4 text-center">
+                <div class="feature-card p-4 rounded" style="background-color: #ECC4A6; min-height: 300px;">
+                    <i class="bi bi-eye-fill display-4 text-dark mb-3"></i>
+                    <h3 class="text-dark">Visión</h3>
+                    <p class="text-dark">Ser reconocidos como la pastelería líder en galletas artesanales, innovando constantemente mientras mantenemos nuestras raíces tradicionales y expandiendo nuestro dulce legado.</p>
+                </div>
+            </div>
+            
+            <!-- Valores -->
+            <div class="col-md-4 text-center">
+                <div class="feature-card p-4 rounded" style="background-color: #ECC4A6; min-height: 300px;">
+                    <i class="bi bi-stars display-4 text-dark mb-3"></i>
+                    <h3 class="text-dark">Valores</h3>
+                    <ul class="text-dark text-start">
+                        <li>Calidad premium</li>
+                        <li>Tradición familiar</li>
+                        <li>Creatividad e innovación</li>
+                        <li>Pasión por lo artesanal</li>
+                        <li>Compromiso con el cliente</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Galería de Galletas Animada -->
+    <div class="container-fluid py-5" style="background-color: #F1B384;">
+        <div class="container">
+            <h2 class="text-center text-dark mb-5">Nuestras Deliciosas Creaciones</h2>
+            
+            <div class="row g-4 gallery-container">
+                <!-- Galleta 1 -->
+                <div class="col-md-4 col-6 gallery-item">
+                    <div class="card border-0 rounded-4 overflow-hidden h-100 gallery-card" style="background-color: #ECC4A6;">
+                        <img src="https://images.unsplash.com/photo-1558961363-fa8fdf82db35?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1365&q=80" 
+                             class="card-img-top img-fluid gallery-img" 
+                             alt="Galleta de Chocolate">
+                        <div class="card-body">
+                            <h5 class="card-title">Clásica de Chocolate</h5>
+                            <p class="card-text">Crujiente por fuera, suave por dentro.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Galleta 2 -->
+                <div class="col-md-4 col-6 gallery-item">
+                    <div class="card border-0 rounded-4 overflow-hidden h-100 gallery-card" style="background-color: #ECC4A6;">
+                        <img src="{{ url_for('static', filename='img/chispas.jpg') }}" 
+                             class="card-img-top img-fluid gallery-img" 
+                             alt="Galleta con Chispas">
+                        <div class="card-body">
+                            <h5 class="card-title">Chispas de Colores</h5>
+                            <p class="card-text">Divertida y llena de sabor.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Galleta 3 -->
+                <div class="col-md-4 col-6 gallery-item">
+                    <div class="card border-0 rounded-4 overflow-hidden h-100 gallery-card" style="background-color: #ECC4A6;">
+                        <img src="https://images.unsplash.com/photo-1590080874088-eec64895b423?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1374&q=80" 
+                             class="card-img-top img-fluid gallery-img" 
+                             alt="Galleta Artesanal">
+                        <div class="card-body">
+                            <h5 class="card-title">Artesanal Familiar</h5>
+                            <p class="card-text">Receta tradicional de la abuela.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Galleta 4 -->
+                <div class="col-md-4 col-6 gallery-item">
+                    <div class="card border-0 rounded-4 overflow-hidden h-100 gallery-card" style="background-color: #ECC4A6;">
+                        <img src="https://images.unsplash.com/photo-1499636136210-6f4ee915583e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1364&q=80" 
+                             class="card-img-top img-fluid gallery-img" 
+                             alt="Galleta con Nuez">
+                        <div class="card-body">
+                            <h5 class="card-title">Nuez y Canela</h5>
+                            <p class="card-text">Delicioso equilibrio de sabores.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Galleta 5 -->
+                <div class="col-md-4 col-6 gallery-item">
+                    <div class="card border-0 rounded-4 overflow-hidden h-100 gallery-card" style="background-color: #ECC4A6;">
+                        <img src="{{ url_for('static', filename='img/paquete.jpg') }}"  
+                             class="card-img-top img-fluid gallery-img" 
+                             alt="Galletas Empacadas">
+                        <div class="card-body">
+                            <h5 class="card-title">Presentación Regalo</h5>
+                            <p class="card-text">Perfecta para ocasiones especiales.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Galleta 6 -->
+                <div class="col-md-4 col-6 gallery-item">
+                    <div class="card border-0 rounded-4 overflow-hidden h-100 gallery-card" style="background-color: #ECC4A6;">
+                        <img src="https://images.unsplash.com/photo-1618923850107-d1a234d7a73a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1386&q=80" 
+                             class="card-img-top img-fluid gallery-img" 
+                             alt="Galletas Decoradas">
+                        <div class="card-body">
+                            <h5 class="card-title">Decoradas a Mano</h5>
+                            <p class="card-text">Arte comestible en cada detalle.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Animaciones para la galería */
+    .gallery-card {
+        transition: all 0.3s ease;
+        transform: translateY(0);
+        border: none !important;
+    }
+    
+    .gallery-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    }
+    
+    .gallery-img {
+        transition: transform 0.5s ease;
+        height: 250px;
+        object-fit: cover;
+    }
+    
+    .gallery-card:hover .gallery-img {
+        transform: scale(1.05);
+    }
+    
+    /* Efecto de carga */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .gallery-item {
+        animation: fadeIn 0.6s ease forwards;
+        opacity: 0;
+    }
+    
+    .gallery-item:nth-child(1) { animation-delay: 0.1s; }
+    .gallery-item:nth-child(2) { animation-delay: 0.2s; }
+    .gallery-item:nth-child(3) { animation-delay: 0.3s; }
+    .gallery-item:nth-child(4) { animation-delay: 0.4s; }
+    .gallery-item:nth-child(5) { animation-delay: 0.5s; }
+    .gallery-item:nth-child(6) { animation-delay: 0.6s; }
+    
+    .card-body {
+        background-color: #ECC4A6 !important;
+    }
+    
+    /* Estilo para la lista de valores */
+    .feature-card ul {
+        padding-left: 1rem;
+        margin-bottom: 0;
+    }
+    
+    .feature-card li {
+        margin-bottom: 0.3rem;
+    }
+</style>
+{% endblock %}
