@@ -14,3 +14,6 @@ class LoteGalletas(db.Model):
     existencia = db.Column(db.Integer, nullable=False)
     # Relacioon con la tabla Galleta
     galleta = db.relationship('Galleta', backref='lotes', lazy=True)
+
+    def __repr__(self):
+        return f'<LoteGalletas {self.id_lote}>'

@@ -9,5 +9,10 @@ class Venta(db.Model):
     fecha = db.Column(db.Date, nullable=False)
     hora = db.Column(db.Time, nullable=False)
     ticket = db.Column(db.Text)
-    tipoVenta = db.Column(db.String(50), nullable=False)
-    
+    tipoVenta = db.Column(db.String(50), nullable=False)    
+
+    # Relación con detalleVentaGalletas (uno a muchos)
+    detalles = db.relationship('DetalleVentaGalletas', backref='venta', lazy=True)
+
+    def __repr__(self):
+        return f'<Venta {self.id_venta}>'

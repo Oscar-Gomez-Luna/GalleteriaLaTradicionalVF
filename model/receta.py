@@ -15,3 +15,7 @@ class Receta(db.Model):
     galletas = db.relationship('Galleta', backref='receta', lazy=True)
     cantidad_galletas = db.Column(db.Integer)
 
+
+
+    def __repr__(self):
+        return f'<Receta {self.nombreReceta}>'

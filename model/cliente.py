@@ -13,4 +13,6 @@ class Cliente(db.Model):
     persona = db.relationship('Persona', backref=db.backref('clientes', lazy=True))
     usuario = db.relationship('Usuario', backref=db.backref('clientes', lazy=True))
     
-    usuario = db.relationship('Usuario', back_populates='cliente')
+    
+    def __repr__(self):
+        return f'<Cliente {self.idCliente}>'

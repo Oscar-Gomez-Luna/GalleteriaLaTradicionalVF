@@ -1,0 +1,126 @@
+<!-- view/usuarios/cambiarContrasena.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cambiar Contraseña - La Tradicional</title>
+    <!-- Incluir Bootstrap CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
+    <!-- Incluir tus estilos personalizados -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos_LAYOUT_galleria.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+    <style>
+        body {
+            background-color: #F5F5DC; /* Fondo beige claro */
+            color: #5C4033; /* Texto marrón oscuro */
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .change-password-container {
+            background-color: #FFFFFF; /* Fondo blanco para el formulario */
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .change-password-container img {
+            max-width: 150px;
+            margin-bottom: 1.5rem;
+        }
+        .change-password-container h2 {
+            color: #5C4033; /* Título marrón oscuro */
+            margin-bottom: 1.5rem;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .form-group label {
+            display: block;
+            color: #5C4033;
+            margin-bottom: 0.5rem;
+        }
+        .form-group input {
+            width: 100%;
+            border: 1px solid #8B5A2B; /* Borde marrón medio */
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        .btn-primary {
+            background-color: #8B5A2B; /* Botón marrón medio */
+            border-color: #8B5A2B;
+            color: #FFFFFF;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #5C4033; /* Marrón más oscuro al pasar el mouse */
+            border-color: #5C4033;
+        }
+        .alert {
+            margin-bottom: 1rem;
+            color: #5C4033;
+            background-color: #FFF5E6; /* Fondo de alerta en tono claro */
+            border-color: #8B5A2B;
+        }
+        .back-link {
+            display: block;
+            margin-top: 1rem;
+            color: #8B5A2B;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            color: #5C4033;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="change-password-container">
+        <!-- Incluir el logo -->
+        <img src="{{ url_for('static', filename='img/LOGO DEL GALLETAS.png') }}" alt="Logo La Tradicional">
+        <h2>Cambiar Contraseña</h2>
+        <!-- Mensajes flash -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Formulario de cambio de contraseña -->
+        <form method="POST" action="{{ url_for('usuarios.change_password') }}">
+            <!-- Incluir el token CSRF -->
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div class="form-group">
+                <label for="current_password">Contraseña Actual:</label>
+                <input type="password" name="current_password" id="current_password" required>
+            </div>
+            <div class="form-group">
+                <label for="new_password">Nueva Contraseña:</label>
+                <input type="password" name="new_password" id="new_password" required>
+            </div>
+            <div class="form-group">
+                <label for="confirm_password">Confirmar Nueva Contraseña:</label>
+                <input type="password" name="confirm_password" id="confirm_password" required>
+            </div>
+            <div>
+                <button type="submit" class="btn btn-primary">Cambiar Contraseña</button>
+            </div>
+        </form>
+        <a href="{{ url_for('dashboard.dashboard') }}" class="back-link">Volver al Dashboard</a>
+    </div>
+
+    <!-- Incluir Bootstrap JS y dependencias -->
+    <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

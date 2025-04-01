@@ -12,4 +12,9 @@ class DetalleVentaGalletas(db.Model):
     subtotal = db.Column(db.Numeric(10, 2), nullable=False)
 
     venta = db.relationship('Venta', backref=db.backref('detalles', lazy=True))
+ 
+    # Eliminamos la definición explícita de 'venta' porque el backref en Venta ya la crea
     lote = db.relationship('LoteGalletas', backref=db.backref('ventas_detalle', lazy=True))
+
+    def __repr__(self):
+        return f'<DetalleVentaGalletas {self.id_detalleVentaGalletas}>'

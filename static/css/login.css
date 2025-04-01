@@ -1,0 +1,214 @@
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Jost', sans-serif;
+    background: url("../img/loginNuevo.png") no-repeat center / cover; 
+}
+
+.main {
+    width: 360px;
+    height: 520px;
+    overflow: hidden;
+    background: #d17a45;
+    border-radius: 10px;
+    box-shadow: 5px 20px 50px #000;
+}
+
+.login .g-recaptcha {
+    margin: 10px auto; /* Centramos el reCAPTCHA */
+    display: flex;
+    justify-content: center;
+}
+
+.logo {
+    position: absolute;
+    top: 40px; 
+    left: 100px;
+}
+
+.logo img {
+    width: 170px !important;
+    height: auto; 
+}
+
+#chk {
+    display: none;
+}
+
+.signup {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+/* Contenedor con scroll para el formulario de registro */
+.signup-content {
+    max-height: 380px;
+    overflow-y: auto;
+    background: #d17a45;
+}
+
+/* Estilo del scrollbar */
+.signup-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.signup-content::-webkit-scrollbar-track {
+    background: #d17a45;
+    border-radius: 10px;
+}
+
+.signup-content::-webkit-scrollbar-thumb {
+    background: #ba8445;
+    border-radius: 10px;
+}
+
+.signup-content::-webkit-scrollbar-thumb:hover {
+    background: #be6e11;
+}
+
+/* Estilo para las columnas del formulario */
+.form-columns {
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+    margin: 0 auto;
+    background: #d17a45;
+}
+
+.column-left,
+.column-right {
+    width: 48%;
+}
+
+/* Ajustamos los inputs, select y el botón dentro del contenedor con scroll */
+.signup-content input,
+.signup-content select,
+.signup-content button {
+    width: 100%;
+    margin: 8px 0;
+    box-sizing: border-box;
+}
+
+/* Ajustamos específicamente el botón */
+.signup-content button {
+    width: 60%;
+    margin: 10px auto 20px auto;
+    display: block;
+}
+
+label {
+    color: #fff;
+    font-size: 1em;
+    justify-content: center;
+    display: flex;
+    margin: 32px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: .5s ease-in-out;
+}
+
+input {
+    width: 60%; /* Mantenemos el ancho para los inputs en general */
+    height: 10px;
+    background: #e0dede;
+    justify-content: center;
+    display: flex;
+    margin: 20px auto; /* Centramos los inputs */
+    padding: 12px;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+/* Estilo específico para los inputs dentro de .login */
+.login input {
+    width: 60%;
+    margin: 20px auto; /* Aseguramos que los inputs estén centrados */
+    display: block; /* Cambiamos a block para un mejor centrado */
+}
+
+/* Estilo específico para el select */
+select {
+    width: 100%;
+    height: 34px;
+    background: #e0dede;
+    justify-content: center;
+    display: flex;
+    margin: 8px 0;
+    padding: 8px;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    box-sizing: border-box;
+    color: #333;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    cursor: pointer;
+    background: #e0dede url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="5" viewBox="0 0 10 5"><path fill="%23333" d="M0 0h10L5 5z"/></svg>') no-repeat right 10px center;
+}
+
+select option {
+    color: #333;
+    background: #fff;
+}
+
+select:focus {
+    color: #333;
+}
+
+button {
+    width: 60%;
+    height: 40px;
+    margin: 10px auto;
+    justify-content: center;
+    display: block;
+    color: #fff;
+    background: #ba8445;
+    font-size: 1em;
+    font-weight: bold;
+    margin-top: 30px;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    transition: .2s ease-in;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #be6e11;
+}
+
+.login {
+    height: 665px;
+    background: #eee;
+    border-radius: 60% / 10%;
+    transform: translateY(-180px);
+    transition: .8s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centramos los elementos dentro de .login */
+}
+
+.login label {
+    color: #ba8445;
+    transform: scale(.6);
+}
+
+#chk:checked ~ .login {
+    transform: translateY(-500px);
+}
+
+#chk:checked ~ .login label {
+    transform: scale(1);
+}
+
+#chk:checked ~ .signup label {
+    transform: scale(.6);
+}

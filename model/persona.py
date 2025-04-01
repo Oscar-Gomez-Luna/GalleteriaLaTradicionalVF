@@ -14,3 +14,9 @@ class Persona(db.Model):
     codigoPostal = db.Column(db.Integer, nullable=False)
     email = db.Column(db.String(100), nullable=False)
     fechaNacimiento = db.Column(db.Date, nullable=False)
+    
+
+    clientes = db.relationship('Cliente', backref='persona', lazy=True)
+
+    def __repr__(self):
+        return f'<Persona {self.nombre}>'

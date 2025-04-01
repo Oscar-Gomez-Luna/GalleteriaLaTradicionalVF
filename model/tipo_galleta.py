@@ -7,3 +7,6 @@ class TipoGalleta(db.Model):
     costo = db.Column(db.Numeric(10, 2), nullable=False)
 
     galletas = db.relationship('Galleta', backref='tipo_galleta', lazy=True)
+    
+    def __repr__(self):
+        return f'<TipoGalleta {self.nombre}>'

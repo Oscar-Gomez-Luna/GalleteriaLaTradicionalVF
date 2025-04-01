@@ -1,0 +1,59 @@
+<!-- view/usuarios/login.html -->
+{% extends "layout_login.html" %}
+{% import "_macros.html" as macro %}
+
+{% block container %}
+<div class="main">
+    <input type="checkbox" id="chk" aria-hidden="true">
+
+    <!-- Formulario de Registro -->
+    <div class="signup">
+        <form method="POST" action="{{ url_for('usuarios.register') }}" novalidate>
+            {{ form_register.hidden_tag() }}
+            <label for="chk" aria-hidden="true">Regístrate</label>
+
+            <!-- Contenedor con scroll -->
+            <div class="signup-content">
+                <div class="form-columns">
+                    <!-- Columna izquierda -->
+                    <div class="column-left">
+                        {{ macro.camposNuevos(form_register.username, placeholder="Nombre de Usuario") }}
+                        {{ macro.camposNuevos(form_register.apMaterno, placeholder="Apellido Materno") }}
+                        {{ macro.camposNuevos(form_register.genero, placeholder="Género") }}
+                        {{ macro.camposNuevos(form_register.calle, placeholder="Calle") }}
+                        {{ macro.camposNuevos(form_register.email, placeholder="Correo") }}
+                        {{ macro.camposNuevos(form_register.password, placeholder="Contraseña", type="password") }}
+                    </div>
+
+                    <!-- Columna derecha -->
+                    <div class="column-right">
+                        {{ macro.camposNuevos(form_register.apPaterno, placeholder="Apellido Paterno") }}
+                        {{ macro.camposNuevos(form_register.nombre, placeholder="Nombre") }}
+                        {{ macro.camposNuevos(form_register.telefono, placeholder="Teléfono", type="text") }}
+                        {{ macro.camposNuevos(form_register.numero, placeholder="Número", type="number") }}
+                        {{ macro.camposNuevos(form_register.colonia, placeholder="Colonia") }}
+                        {{ macro.camposNuevos(form_register.codigoPostal, placeholder="Código Postal", type="number") }}
+                        {{ macro.camposNuevos(form_register.fechaNacimiento, placeholder="Fecha de Nacimiento", type="date") }}
+                    </div>
+                </div>
+
+                <button type="submit">Regístrate</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Formulario de Login -->
+    <div class="login">
+        <form method="POST" action="{{ url_for('usuarios.login') }}" novalidate>
+            {{ form_login.hidden_tag() }}
+            <label for="chk" aria-hidden="true">Iniciar Sesión</label>
+
+            {{ macro.camposNuevos(form_login.username, placeholder="Nombre de Usuario") }}
+            {{ macro.camposNuevos(form_login.password, placeholder="Contraseña", type="password") }}
+
+            <div class="g-recaptcha" data-sitekey="6Lfzv_gqAAAAACe6rNuoX0zGOsCe3Ltjfb9P6dZU"></div>
+            <button type="submit">Ingresar</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

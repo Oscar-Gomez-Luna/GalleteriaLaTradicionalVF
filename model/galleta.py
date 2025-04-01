@@ -13,9 +13,10 @@ class Galleta(db.Model):
     
     # Relación con receta
     receta = db.relationship('Receta', backref=db.backref('galletas', lazy=True))
-    
-    # Relaciones
     detalles_venta = db.relationship('DetalleVentaOrden', backref='galleta', lazy=True)
     tipo = db.relationship('TipoGalleta', back_populates='galletas')
-
     lotes = db.relationship('LoteGalletas', backref='galleta', lazy=True)
+    tipo_galleta = db.relationship('TipoGalleta', backref=db.backref('galletas', lazy=True))
+
+    def __repr__(self):
+        return f'<Galleta {self.galleta}>'
