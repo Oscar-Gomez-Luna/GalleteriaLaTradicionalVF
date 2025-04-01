@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La tradicional - login</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.6/dist/sweetalert2.min.css">
+    <link href="{{ url_for('static', filename='css/estilos_layout_login.css') }}" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" class="logo">
+
+    <!-- Menu -->
+    <header class="header">
+        <h1>GALLETERIA LA TRADICIONAL</h1>
+    </header>
+
+    {% block container %}
+    {% endblock %}
+
+</body>
+
+</html>

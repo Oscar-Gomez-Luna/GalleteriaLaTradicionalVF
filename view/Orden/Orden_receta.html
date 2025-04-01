@@ -1,0 +1,63 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/estilos_ordenes.css') }}" rel="stylesheet">
+
+{% extends "layout_galleteria.html" %}
+{% import "_macros.html" as macros %}
+{% block container %}
+
+<main class="main">
+<div>
+    <div class="form-container receta-container">
+        <div class="receta-header">
+            <div class="header-content">
+                <h3 class="receta-title">{{ receta.nombreReceta }}</h3>
+                <div class="cantidad-info">
+                    <span class="receta-badge">{{ cantidad }}</span>
+                    {% if ingredientes and ingredientes[0].presentacion != 'Unidad' %}
+                        <span class="presentacion-info">
+                            ({{ ingredientes[0].presentacion }} - 
+                            {{ ingredientes[0].cantidad_pedido_original }} cajas = 
+                            {{ ingredientes[0].total_galletas }} galletas)
+                        </span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="receta-body">
+            <div class="mb-4">
+                <h5 class="receta-subtitle">Descripción:</h5>
+                <textarea class="form-control receta-textarea" rows="3" readonly>{{ receta.Descripccion }}</textarea>
+            </div>
+
+            <div class="mb-4">
+                {% if ingredientes %}
+                <div class="row">
+                    {% for item in ingredientes %}
+                    <div class="col-md-6 mb-3">
+                        <div class="form-group">
+                            <label class="ingrediente-label">{{ item.insumo }}</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control ingrediente-input"
+                                    value="{{ item.cantidad_necesaria }}" readonly>
+                                <span class="input-group-text ingrediente-unidad">{{ item.unidad }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="receta-alert">
+                    No se pudieron cargar los ingredientes
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="form-buttons">
+                <a href="{{ url_for('orden.ordenes') }}" class="btn receta-btn">Volver</a>
+            </div>
+        </div>
+    </div>
+</div>
+</main>
+{% endblock %}

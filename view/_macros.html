@@ -1,0 +1,34 @@
+{% macro camposNuevos(field) %}
+    <dt>{{ field.label }}</dt>
+    <dd>
+        {% if field.type == 'SelectMultipleField' %}
+            <ul style="list-style-type: none; padding-left: 0;">
+                {% for checkbox in field %}
+                <li>
+                    {{ checkbox(class="form-check-input")|safe }}
+                    {{ checkbox.label(class="form-check-label") }}
+                </li>
+                {% endfor %}
+            </ul>
+        {% elif field.type == 'RadioField' %}
+            <ul style="list-style-type: none; padding-left: 0;">
+                {% for radiobutton in field %}
+                <li>
+                    {{ radiobutton(class="form-check-input")|safe }}
+                    {{ radiobutton.label(class="form-check-label") }}
+                </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            {{ field(**kwargs)|safe }}
+        {% endif %}
+    </dd>
+
+    {% if field.errors %}
+    <ul class="errors">
+        {% for error in field.errors %}
+        <li style="color: red;">{{ error }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+{% endmacro %}

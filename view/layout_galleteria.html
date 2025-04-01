@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La tradicional</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.6/dist/sweetalert2.min.css">
+    <link href="{{ url_for('static', filename='css/estilos_layout_galleteria.css') }}" rel="stylesheet" type="text/css" />
+</head>
+
+<body class="custom-background">
+    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" class="custom-logo">
+
+    <!-- Menu -->
+    <header class="custom-header">
+        <nav class="custom-nav">
+            <a href="{{ url_for('galletas') }}" class="{{ 'custom-active' if active_page == 'galletas' else '' }}">Galletas</a>
+            <a href="{{ url_for('ventas') }}" class="{{ 'custom-active' if active_page == 'ventas' else '' }}">Ventas</a>
+            <a href="{{ url_for('produccion') }}" class="{{ 'custom-active' if active_page == 'produccion' else '' }}">Producción</a>
+            <a href="{{ url_for('insumo.insumos') }}" class="{{ 'custom-active' if active_page == 'insumos' else '' }}">Insumos</a>
+            <a href="{{ url_for('orden.ordenes') }}" class="{{ 'custom-active' if active_page == 'ordenes' else '' }}">Ordenes</a>
+            <a href="{{ url_for('ganancias') }}" class="{{ 'custom-active' if active_page == 'ganancias' else '' }}">Ganancias</a>
+            <a href="{{ url_for('administracion') }}" class="{{ 'custom-active' if active_page == 'administrador' else '' }}">Administrador</a>
+        </nav>
+    </header>
+
+    
+
+    {% block container %}
+    {%with messages=get_flashed_messages()%}
+                
+                {%if messages%}
+                    {%for message in messages%}
+                    <div class="alert alert-success">
+                        {{message}}
+                    </div>
+                    {%endfor%}
+                {%endif%}
+                {%endwith%}
+    {% endblock %}
+</body>
+
+</html>

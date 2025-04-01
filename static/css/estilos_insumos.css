@@ -1,0 +1,459 @@
+.main {
+    padding: 20px; 
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background-color: #ECC4A6;
+}
+
+.table th,
+.table td {
+    border: 1px solid #a65323;
+    padding: 10px;
+    text-align: center;
+}
+
+.table th {
+    background-color: #F1B384;
+}
+
+.btn {
+    background-color: #f5c19b;
+    border: 1px solid #a65323;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #a65323;
+}
+
+.btn:hover {
+    background-color: #e09566;
+    color: #fff;
+}
+
+/* Estilos para el formulario */
+.form-container {
+    background-color: #A97458; /* Nuevo color de fondo */
+    color: #fff; /* Texto en blanco */
+    border-radius: 20px; /* Bordes redondeados */
+    box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.2); /* Sombra */
+    padding: 20px; /* Más padding */
+    max-width: 500px; /* Ancho máximo */
+    margin: -15px auto; /* Centrado */
+    overflow-y: auto; /* Scroll vertical si es necesario */
+}
+
+.form-group {
+    margin-bottom: 5px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 3px;
+    color: #fff; /* Texto en blanco */
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px; /* Bordes más redondeados */
+    border: 1px solid #ccc;
+    background-color: #fff; /* Fondo blanco para inputs */
+    color: #000; /* Texto en negro */
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin: 25px 0;
+    width: 100%;
+}
+
+/* Estilos para los botones (tanto <button> como <a>) */
+.form-buttons .btn {
+    padding: 12px 25px;       /* Mismo padding interno */
+    width: 140px;             /* Ancho fijo idéntico */
+    height: 45px;             /* Altura fija idéntica */
+    box-sizing: border-box;   /* Incluye padding en el ancho/alto */
+    text-align: center;
+    line-height: 1.2;         /* Centra verticalmente el texto */
+    
+    /* Estilos visuales (manteniendo tu diseño original) */
+    background-color: #a65323;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    text-decoration: none;
+    display: inline-flex;      /* Mejor alineación */
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+/* Estilos hover para ambos */
+.form-buttons .btn:hover {
+    background-color: #e09566;
+    transform: translateY(-2px);
+}
+
+.extra-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ECC4A6;
+    padding: 20px;
+    margin-top: 10px;
+    border-radius: 8px;
+    height: 125px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.extra-section h3,
+.extra-section h4 {
+    margin-top: -50px;
+}
+
+.extra-section h4 {
+    font-weight: normal;
+}
+
+.extra-section>div:last-child {
+    display: flex;
+    gap: 10px;
+}
+
+#boton_compra {
+    background-color: #ECC4A6;
+    border: none;
+    cursor: pointer;
+    padding: 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+#boton_compra:hover {
+    background-color: #e09566;
+}
+
+#boton_compra img {
+    width: 50px;
+    height: 50px;
+}
+
+.table-container {
+    width: auto;
+    height: 210px;
+    overflow: auto;
+}
+
+.table-container table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.alert-success {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
+
+.alert-error {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}
+
+/* Estilos para el modal */
+.modal {
+    display: none; /* Oculta el modal por defecto */
+    position: fixed;
+    top: 5%; /* Posiciona el modal un 5% desde la parte superior */
+    left: 30%; /* Posiciona el modal un 30% desde la izquierda */
+    width: 40%; /* Ancho del modal */
+    height: 80%; /* Alto del modal */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-dialog {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    width: 100%; /* Ocupa el 100% del ancho del modal */
+    max-width: 500px; /* Limita el ancho máximo */
+    border: 1px solid #a65323; /* Color del borde */
+    max-height: 90%; /* Limita el alto máximo del modal */
+    overflow-y: auto; /* Habilita el scroll vertical */
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #a65323; /* Color del borde */
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.modal-title {
+    margin: 0;
+    color: #a65323; /* Color del texto */
+}
+
+.close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #a65323; /* Color del botón de cierre */
+}
+
+.close:hover {
+    color: #7a3a1a; /* Color al hacer hover */
+}
+
+.modal-body {
+    margin-bottom: 20px;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.modal-buttons button {
+    padding: 10px 20px;
+    background-color: #964b28; /* Color de fondo del botón */
+    color: white; /* Color del texto */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.modal-buttons button:hover {
+    background-color: #7a3a1a; /* Color al hacer hover */
+}
+
+/* Estilos para enlaces que se ven como el botón #boton_compra */
+.btn-compra-link {
+    display: inline-block; /* Hace que el enlace se comporte como un botón */
+    background-color: #ECC4A6; /* Mismo color de fondo que #boton_compra */
+    border: none; /* Sin borde */
+    cursor: pointer; /* Cambia el cursor a pointer, como un botón */
+    padding: 20px; /* Mismo padding que #boton_compra */
+    border-radius: 5px; /* Mismo radio de borde que #boton_compra */
+    transition: background-color 0.3s ease; /* Misma transición que #boton_compra */
+    text-decoration: none; /* Elimina el subrayado predeterminado de los enlaces */
+    color: inherit; /* Hereda el color del texto */
+    text-align: center; /* Centra el contenido */
+}
+
+.btn-compra-link:hover {
+    background-color: #e09566; /* Mismo color de hover que #boton_compra */
+}
+
+.btn-compra-link img {
+    width: 50px; /* Mismo tamaño de imagen que #boton_compra */
+    height: 50px; /* Mismo tamaño de imagen que #boton_compra */
+}
+
+.btn-compra-links img {
+    width: 10px;
+    height: 30px;
+    margin: 0 10px;
+    background-color: aqua;
+    border-radius: 8%;
+}
+
+/* Estilos para el formulario en 3 columnas */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Tres columnas de igual tamaño */
+    gap: 20px; /* Espacio entre columnas */
+}
+
+.form-grid .form-group {
+    margin-bottom: 10px;
+}
+
+.form-grid .form-group label {
+    display: block;
+    margin-bottom: 3px;
+    color: #fff; /* Texto en blanco */
+    font-weight: bold;
+}
+
+.form-grid .form-group input,
+.form-grid .form-group select {
+    width: 100%;
+    padding: 7px;
+    border-radius: 10px; /* Bordes más redondeados */
+    border: 1px solid #ccc;
+    background-color: #fff; /* Fondo blanco para inputs */
+    color: #000; /* Texto en negro */
+}
+
+.table-containe {
+    width: auto;
+    height: 260px;
+    overflow: auto;
+    background-color: #ECC4A6;
+}
+
+/* Estilos para las alertas */
+/* Estilo base para todas las alertas (opcional) */
+/* Alertas de "por terminarse" - Texto rojo */
+.alerta-terminarse {
+    color: #d32f2f; /* Rojo oscuro */
+    font-weight: bold; /* Opcional: negrita para énfasis */
+}
+
+/* Alertas de "caducar" - Texto amarillo/naranja */
+.alerta-caducar {
+    color: #ffcf11; /* Amarillo-anaranjado */
+    font-weight: bold; /* Opcional: negrita para énfasis */
+}
+
+.textarea-merma {
+    height: 120px; /* Altura fija */
+    min-height: 120px; /* Altura mínima */
+    max-height: 200px; /* Altura máxima para scroll */
+    resize: vertical; /* Permite redimensionar solo verticalmente */
+    overflow-y: auto; /* Scroll vertical cuando sea necesario */
+    width: 100%; /* Ancho completo del contenedor */
+    padding: 8px 12px; /* Espaciado interno */
+    border: 1px solid #ced4da; /* Borde similar a otros inputs */
+    border-radius: 4px; /* Bordes redondeados */
+    font-family: inherit; /* Mantiene la fuente consistente */
+    font-size: 1rem; /* Tamaño de fuente estándar */
+}
+
+/* Estilos específicos para alertas 
+.alert-container {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto 20px auto;
+}*/
+
+.alert {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.alert-success {
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+    color: #3c763d;
+}
+
+.alert-error,
+.alert-danger {
+    background-color: #f2dede;
+    border-color: #ebccd1;
+    color: #a94442;
+}
+
+.alert-warning {
+    background-color: #fcf8e3;
+    border-color: #faebcc;
+    color: #8a6d3b;
+}
+
+.alert-info {
+    background-color: #d9edf7;
+    border-color: #bce8f1;
+    color: #31708f;
+}
+
+/* Estilos específicos para cada botón */
+.btn-guardar, .btn-cancelar {
+    padding: 12px 25px;
+    min-width: 120px;
+    text-align: center;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: bold;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s;
+}
+
+.btn-guardar {
+    background-color: #a65323; /* Color original */
+}
+
+.btn-cancelar {
+    background-color: #a65323; /* Mismo color que el botón */
+}
+
+.btn-guardar:hover, .btn-cancelar:hover {
+    background-color: #e09566;
+    color: white;
+    transform: translateY(-2px);
+}
+
+
+
+/* Estilo para los botones de acción */
+/* Estilo unificado para todos los botones del contenedor */
+.btn-cancelar,
+#boton_compra {
+    background-color: #a65323;
+    color: white;
+    padding: 12px 10px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-block;
+    width: 90px; /* Ancho fijo para todos */
+    height: 40px; /* Altura fija para todos */
+    text-align: center;
+    margin: 0 0px;
+    box-sizing: border-box; /* Incluye padding en el ancho/alto */
+    line-height: 1.2; /* Centrado vertical del texto */
+}
+
+/* Efecto hover manteniendo tus colores */
+.btn-cancelar:hover,
+#boton_compra:hover {
+    background-color: #e09566;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* IMPORTANTE: Corrige los IDs duplicados en tu HTML */
+/* Recomiendo cambiar los IDs a clases: */
+/*
+<button class="btn-cancelar" onclick="abrirModalProveedor()">Pagos</button>
+<button class="btn-cancelar" onclick="abrirModalOrdenes()">Ordenes</button>
+*/
