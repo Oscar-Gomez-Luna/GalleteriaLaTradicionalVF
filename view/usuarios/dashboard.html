@@ -1,0 +1,126 @@
+<!-- view/usuarios/dashboard.html -->
+{% extends "layaut.html" %}
+
+{% block links %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        .chart-container {
+            background-color: #ffffff;
+            padding: 60px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            height: 400px; /* Fixed height for consistency */
+        }
+        .chart-container h4 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .button-group {
+            display: flex;
+            justify-content: flex-end; /* Mueve los botones a la derecha */
+            gap: 10px; /* Espacio entre los botones */
+            margin-top: 10px;
+        }
+        .btn-primary, .btn-danger {
+            border-radius: 20px;
+            padding: 10px 20px;
+        }
+        .btn-primary {
+            background-color: #007BFF; /* Azul para "Cambiar Contraseña" */
+            border-color: #007BFF;
+        }
+        .btn-danger {
+            background-color: #DC3545; /* Rojo para "Cerrar Sesión" */
+            border-color: #DC3545;
+        }
+        .alert {
+            background-color: #FFF5E6; /* Fondo claro para los mensajes */
+            color: #5C4033;
+            border-color: #8B5A2B;
+            margin-bottom: 10px;
+        }
+        .welcome-message {
+            background-color: #FFF5E6; /* Fondo claro para el mensaje de bienvenida */
+            color: #5C4033;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .last-connection {
+            background-color: #E6F0FA; /* Fondo claro para "Última conexión" */
+            color: #5C4033;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block container %}
+    <div class="container mt-4">
+        <!-- Header Section -->
+        <div class="dashboard-header">
+            <div class="welcome-message auto-hide">
+                <h2 class="mb-3">Bienvenido, {{ usuario.nombreUsuario }}</h2>
+            </div>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} auto-hide">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            <div class="last-connection auto-hide">
+                Última conexión: {{ usuario.ultima_conexion.strftime('%Y-%m-%d %H:%M:%S') }}
+            </div>
+            <div class="button-group">
+                <a href="{{ url_for('usuarios.change_password') }}" class="btn btn-primary">Cambiar Contraseña</a>
+                <a href="{{ url_for('usuarios.logout') }}" class="btn btn-danger">Cerrar Sesión</a>
+            </div>
+        </div>
+
+        <!-- Dashboard Charts -->
+        <h3 class="mb-4">Dashboard de Ventas</h3>
+        <div class="row">
+            <!-- Ventas Diarias -->
+            <div class="col-md-6">
+                <div class="chart-container">
+                    <h4>Ventas Diarias (Últimos 7 días)</h4>
+                    <canvas id="ventasDiariasChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Productos Más Vendidos -->
+            <div class="col-md-6">
+                <div class="chart-container">
+                    <h4>Productos Más Vendidos</h4>
+                    <canvas id="productosVendidosChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Presentaciones Más Vendidas -->
+            <div class="col-md-6 offset-md-3">
+                <div class="chart-container">
+                    <h4>Presentaciones Más Vendidas</h4>
+                    <canvas id="presentacionesVendidasChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pasar los datos al JavaScript -->
+    <script id="fechas" type="application/json">{{ fechas | tojson }}</script>
+    <script id="totalesVentas" type="application/json">{{ totales_ventas | tojson }}</script>
+    <script id="nombresProductos" type="application/json">{{ nombres_productos | tojson }}</script>
+    <script id="cantidadesProductos" type="application/json">{{ cantidades_productos | tojson }}</script>
+    <script id="nombresPresentaciones" type="application/json">{{ nombres_presentaciones | tojson }}</script>
+    <script id="cantidadesPresentaciones" type="application/json">{{ cantidades_presentaciones | tojson }}</script>
+{% endblock %}

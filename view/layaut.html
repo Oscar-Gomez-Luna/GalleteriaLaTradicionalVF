@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galleteria - La tradicional</title>
+    <link href="{{ url_for('static', filename='css/estilos_nav.css') }}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    {% block links %}
+
+    {% endblock %}
+</head>
+
+<body class="custom-background">
+    <img src="{{ url_for('static', filename='img/LOGO DEL GALLETAS.png') }}" alt="" class="custom-logo">
+
+    <header class="custom-header">
+        <nav class="custom-nav">
+            <a href="" class="{{ 'custom-active' if active_page == 'galletas' else '' }}">Galletas</a>
+            <a href="" class="{{ 'custom-active' if active_page == 'ventas' else '' }}">Ventas</a>
+            <a href="" class="{{ 'custom-active' if active_page == 'produccion' else '' }}">Producción</a>
+            <a href="" class="{{ 'custom-active' if active_page == 'insumos' else '' }}">Insumos</a>
+            <a href="" class="{{ 'custom-active' if active_page == 'ordenes' else '' }}">Ordenes</a>
+            <a href="" class="{{ 'custom-active' if active_page == 'ganancias' else '' }}">Dashboard</a>
+            <a href="" class="{{ 'custom-active' if active_page == 'administracion' else '' }}">Administración</a>
+        </nav>
+    </header>
+
+    {% block container %}
+
+    {% endblock %}
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+
+</html>

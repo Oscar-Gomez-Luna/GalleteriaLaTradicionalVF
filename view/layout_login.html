@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Tradicional - Login</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.6/dist/sweetalert2.min.css">
+    <link href="{{ url_for('static', filename='css/login.css') }}" rel="stylesheet" type="text/css" />
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+<body>
+    <!-- Logo -->
+    <img src="{{ url_for('static', filename='img/LOGO DEL GALLETAS.png') }}" alt="Logo" class="logo">
+
+ 
+
+    <!-- Contenedor principal -->
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <!-- Solo mostramos mensajes que no sean errores de validación -->
+                    {% if message not in ['El nombre de usuario es requerido', 'El correo es requerido', 'El teléfono es requerido', 'La contraseña es requerida'] %}
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                Swal.fire({
+                                    icon: '{{ category }}',
+                                    title: '{{ "Éxito" if category == "success" else "Error" }}',
+                                    text: '{{ message }}',
+                                    confirmButtonText: 'Aceptar'
+                                });
+                            });
+                        </script>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block container %}
+        {% endblock %}
+    </div>
+
+    <!-- Incluir el script de SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.6/dist/sweetalert2.min.js"></script>
+</body>
+</html>
