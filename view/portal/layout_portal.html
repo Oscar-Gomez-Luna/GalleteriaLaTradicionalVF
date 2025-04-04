@@ -25,7 +25,7 @@
         <nav class="nav">
             <a href="mis-pedidos">Mis Pedidos</a>
             <a href="portal-cliente" class="{{ 'activo' if active_page == 'portal_cliente' else '' }}">Pedidos</a>
-            <a href="logout">Cerrar Sesión</a>
+            <a href="{{ url_for('usuarios.logout') }}">Cerrar Sesión</a>
         </nav>
     </header>
 

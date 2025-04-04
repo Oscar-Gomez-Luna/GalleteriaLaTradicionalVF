@@ -3,32 +3,44 @@ from datetime import datetime, timedelta
 from model.tipo_galleta import db, TipoGalleta
 from model.galleta import db, Galleta
 from model.orden import db, Orden
-from model.detalle_orden import DetalleVentaOrden
+from model.detalle_venta_orden import DetalleVentaOrden
 from model.usuario import db, Usuario
 from model.cliente import db, Cliente
 from model.persona import db, Persona
+from flask_login import login_required, current_user
+from extensions import role_required
 
-portal_cliente_bp = Blueprint('portal_cliente', __name__, 
+portal_cliente_bp = Blueprint('portal_cliente', __name__,
                             url_prefix='/portal',
                             template_folder='view')
 
 # Configuración
-MODO_PRUEBA = True  # Cambiar a False en producción
-CLIENTE_PRUEBA_ID = 1 # ID del cliente de prueba
+MODO_PRUEBA = False  # Cambiar a False en producción
+CLIENTE_PRUEBA_ID = 1  # ID del cliente de prueba
+
+def obtener_cliente_desde_usuario(user_id):
+    """Obtiene el cliente asociado a un usuario"""
+    return Cliente.query.filter_by(idUsuario=user_id).first()
 
 @portal_cliente_bp.route('/')
+@login_required
+@role_required('CLIE')
 def index():
     return render_template('portal/welcome.html')
 
 @portal_cliente_bp.route('/portal-cliente', methods=['GET', 'POST'])
+@login_required
+@role_required('CLIE')
 def portal_cliente():
-    # Verificar si hay cliente logeado o usar modo prueba
-    if 'cliente_id' not in session and not MODO_PRUEBA:
-        flash('Debe iniciar sesión para acceder al portal', 'error')
-        return redirect(url_for('auth.login'))  # Asume que tienes una ruta de login
+    # Obtener el cliente actual (real o de prueba)
+    cliente = obtener_cliente_actual()
     
-    # Obtener el ID del cliente actual (real o de prueba)
-    cliente_id = session.get('cliente_id', CLIENTE_PRUEBA_ID) if MODO_PRUEBA else session.get('cliente_id')
+    if not cliente:
+        flash('No se encontró su perfil de cliente', 'error')
+        return redirect(url_for('usuarios.index'))
+    
+    # Guardar el ID del cliente en sesión
+    session['cliente_id'] = cliente.idCliente
     
     # Obtener tipos de galletas para el select
     tipos_galletas = TipoGalleta.query.all()
@@ -37,19 +49,19 @@ def portal_cliente():
     if 'carritos' not in session:
         session['carritos'] = {}
     
-    if str(cliente_id) not in session['carritos']:
-        session['carritos'][str(cliente_id)] = []
+    if str(cliente.idCliente) not in session['carritos']:
+        session['carritos'][str(cliente.idCliente)] = []
     
     # Procesar formulario cuando se envía
     if request.method == 'POST':
         action = request.form.get('action')
         
         if action == 'agregar':
-            return agregar_al_carrito(cliente_id)
+            return agregar_al_carrito(cliente.idCliente)
         elif action == 'eliminar':
-            return eliminar_del_carrito(cliente_id)
+            return eliminar_del_carrito(cliente.idCliente)
         elif action == 'limpiar':
-            return limpiar_carrito(cliente_id)
+            return limpiar_carrito(cliente.idCliente)
         
         return redirect(url_for('portal_cliente.portal_cliente'))
     
@@ -60,7 +72,7 @@ def portal_cliente():
         galletas = Galleta.query.filter_by(tipo_galleta_id=tipo_seleccionado).all()
     
     # Calcular total del carrito
-    carrito = session['carritos'].get(str(cliente_id), [])
+    carrito = session['carritos'].get(str(cliente.idCliente), [])
     total = sum(item['subtotal'] for item in carrito)
     
     return render_template('portal/portal_cliente.html',
@@ -69,6 +81,29 @@ def portal_cliente():
                          carrito=carrito,
                          total=total,
                          modo_prueba=MODO_PRUEBA)
+
+def obtener_id_cliente_actual():
+    """Obtiene el ID del cliente actual según el modo de operación"""
+    if MODO_PRUEBA:
+        return CLIENTE_PRUEBA_ID
+    
+    if not current_user.is_authenticated:
+        return None
+    
+    # Obtener el cliente asociado al usuario actual
+    cliente = obtener_cliente_desde_usuario(current_user.idUsuario)
+    return cliente.idCliente if cliente else None
+
+def obtener_cliente_actual():
+    """Obtiene el objeto Cliente actual según el modo de operación"""
+    if MODO_PRUEBA:
+        return Cliente.query.get(CLIENTE_PRUEBA_ID)
+    
+    if not current_user.is_authenticated:
+        return None
+    
+    # Obtener el cliente asociado al usuario actual
+    return obtener_cliente_desde_usuario(current_user.idUsuario)
 
 def agregar_al_carrito(cliente_id):
     galleta_id = request.form.get('galleta_id')
@@ -88,10 +123,10 @@ def agregar_al_carrito(cliente_id):
         item = {
             'galleta_id': galleta.id_galleta,
             'nombre': galleta.galleta,
-            'tipo': galleta.tipo_galleta_rel.nombre,
-            'precio': float(galleta.tipo_galleta_rel.costo),
+            'tipo': galleta.tipo_galleta.nombre,
+            'precio': float(galleta.tipo_galleta.costo),
             'cantidad': cantidad,
-            'subtotal': float(galleta.tipo_galleta_rel.costo) * cantidad
+            'subtotal': float(galleta.tipo_galleta.costo) * cantidad
         }
         
         # Buscar si ya existe el item en el carrito
@@ -131,77 +166,22 @@ def limpiar_carrito(cliente_id):
         flash('Carrito vaciado', 'info')
     return redirect(url_for('portal_cliente.portal_cliente'))
 
-def obtener_cliente_actual():
-    """Obtiene el cliente actual (real o de prueba)"""
-    if not MODO_PRUEBA and 'cliente_id' in session:
-        # Modo producción con cliente real
-        return Cliente.query.get(session['cliente_id'])
-    else:
-        # Modo prueba con cliente temporal
-        return crear_cliente_temporal()
-
-def crear_cliente_temporal():
-    """Función para crear un cliente temporal si no existe"""
-    cliente_temporal = Cliente.query.get(CLIENTE_PRUEBA_ID)
-    
-    if not cliente_temporal and MODO_PRUEBA:
-        try:
-            # Crear persona temporal
-            persona = Persona(
-                apPaterno='Temporal',
-                apMaterno='Cliente',
-                nombre='Invitado',
-                genero='O',
-                telefono='0000000000',
-                calle='Desconocida',
-                numero=0,
-                colonia='Desconocida',
-                codigoPostal=00000,
-                email='invitado@temporal.com',
-                fechaNacimiento=datetime.now().date()
-            )
-            db.session.add(persona)
-            db.session.flush()
-            
-            # Crear usuario temporal
-            usuario = Usuario(
-                nombreUsuario='invitado_temp',
-                estatus=1,
-                contrasenia='temp1234',
-                rol='CLIE'
-            )
-            db.session.add(usuario)
-            db.session.flush()
-            
-            # Crear cliente temporal
-            cliente_temporal = Cliente(
-                idPersona=persona.idPersona,
-                idUsuario=usuario.idUsuario
-            )
-            db.session.add(cliente_temporal)
-            db.session.commit()
-        except Exception as e:
-            db.session.rollback()
-            flash('Error al crear cliente temporal', 'error')
-            raise e
-    
-    return cliente_temporal
-
 @portal_cliente_bp.route('/confirmar-pedido', methods=['POST'])
+@login_required
+@role_required('CLIE')
 def confirmar_pedido():
-    cliente_id = session.get('cliente_id', CLIENTE_PRUEBA_ID) if MODO_PRUEBA else session.get('cliente_id')
+    cliente = obtener_cliente_actual()
+    if not cliente:
+        flash('Debe iniciar sesión como cliente para confirmar un pedido', 'error')
+        return redirect(url_for('usuarios.index'))
+    
+    cliente_id = cliente.idCliente
     
     if 'carritos' not in session or str(cliente_id) not in session['carritos'] or not session['carritos'][str(cliente_id)]:
         flash('No hay productos en el carrito', 'error')
         return redirect(url_for('portal_cliente.portal_cliente'))
     
     try:
-        # Obtener cliente actual (real o temporal)
-        cliente = obtener_cliente_actual()
-        if not cliente:
-            flash('No se pudo identificar al cliente', 'error')
-            return redirect(url_for('portal_cliente.portal_cliente'))
-        
         # Crear la orden
         nueva_orden = Orden(
             descripcion="Pedido de galletas",
@@ -236,14 +216,17 @@ def confirmar_pedido():
         db.session.rollback()
         flash(f'Error al confirmar el pedido: {str(e)}', 'error')
         return redirect(url_for('portal_cliente.portal_cliente'))
-    
+
 @portal_cliente_bp.route('/mis-pedidos')
+@login_required
+@role_required('CLIE')
 def mis_pedidos():
-    # Obtener cliente actual
     cliente = obtener_cliente_actual()
     if not cliente:
-        flash('No se pudo identificar al cliente', 'error')
-        return redirect(url_for('portal_cliente.portal_cliente'))
+        flash('Debe iniciar sesión como cliente para ver sus pedidos', 'error')
+        return redirect(url_for('usuarios.index'))
+    
+    cliente_id = cliente.idCliente
     
     # Obtener órdenes del cliente
     ordenes = Orden.query.filter_by(cliente_id=cliente.idCliente)\
@@ -266,7 +249,7 @@ def mis_pedidos():
             galleta = detalle.galleta
             pedido['detalles'].append({
                 'nombre': galleta.galleta,
-                'tipo': galleta.tipo_galleta_rel.nombre,
+                'tipo': galleta.tipo_galleta.nombre,
                 'cantidad': detalle.cantidad,
                 'subtotal': f"${detalle.subtotal:.2f}"
             })

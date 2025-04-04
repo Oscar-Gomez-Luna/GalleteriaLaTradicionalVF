@@ -4,7 +4,7 @@
 <link href="{{ url_for('static', filename='css/estilos_insumos.css') }}" rel="stylesheet" type="text/css" />
 
 {% import "_macros.html" as macros %}
-{% extends "layout_galleteria.html" %}
+{% extends "layaut.html" %}
 {% block container %}
 
 <main class="main">
@@ -19,7 +19,7 @@
     {% endif %}
     {% endwith %}
 
-    <!-- Formulario de busqueda -->
+    <!-- Formulario de busqueda 
     <form id="form-buscar-orden" class="form-container mb-4" method="POST" action="{{ url_for('insumo.comprados_insumos') }}" novalidate>
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
@@ -35,7 +35,7 @@
                 </div>
             </div>
         </div>
-    </form>
+    </form> -->
 
     <!-- Resultados de la busqueda la tabla o error -->
     {% if detalles_compra %}

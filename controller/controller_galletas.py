@@ -4,11 +4,13 @@ from model.tipo_galleta import TipoGalleta
 from model.lote_galleta import LoteGalletas
 from model.merma_galleta import MermaGalleta
 from model.receta import Receta
+from flask_login import current_user
 from forms.galleta_forms import MermaGalletaForm
 from sqlalchemy import func
+from flask_login import login_required
+from extensions import role_required
 
-galletas_bp = Blueprint('galletas', __name__)
-
+galletas_bp = Blueprint('galletas', __name__, url_prefix="/galletas")
 
 def obtener_galletas_unidad_con_existencia():
     subq = db.session.query(
@@ -22,9 +24,10 @@ def obtener_galletas_unidad_con_existencia():
         .filter(TipoGalleta.nombre == "Unidad")\
         .filter(subq.c.total > 0)\
         .all()
-
-
+ 
 @galletas_bp.route("/", methods=['GET', 'POST'])
+@login_required
+@role_required("ADMS", "PROD", "CAJA")
 def galletas():
     from forms.galleta_forms import NuevaGalletaForm
     nueva_form = NuevaGalletaForm()
@@ -90,11 +93,15 @@ def galletas():
         galletas_unidad=galletas_unidad,
         galletas_caja_kilo=galletas_caja_kilo,
         galletas_caja_medio_kilo=galletas_caja_medio_kilo,
-        galletas=galletas_con_existencia  # para el select del modal
+        galletas=galletas_con_existencia,  # para el select del modal
+        active_page="galletas",
+        usuario = current_user
     )
 
 
 @galletas_bp.route("/agregar-galleta", methods=["POST"])
+@login_required
+@role_required("ADMS", "PROD", "CAJA")
 def agregar_galleta():
     from forms.galleta_forms import NuevaGalletaForm
     form = NuevaGalletaForm()
@@ -120,6 +127,8 @@ def agregar_galleta():
 
 
 @galletas_bp.route("/merma-galleta", methods=["POST"])
+@login_required
+@role_required("ADMS", "PROD", "CAJA")
 def merma_galleta():
     form = MermaGalletaForm()
 

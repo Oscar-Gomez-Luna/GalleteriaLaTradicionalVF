@@ -1,4 +1,3 @@
-
 /* -------------------------------------------------------------------------------Estilos generales parte superior------------------------------------------------------*/
 body {
     font-family: Arial, sans-serif;
@@ -48,196 +47,6 @@ body {
 
 .main {
     padding: 20px;
-}
-
-/*------------------------------------------------------------------------ Estilos del submenú ---------------------------------------------------------------------------------------- */
-.submenu {
-display: flex;
-justify-content: center;
-align-items: center;
-background-color: #c89a73; /* Fondo un poquito más claro */
-border-radius: 50px; /* Bordes ovalados */
-padding: 10px 40px; /* Espaciado ajustado */
-gap: 20px; /* Espacio entre botones */
-max-width: 900px; /* Ancho máximo ajustado */
-width: 90%; /* El recuadro ocupa la mayor parte del contenedor */
-}
-
-.submenu button {
-background-color: transparent; /* Fondo transparente */
-border: none;
-font-size: 31px; /* Letras un poquito más grandes */
-font-family: "Georgia", serif; /* Fuente elegante */
-font-weight: bold; /* Negritas */
-color: #3a200f; /* Color de texto */
-cursor: pointer;
-padding: 10px 15px;
-text-decoration: none;
-}
-
-.submenu button.active {
-color: #6b3e1e; /* Color café más oscuro al estar seleccionado */
-text-decoration: underline; /* Subrayado */
-}
-
-.submenu button:hover {
-color: #6b3e1e; /* Color café al pasar el mouse */
-text-decoration: underline; /* Subrayado */
-}
-
-.centered-box {
-display: flex;
-justify-content: center; /* Centra horizontalmente */
-align-items: center; /* Centra verticalmente */
-margin: 20px auto; /* Espaciado automático */
-background-color: #c89a73; /* Fondo un poquito más claro */
-border-radius: 50px; /* Bordes ovalados */
-padding: 15px 50px; /* Espaciado interno ajustado */
-max-width: 900px; /* Máximo ancho ajustado */
-width: 90%; /* El recuadro ocupa la mayor parte del contenedor */
-box-sizing: border-box; /* Incluye padding dentro del ancho total */
-}
-
-/* Estilos para los botones */
-.centered-box button {
-background-color: transparent;
-border: none;
-font-size: 31px; /* Letras un poquito más grandes */
-font-family: "Georgia", serif; /* Fuente elegante */
-font-weight: bold; /* Negritas */
-color: #3a200f;
-cursor: pointer;
-padding: 10px 15px;
-text-align: center;
-}
-
-.centered-box button.active {
-color: #6b3e1e; /* Color café más oscuro al estar seleccionado */
-text-decoration: underline; /* Subrayado */
-}
-
-.centered-box button:hover {
-color: #6b3e1e; /* Color café al pasar el mouse */
-text-decoration: underline; /* Subrayado */
-}
-
-
-/* ---------------------------------------------------------------------- Estilos para las tablas------------------------------------------------------------------------------------ */
-/* Contenedor de las tablas */
-.tabla-contenedor {
-margin: 20px auto; /* Centrado */
-max-width: 100%; /* Ancho ligeramente mayor */
-overflow-x: auto; /* Scroll horizontal si es necesario */
-}
-
-/* Tabla general */
-.table {
-width: 100%; /* Ocupa todo el contenedor */
-border-collapse: collapse; /* Sin espacios entre bordes */
-font-family: "Georgia", serif; /* Fuente elegante */
-font-size: 18px; /* Contenido más grande */
-background-color: #f7c8a3; /* Fondo uniforme */
-color: #3a200f; /* Texto café oscuro */
-border: 1px solid #a97145; /* Borde exterior menos grueso */
-}
-
-/* Encabezados de tabla */
-.table thead th {
-background-color: #f7c8a3; /* Fondo igual al cuerpo */
-color: #3a200f; /* Texto café oscuro */
-font-weight: bold; /* Negrita */
-font-size: 20px; /* Encabezados más grandes */
-text-align: center; /* Texto centrado */
-padding: 15px; /* Espaciado interno */
-border: 1px solid #a97145; /* Líneas más suaves */
-text-transform: capitalize; /* Primera letra en mayúscula,*/
-}
-
-/* Filas de tabla */
-.table tbody td {
-padding: 15px; /* Espaciado interno */
-text-align: center; /* Texto centrado */
-font-size: 18px; /* Texto más grande en las celdas */
-border: 1px solid #a97145; /* Líneas menos marcadas */
-background-color: #f7c8a3; /* Mismo fondo */
-}
-
-/* Resaltado al pasar el mouse */
-.table tbody tr:hover {
-background-color: #f3b08d; /* Fondo ligeramente más oscuro */
-}
-
-/* Estilo para botones de acciones */
-.table tbody td .btn {
-padding: 7px 15px; /* Tamaño más grande para botones */
-font-size: 16px; /* Botones con texto más grande */
-font-weight: bold;
-border: none;
-border-radius: 5px;
-cursor: pointer;
-text-transform: uppercase;
-}
-
-/* Botón editar */
-.table tbody td .btn-edit {
-background-color: #ffd966; /* Amarillo */
-color: #3a200f; /* Texto oscuro */
-margin-right: 5px;
-}
-
-/* Botón eliminar */
-.table tbody td .btn-delete {
-background-color: #ff6666; /* Rojo */
-color: white; /* Texto blanco */
-}
-/*----------------------------------------------------------------------- Botónes dentro de la tabla -------------------------------------------------*/
-/* Botón de icono minimalista */
-/* Botón de icono minimalista */
-.icon-btn {
-background-color: transparent;
-border: none;
-color: #3a200f; /* Café oscuro */
-cursor: pointer;
-display: inline-flex;
-justify-content: center;
-align-items: center;
-width: 45px; /* Tamaño del botón */
-height: 45px;
-padding: 0;
-margin: 0;
-}
-
-/* Botón "Agregar" personalizado */
-.icon-btn.agregar .circle {
-display: flex;
-justify-content: center;
-align-items: center;
-width: 45px; /* Tamaño del círculo */
-height: 45px;
-border: 3px solid #3a200f; /* Borde del círculo */
-border-radius: 50%; /* Forma circular */
-font-size: 26px; /* Tamaño del signo "+" */
-font-weight: bold;
-color: #3a200f; /* Café oscuro */
-}
-
-/* Botón "Eliminar" */
-.icon-btn.eliminar i {
-font-size: 28px; /* Tamaño más grande del icono del bote de basura*/
-}
-
-/* Espaciado entre los botones */
-.acciones {
-display: flex;
-gap: 40px; /* Aumentar separación entre los botones */
-justify-content: center; /* Centrar botones */
-align-items: center; /* Alinear verticalmente */
-}
-
-/* Efecto hover para los botones */
-.icon-btn:hover {
-transform: scale(1.1); /* Aumentar tamaño ligeramente */
-transition: transform 0.2s ease-in-out;
 }
 
 
@@ -290,82 +99,6 @@ font-size: 40px; /* Aumento máximo del tamaño del icono */
 }
 
 
-
-/*------------------------------------------------------------------------ Modal para agregar------------------------------------------------------------------------------------------------*/
-
-
-/* Estilo general del modal */
-.modal-content {
-background-color: #fff; /* Fondo blanco */
-border-radius: 8px;
-padding: 20px;
-box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-font-family: Arial, sans-serif;
-}
-
-/* Título del modal */
-.modal-title {
-font-weight: bold; /* Negritas */
-font-size: 1.5rem;
-color: #000; /* Negro */
-text-align: center;
-}
-
-/* Etiquetas de los campos */
-.label-large {
-font-size: 1.2rem; /* Más grande */
-font-weight: bold; /* Negritas */
-font-family: 'Arial', sans-serif; /* Consistente con otros estilos*/
-color: #333; /* Gris oscuro */
-}
-
-/* Campos de entrada */
-.input-field {
-background-color: #d3d3d3; /* Gris más oscuro */
-border: 1px solid #ccc;
-color: #000; /* Texto negro */
-border-radius: 5px;
-padding: 15px; /* Más grande */
-font-size: 1rem; /* Texto más grande */
-}
-
-.input-large {
-height: 50px; /* Mayor altura */
-}
-
-.input-field:focus {
-outline: none;
-border-color: #7a3a1a; /* Bordes marrón oscuro */
-}
-
-/* Botones */
-.btn-receive {
-background-color: #964b28; /* Marrón oscuro */
-color: white;
-border: none;
-padding: 10px 20px;
-border-radius: 5px;
-cursor: pointer;
-font-weight: bold;
-}
-
-.btn-receive:hover {
-background-color: #7a3a1a; /* Marrón más oscuro */
-}
-
-.btn-cancel {
-background-color: #964b28; /* Marrón oscuro */
-color: white;
-border: none;
-padding: 10px 20px;
-border-radius: 5px;
-cursor: pointer;
-font-weight: bold;
-}
-
-.btn-cancel:hover {
-background-color: #7a3a1a; /* Marrón más oscuro */
-}
 
 
 
@@ -450,41 +183,66 @@ background-color: #7a3a1a; /* Marrón más oscuro */
 
 
 
-/* BARRA lateral de desplazamiento */
-
+/* BARRA lateral de desplazamiento y tabla --------------------------------------------------------------------- */
+/* Contenedor con scroll y fondo crema */
 .tabla-scroll-contenedor {
-    max-height: 420px;
+    width: 100%;
+    max-height: 260px;
     overflow-y: auto;
-    border: 1px solid #a97145;
-    margin-top: 15px;
+    background-color: #ECC4A6;
+    border-radius: 8px;
+    margin-top: 10px;
 }
 
-/* Tabla completa */
+/* Estilo de la tabla */
 .tabla-scroll {
     width: 100%;
     border-collapse: collapse;
-    table-layout: fixed;
+    margin-bottom: 20px;
+    background-color: #ECC4A6;
+    font-family: Arial, sans-serif;
 }
 
-/* Encabezados fijos */
-.tabla-scroll thead th {
+/* Cabecera fija */
+.tabla-scroll th {
+    background-color: #F1B384;
+    color: #333;
     position: sticky;
     top: 0;
-    background-color: #f7c8a3;
     z-index: 2;
     text-align: center;
     padding: 15px;
-    border: 1px solid #a97145;
+    border: 1px solid #a65323;
+}
+
+/* Celdas */
+.tabla-scroll td {
+    background-color: #ECC4A6;
+    color: #000;
+    text-align: center;
+    padding: 15px;
+    border: 1px solid #a65323;
+}
+
+/* Botones de acción */
+.acciones button {
+    background-color: #a65323;
+    color: rgb(236, 239, 236);
+    padding: 6px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
     font-weight: bold;
 }
 
-/* Celdas del cuerpo */
-.tabla-scroll tbody td {
-    text-align: center;
-    padding: 15px;
-    border: 1px solid #a97145;
-    background-color: #f7c8a3;
+.acciones button:hover {
+    background-color: #e09566;
 }
+
+
+
+
+
 
 
 /* merma-------------------- */
@@ -547,6 +305,176 @@ background-color: #7a3a1a; /* Marrón más oscuro */
     cursor: pointer;
 }
 
+/* estilos del boton de agregar ------------------------------------------------------------------------------------------------------------- */
+
+/* Contenedor general con fondo claro y bordes redondeados */
+.custom-extra-section {
+    background-color: #ECC4A6;
+    padding: 20px;
+    margin-top: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+    width: 90%;          /* controla el ancho relativo */
+    max-width: 1300px;   /* límite de ancho máximo */
+    margin-left: auto;
+    margin-right: auto;  /* centra horizontalmente */
+}
+
+/* Contenedor flexible para centrar el botón */
+.custom-button-container {
+    display: flex;
+    gap: 15px;
+}
+
+.custom-button-container.justify-content-center {
+    justify-content: center;
+}
+
+/* Botón estilo café (como en tu módulo de ventas) */
+.custom-btn-cafe {
+    background-color: #a65323; /* café */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+.custom-btn-cafe:hover {
+    background-color: #e09566; /* café claro al hacer hover */
+    color: white;
+}
 
 
+/* Igual al diseño de .nav_admin ---------------------------------------------------------------------------------------------------------------------------*/
+.nav_admin {
+    width: 50%;
+    margin: 50px auto;
+    padding: 10px 20px;
+    border-radius: 25px;
+    background-color: #E5A87B;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
 
+/* Botones tipo nav con estilo similar a <a> del nav_admin */
+.nav_admin .btn-nav {
+    background: none;
+    border: none;
+    color: #000000;
+    padding: 10px 15px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: all 0.3s;
+}
+
+/* Estilo del botón activo (como .activo en a) */
+.nav_admin .btn-nav.active {
+    color: #8B4513;
+    text-decoration: underline;
+}
+
+/* Hover opcional */
+.nav_admin .btn-nav:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+ /* ======================= MODAL AGREGAR GALLETA ======================= */
+
+    /* Fondo del modal */
+    .modal-galleta {
+        position: fixed;
+        z-index: 999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(58, 32, 15, 0.5);
+        /* Café oscuro con transparencia */
+    }
+
+    /* Contenedor del modal */
+    .modal-content-galleta {
+        background-color: #fbe8d2;
+        margin: 8% auto;
+        padding: 25px;
+        border-radius: 12px;
+        width: 450px;
+        box-shadow: 0 0 10px #3a200f;
+        position: relative;
+        font-family: 'Georgia', serif;
+    }
+
+    /* Título */
+    .modal-content-galleta h2 {
+        font-weight: bold;
+        font-size: 24px;
+        color: #3a200f;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    /* Botón de cerrar */
+    .close-galleta {
+        position: absolute;
+        top: 10px;
+        right: 14px;
+        font-size: 26px;
+        text-decoration: none;
+        color: #3a200f;
+        font-weight: bold;
+    }
+
+    .close-galleta:hover {
+        color: #7a3a1a;
+    }
+
+    /* Contenedor de botones */
+    .modal-buttons {
+        text-align: center;
+        margin-top: 25px;
+    }
+
+    /* Botones del modal */
+    .modal-buttons .btn-receive,
+    .modal-buttons .btn-cancel {
+        background-color: #964b28;
+        color: white;
+        border: none;
+        padding: 10px 22px;
+        border-radius: 6px;
+        font-weight: bold;
+        text-decoration: none;
+        margin: 0 10px;
+        display: inline-block;
+        font-size: 16px;
+    }
+
+    .modal-buttons .btn-receive:hover,
+    .modal-buttons .btn-cancel:hover {
+        background-color: #7a3a1a;
+        cursor: pointer;
+    }
+
+    /* Campos del formulario */
+    .input-field {
+        background-color: #f3d3b0;
+        border: 1px solid #a65323;
+        color: #3a200f;
+        border-radius: 6px;
+        padding: 10px;
+        font-size: 16px;
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+    .input-field:focus {
+        outline: none;
+        border-color: #7a3a1a;
+    }

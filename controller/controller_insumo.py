@@ -1,6 +1,8 @@
 
 from flask import (Blueprint,Flask,render_template,request,redirect,url_for,flash,session,)
 from datetime import datetime, timedelta
+from flask_login import login_required, current_user
+from extensions import role_required
 from sqlalchemy import desc, func
 from extensions import db
 from model.insumo import Insumos
@@ -19,6 +21,8 @@ from forms.comprarInsumos_form import ComprarInsumos
 insumo_bp = Blueprint("insumo", __name__, url_prefix="/insumos")
 
 #Metodo para decscontar los lotes caducados
+@login_required
+@role_required("ADMS", "PROD")
 def descontar_lotes_caducados():
     """Metodo para descontar lotes que han alcanzado su fecha de caducidad"""
     hoy = datetime.now().date()
@@ -44,6 +48,8 @@ def descontar_lotes_caducados():
 
 #ruta principal que muestra la tabla, carga el modal de lo que se debe, los ordenes y lo del metodo de descontar, y las alertas
 @insumo_bp.route("/", methods=["GET", "POST"])
+@login_required
+@role_required("ADMS", "PROD")
 def insumos():
     # Primero verificamos para descontar los lotes caducados
     descontar_lotes_caducados()
@@ -141,10 +147,13 @@ def insumos():
         ordenes_compra=ordenes_compra,
         alertas=alertas,
         active_page="insumos",
+        usuario = current_user
     )
 
 #ruta para registrar un nuevo insumo que trae el nombre del proveedor
 @insumo_bp.route("/registrar", methods=["GET", "POST"])
+@login_required
+@role_required("ADMS", "PROD")
 def registrar_insumo():
     create_form = RegistrarInsumo(request.form)
 
@@ -199,6 +208,8 @@ def registrar_insumo():
 
 #abre lo de la ruta de comprar y guarda en la tabla temporal
 @insumo_bp.route("/comprar", methods=["GET", "POST"])
+@login_required
+@role_required("ADMS", "PROD")
 def comprar_insumos():
 
     UNIDADES = [
@@ -412,6 +423,8 @@ def comprar_insumos():
 
 #guarda lo de la tabla temporal en la base de datos
 @insumo_bp.route("/comprar/lista", methods=["GET", "POST"])
+@login_required
+@role_required("ADMS", "PROD")
 def insumos_comprar():
 
     form = ComprarInsumos(request.form if request.method == "POST" else None)
@@ -537,6 +550,8 @@ def insumos_comprar():
 
 #ruta para limpiar el formulario de compra
 @insumo_bp.route("/comprar/limpiar", methods=["GET", "POST"])
+@login_required
+@role_required("ADMS", "PROD")
 def limpiar_compras():
     # Limpiar la lista
     if "compras" in session:
@@ -546,6 +561,8 @@ def limpiar_compras():
 
 #ruta que elimina el insumo a comprar de la tabla temporal
 @insumo_bp.route("/comprar/eliminar/<int:index>", methods=["POST"])
+@login_required
+@role_required("ADMS", "PROD")
 def eliminar_compra(index):
     if "compras" in session:
         if 0 <= index < len(session["compras"]):
@@ -556,55 +573,69 @@ def eliminar_compra(index):
 
 #abre la ruta y busca el orden de compra para que se vea la tabla con lo que se compro
 @insumo_bp.route("/comprados", methods=["GET", "POST"])
-def comprados_insumos():
-    # GET:  formulario vacío
-    #  POST: Procesar busqueda
+@insumo_bp.route("/comprados/<numero_orden>", methods=["GET"])
+@login_required
+@role_required("ADMS", "PROD")  # Nueva ruta para recibir el número de orden
+def comprados_insumos(numero_orden=None):
     form = OrdenCompraForm(request.form if request.method == "POST" else None)
     
-    if request.method == "POST":
-        if not form.validate():
-            # Si hay errores de validacion
-            return render_template(
-                "Insumos/Insumos_comprados.html",
-                form=form,
-                active_page="insumos"
-            )
-
-        numero_orden = form.numero_orden.data
-
-        compra = ComprasRealizadas.query.filter_by(numeroOrden=numero_orden).first()
-
-        if not compra:
-            flash("No se encontró ninguna orden con ese número", "danger")
-            return redirect(url_for("insumo.comprados_insumos"))
-
-        detalles = DetalleCompra.query.filter_by(
-            compra_id=compra.id_comprasRealizadas
-        ).all()
-
-        detalles_compra = [detalle.descripcion for detalle in detalles]
-
-        dynamic_form = DynamicFechaCaducidadForm.create_form(len(detalles_compra))
-
-        return render_template(
-            "Insumos/Insumos_comprados.html",
-            form=form,
-            dynamic_form=dynamic_form,
-            detalles_compra=detalles_compra,
-            numero_orden=numero_orden,
-            hoy=datetime.now().strftime("%Y-%m-%d"),
-            active_page="insumos",
-        )
+    # Si viene número de orden por URL (GET)
+    if numero_orden:
+        form.numero_orden.data = numero_orden  # Autocompletar el formulario
+        return procesar_busqueda_orden(form)
     
-    #
+    # Si es POST (búsqueda manual)
+    if request.method == "POST":
+        return procesar_busqueda_orden(form)
+    
+    # GET sin parámetros (formulario vacío)
     return render_template(
         "Insumos/Insumos_comprados.html",
         form=form,
         active_page="insumos"
     )
 
+@login_required
+@role_required("ADMS", "PROD")
+def procesar_busqueda_orden(form):
+    """Función auxiliar para procesar la búsqueda de órdenes"""
+    if not form.validate():
+        return render_template(
+            "Insumos/Insumos_comprados.html",
+            form=form,
+            active_page="insumos"
+        )
+
+    numero_orden = form.numero_orden.data
+
+    compra = ComprasRealizadas.query.filter_by(numeroOrden=numero_orden).first()
+
+    if not compra:
+        flash("No se encontró ninguna orden con ese número", "danger")
+        return redirect(url_for("insumo.comprados_insumos"))
+
+    detalles = DetalleCompra.query.filter_by(
+        compra_id=compra.id_comprasRealizadas
+    ).all()
+
+    detalles_compra = [detalle.descripcion for detalle in detalles]
+
+    dynamic_form = DynamicFechaCaducidadForm.create_form(len(detalles_compra))
+
+    return render_template(
+        "Insumos/Insumos_comprados.html",
+        form=form,
+        dynamic_form=dynamic_form,
+        detalles_compra=detalles_compra,
+        numero_orden=numero_orden,
+        hoy=datetime.now().strftime("%Y-%m-%d"),
+        active_page="insumos",
+    )
+
 #ruta para registrar y modificar los insumos que se compraron
 @insumo_bp.route("/registrar-compra", methods=["POST"])
+@login_required
+@role_required("ADMS", "PROD")
 def registrar_insumos():
     numero_orden = request.form.get("numero_orden")
 
@@ -679,6 +710,8 @@ def registrar_insumos():
 
 #abre la ruta de merma dependiendo del id del insumo que esta en la tabla
 @insumo_bp.route("/merma/registrar/<int:id_insumo>", methods=["GET", "POST"])
+@login_required
+@role_required("ADMS", "PROD")
 def registrar_merma_insumo(id_insumo):
 
     insumo = Insumos.query.get_or_404(id_insumo)
@@ -744,3 +777,27 @@ def registrar_merma_insumo(id_insumo):
         insumo=insumo, 
         active_page="insumos"
     )
+
+#borrar insumo permanentemente
+@insumo_bp.route("/eliminar/<int:id_insumo>")
+@login_required
+@role_required("ADMS", "PROD")
+def eliminar_insumo(id_insumo):
+    try:
+        insumo = Insumos.query.get_or_404(id_insumo)
+        nombre_insumo = insumo.nombreInsumo
+        
+        # primero los lotes
+        LoteInsumo.query.filter_by(id_insumo=id_insumo).delete()
+        
+        # luego insumos
+        db.session.delete(insumo)
+        db.session.commit()
+        
+        flash(f"Insumo '{nombre_insumo}' eliminado permanentemente con sus lotes asociados", "success")
+    except Exception as e:
+        db.session.rollback()
+        flash(f"Error al eliminar insumo: {str(e)}", "error")
+        print(f"Error en eliminar_insumo: {str(e)}")
+    
+    return redirect(url_for("insumo.insumos"))

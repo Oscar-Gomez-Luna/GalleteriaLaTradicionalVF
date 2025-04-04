@@ -3,10 +3,14 @@ from model.cliente import db, Cliente
 from model.persona import db,  Persona
 from model.usuario import db, Usuario
 from forms.forms import ClienteForm
+from flask_login import login_required, current_user
+from extensions import role_required
 
 clientes_bp = Blueprint('clientes', __name__, url_prefix='/clientes', template_folder='view')
 
 @clientes_bp.route('/', methods=['GET'])
+@login_required
+@role_required("ADMS")
 def clientes():
     mostrar_inactivos = request.args.get('inactivos') == 'on'
     
@@ -20,10 +24,11 @@ def clientes():
     clientes = query.all()
     return render_template('administracion/clientes/clientes.html', 
                          clientes=clientes,
-                         mostrar_inactivos=mostrar_inactivos, active_page="administracion", active_page_admin="clientes")
-
+                         mostrar_inactivos=mostrar_inactivos, active_page="administracion", active_page_admin="clientes", usuario=current_user)
 
 @clientes_bp.route('/modificar', methods=['GET', 'POST'])
+@login_required
+@role_required("ADMS") 
 def modificar_cliente():
     idCliente = request.args.get('idCliente')
     cliente = Cliente.query.filter_by(idCliente=idCliente).first()
@@ -60,37 +65,53 @@ def modificar_cliente():
 
     return render_template('administracion/clientes/modificar_cliente.html', form=cliente_form, idCliente=idCliente, active_page="administracion", active_page_admin="clientes")
 
-
-
 @clientes_bp.route('/eliminar', methods=['GET'])
+@login_required
+@role_required("ADMS") 
 def eliminar_cliente():
-    idCliente = request.args.get('idCliente')
-    usuario = Usuario.query.filter_by(idUsuario=idCliente).first()
+    if request.method == 'GET':
+        idCliente = request.args.get('idCliente')
+        cliente = (
+                db.session.query(Cliente)
+                .options(db.joinedload(Cliente.persona), db.joinedload(Cliente.usuario))
+                .filter(Cliente.idCliente == idCliente)
+                .first()
+            )
 
-    if usuario:
-        usuario.estatus = 0 
-        db.session.commit()
-        flash("Cliente desactivado correctamente", "success")
-    else:
-        flash("Cliente no encontrado", "danger")
+        if cliente:
+            cliente.usuario.estatus = 0
+            db.session.commit()
+            flash("Cliente desactivado correctamente", "success")
+        else:
+            flash("Cliente no encontrado", "danger")
 
     return redirect(url_for('administracion.clientes.clientes'))
 
 @clientes_bp.route('/activar', methods=['GET'])
+@login_required
+@role_required("ADMS") 
 def activar_cliente():
-    idCliente = request.args.get('idCliente')
-    usuario = Usuario.query.filter_by(idUsuario=idCliente).first()
+    if request.method == 'GET':
+        idCliente = request.args.get('idCliente')
+        cliente = (
+                db.session.query(Cliente)
+                .options(db.joinedload(Cliente.persona), db.joinedload(Cliente.usuario))
+                .filter(Cliente.idCliente == idCliente)
+                .first()
+            )
 
-    if usuario:
-        usuario.estatus = 1 
-        db.session.commit()
-        flash("Cliente activado correctamente", "success")
-    else:
-        flash("Cliente no encontrado", "danger")
+        if cliente:
+            cliente.usuario.estatus = 1 
+            db.session.commit()
+            flash("Cliente activado correctamente", "success")
+        else:
+            flash("Cliente no encontrado", "danger")
 
     return redirect(url_for('administracion.clientes.clientes'))
-
+ 
 @clientes_bp.route('/detalles', methods=['GET'])
+@login_required
+@role_required("ADMS")
 def detalles_clientes():
     idCliente = request.args.get('idCliente')
     cliente = Cliente.query.filter_by(idCliente=idCliente).first()

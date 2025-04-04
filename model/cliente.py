@@ -9,10 +9,9 @@ class Cliente(db.Model):
     idPersona = db.Column(db.Integer, db.ForeignKey('persona.idPersona'), nullable=False)
     idUsuario = db.Column(db.Integer, db.ForeignKey('usuario.idUsuario'), nullable=False)
 
+    # Modificar el backref 'persona' para que sea único
+    persona = db.relationship('Persona', backref=db.backref('clientes_relacionados', lazy=True))
+    usuario = db.relationship('Usuario', backref=db.backref('clientes_usuario', lazy=True))
 
-    persona = db.relationship('Persona', backref=db.backref('clientes', lazy=True))
-    usuario = db.relationship('Usuario', backref=db.backref('clientes', lazy=True))
-    
-    
     def __repr__(self):
         return f'<Cliente {self.idCliente}>'

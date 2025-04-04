@@ -12,8 +12,7 @@ class Receta(db.Model):
     cantidad_galletas = db.Column(db.Integer, nullable=False)
     
     # Relacion
-    galletas = db.relationship('Galleta', backref='receta', lazy=True)
-    cantidad_galletas = db.Column(db.Integer)
+    galletas_rel = db.relationship('Galleta', backref='galletas_receta', lazy=True)
 
 
 

@@ -2,11 +2,15 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for
 from model.proveedor import Proveedor
 from forms.proveedor_form import ProveedorForm
 from extensions import db
+from flask_login import login_required, current_user
+from extensions import role_required
 
 proovedor_bp = Blueprint('proveedor', __name__, template_folder='../view/', url_prefix='/proveedor')
 
 @proovedor_bp.route("/")
 @proovedor_bp.route("/catálago")
+@login_required
+@role_required("ADMS") 
 def proveedores():
     mostrar_inactivos = request.args.get('mostrar_inactivos') == 'on'
 
@@ -15,9 +19,11 @@ def proveedores():
     else:
         proveedores =  Proveedor.query.filter(Proveedor.estatus == 1).all()
 
-    return render_template("administracion/proveedores/proveedores.html", active_page="administracion", active_page_admin="proveedores", proveedores=proveedores)
+    return render_template("administracion/proveedores/proveedores.html", active_page="administracion", active_page_admin="proveedores", proveedores=proveedores, usuario = current_user)
 
 @proovedor_bp.route('/registrar', methods=['GET', 'POST'])
+@login_required
+@role_required("ADMS") 
 def registrar_proveedor():
     proveedor_class = ProveedorForm(request.form)
 
@@ -47,6 +53,8 @@ def registrar_proveedor():
     return render_template("administracion/proveedores/registrar_proveedores.html", active_page="administracion", active_page_admin="proveedores", form=proveedor_class)
 
 @proovedor_bp.route("/modificar", methods=['GET', 'POST'])
+@login_required
+@role_required("ADMS") 
 def modificar_proveedor():
     idProveedor = request.args.get('idProveedor')
 
@@ -94,6 +102,8 @@ def modificar_proveedor():
         return redirect(url_for('administracion.proveedor.proveedores'))
 
 @proovedor_bp.route("/detalles", methods=['GET', 'POST'])
+@login_required
+@role_required("ADMS") 
 def detalles_proveedor():
     if request.method == 'GET':
         idProveedor = request.args.get('idProveedor')
@@ -104,6 +114,8 @@ def detalles_proveedor():
     return render_template("administracion/proveedores/detalle_proveedores.html", active_page="administracion", active_page_admin="proveedores", proveedor=proveedor)
 
 @proovedor_bp.route('/eliminar', methods=['GET', 'POST'])
+@login_required
+@role_required("ADMS") 
 def eliminar_proveedor():
     if request.method == 'GET':
         idProveedor = request.args.get('idProveedor') 
@@ -130,6 +142,8 @@ def eliminar_proveedor():
     return redirect(url_for('administracion.proveedor.proveedores'))
 
 @proovedor_bp.route('/reactivar', methods=['GET', 'POST'])
+@login_required
+@role_required("ADMS") 
 def reactivar_proveedor():
     if request.method == 'GET':
         idProveedor = request.args.get('idProveedor') 

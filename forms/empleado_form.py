@@ -48,7 +48,7 @@ class EmpleadoForm(Form):
         validators.InputRequired(message="La fecha de nacimiento es obligatoria.")
     ], format='%Y-%m-%d')
     rol = SelectField('Rol:', choices=[
-        ('ADMI', 'Administrador'),
+        ('ADMS', 'Administrador'),
         ('CAJA', 'Cajero'),
         ('PROD', 'Producción')
     ], validators=[validators.InputRequired(message="El rol es obligatorio.")])

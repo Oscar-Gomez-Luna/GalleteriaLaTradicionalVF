@@ -11,7 +11,10 @@ from model.tipo_galleta import TipoGalleta
 from model.detalle_venta import LoteGalletas
 from model.galleta import Galleta
 from model.receta import Receta
-from model.merma_galletas import MermaGalletas
+from flask_login import login_required
+from extensions import role_required
+from model.merma_galleta import MermaGalleta
+from flask_login import current_user
 from forms.merma_form import MermaGalletasForm
 from model.persona import Persona
 from model.usuario import Usuario
@@ -25,15 +28,20 @@ from model.detalle_venta import DetalleVentaGalletas
 
 venta_bp = Blueprint('venta', __name__, url_prefix='/venta')
 
+
 @venta_bp.route("/")
 @venta_bp.route("/catálago", methods=['GET', 'POST'])
+@login_required
+@role_required("ADMS", "CAJA") 
 def ventas():
     form = VentaForm(request.form)
     ventas = Venta.query.all()
-    
-    return render_template("ventas/ventas.html", active_page="ventas", ventas=ventas, form=form)
+    return render_template("ventas/ventas.html", active_page="ventas", ventas=ventas, form=form, usuario=current_user)
+
 
 @venta_bp.route('/registrar', methods=['GET', 'POST'])
+@login_required
+@role_required("ADMS", "CAJA") 
 def registrar_venta():
     form = VentaForm(request.form)
 
@@ -113,6 +121,8 @@ def registrar_venta():
                         detalle_venta=session['detalle_venta'])
 
 @venta_bp.route('/finalizar', methods=['POST'])
+@login_required
+@role_required("ADMS", "CAJA") 
 def finalizar_venta():
     if 'detalle_venta' not in session or not session['detalle_venta']:
         flash("Error: No hay productos en la venta.", "danger")
@@ -178,6 +188,8 @@ def finalizar_venta():
         return redirect(url_for('venta.registrar_venta'))
     
 @venta_bp.route("/detalles", methods=['GET', 'POST'])
+@login_required
+@role_required("ADMS", "CAJA") 
 def detalles_venta():
     if request.method == 'GET':
         id_venta = request.args.get('idVenta')
@@ -209,6 +221,8 @@ def detalles_venta():
         )
 
 @venta_bp.route('/obtener_galletas/<int:tipo_venta_id>')
+@login_required
+@role_required("ADMS", "CAJA") 
 def obtener_galletas(tipo_venta_id):
     galletas = (db.session.query(Galleta)
             .filter(Galleta.tipo_galleta_id == tipo_venta_id)
@@ -219,6 +233,8 @@ def obtener_galletas(tipo_venta_id):
     return jsonify(galletas_json)
 
 @venta_bp.route('/obtener_lotes/<int:galleta_id>')
+@login_required
+@role_required("ADMS", "CAJA") 
 def obtener_lotes(galleta_id):
     # Asegurarse que existe la variable de sesión
     if 'detalle_venta' not in session:
@@ -252,6 +268,8 @@ def obtener_lotes(galleta_id):
     return jsonify(lotes_json)
 
 @venta_bp.route('/generar_ticket/<int:venta_id>')
+@login_required
+@role_required("ADMS", "CAJA") 
 def generar_ticket(venta_id):
     try:
         # Obtener la información de la venta
@@ -318,6 +336,8 @@ def generar_ticket(venta_id):
         return f"Error al generar ticket: {str(e)}", 500
 
 @venta_bp.route('/obtener_ticket/<int:venta_id>', methods=['GET'])
+@login_required
+@role_required("ADMS", "CAJA") 
 def obtener_ticket(venta_id):
     try:
         venta = Venta.query.filter(Venta.id_venta == venta_id).first()
@@ -332,6 +352,8 @@ def obtener_ticket(venta_id):
         return jsonify({"error": str(e)}), 500
 
 @venta_bp.route('/cancelar_venta', methods=['POST'])
+@login_required
+@role_required("ADMS", "CAJA") 
 def cancelar_venta():
     if "detalle_venta" in session:
         # Eliminar toda la lista de detalle_venta
@@ -343,6 +365,8 @@ def cancelar_venta():
     return redirect(url_for('venta.registrar_venta'))
 
 @venta_bp.route('/eliminar_detalle/<int:session_id>', methods=['POST'])
+@login_required
+@role_required("ADMS", "CAJA") 
 def eliminar_detalle(session_id):
     if "detalle_venta" in session:
         if 0 <= session_id < len(session["detalle_venta"]):  # Verificar si el índice es válido
@@ -352,6 +376,8 @@ def eliminar_detalle(session_id):
     return redirect(url_for('venta.registrar_venta'))
 
 @venta_bp.route('/corte-caja', methods=['GET', 'POST'])
+@login_required
+@role_required("ADMS", "CAJA") 
 def corte_caja():
     form = CorteCajaForm(request.form)
     cortes = CorteCaja.query.all()
@@ -392,11 +418,13 @@ def corte_caja():
     return render_template("ventas/corte_caja.html", form=form, active_page="ventas", cortes=cortes)
 
 @venta_bp.route('/cobrar-pedido', methods=['GET', 'POST'])
+@login_required
+@role_required("ADMS", "CAJA") 
 def pedido_portal():
     pedidos = (
     db.session.query(
         Orden.id_orden,
-        Orden.descripcion,
+        Orden.detalles,
         Orden.total,
         Orden.fechaAlta,
         Orden.fechaEntrega,
@@ -424,6 +452,8 @@ def pedido_portal():
 
     return render_template("ventas/pedidos_portal.html", active_page="ventas", pedidos=pedidos)
 
+@login_required
+@role_required("ADMS", "CAJA") 
 def registrar_venta(id_orden, total, tipo_venta, detalles):
     try:
         # Crear la venta primero con un ticket temporal
@@ -507,6 +537,8 @@ def registrar_venta(id_orden, total, tipo_venta, detalles):
         return None
 
 @venta_bp.route('/cobrar/<int:id_orden>', methods=['POST'])
+@login_required
+@role_required("ADMS", "CAJA") 
 def cobrar_pedido(id_orden):
     pedido = db.session.query(Orden).filter_by(id_orden=id_orden).first()
     if not pedido:
@@ -556,6 +588,8 @@ def cobrar_pedido(id_orden):
     return redirect(url_for('venta.ventas'))
 
 @venta_bp.route("/detalles_pedidos", methods=['GET', 'POST'])
+@login_required
+@role_required("ADMS", "CAJA") 
 def detalles_pedido():
     if request.method == 'GET':
         orden_id = request.args.get('idOrden')
@@ -591,6 +625,8 @@ def detalles_pedido():
         )
 
 @venta_bp.route('/merma_galletas', methods=['GET', 'POST'])
+@login_required
+@role_required("ADMS", "CAJA") 
 def merma_galletas():
     form = MermaGalletasForm(request.form)
 
@@ -615,7 +651,7 @@ def merma_galletas():
                 return redirect(url_for('venta.merma_galletas'))
 
             # Crear la nueva merma
-            nueva_merma = MermaGalletas(
+            nueva_merma = MermaGalleta(
                 lote_id=lote_id,
                 cantidad=cantidad,
                 tipo_merma=tipo_merma,
@@ -640,6 +676,8 @@ def merma_galletas():
     return render_template("ventas/registrar_merma.html", active_page="ventas", form=form)
 
 @venta_bp.route('/obtener/lotes', methods=['GET'])
+@login_required
+@role_required("ADMS", "CAJA") 
 def get_lotes():
     try:
         lotes = db.session.query(

@@ -3,20 +3,18 @@
     integrity="sha384-rbsA2VBKQFmp7HQWD4DgAn8A7lLLOmDL7JHEuHjVNcbPttI3lCz2Pr8rYcmD2Dlc" crossorigin="anonymous">
 <link href="{{ url_for('static', filename='css/estilos_ordenes.css') }}" rel="stylesheet" type="text/css" />
 
-{% extends "layout_galleteria.html" %}
+{% extends "layaut.html" %}
 {% import "_macros.html" as macros %}
 {% block container %}
 
 <main class="main">
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-    {% for category, message in messages %}
-    <div class="alert alert-{{ category }}">
-        {{ message }}
-    </div>
-    {% endfor %}
-    {% endif %}
-    {% endwith %}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} auto-hide">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
 
     <div class="table-container">
         <table class="table">
@@ -80,7 +78,7 @@
     </div>
 
 </main>
-
+<script src="/static/js/ordenes.js"></script>
 
 
 {% endblock %}

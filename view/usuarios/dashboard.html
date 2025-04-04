@@ -67,10 +67,6 @@
 {% block container %}
     <div class="container mt-4">
         <!-- Header Section -->
-        <div class="dashboard-header">
-            <div class="welcome-message auto-hide">
-                <h2 class="mb-3">Bienvenido, {{ usuario.nombreUsuario }}</h2>
-            </div>
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                     {% for category, message in messages %}
@@ -78,17 +74,8 @@
                     {% endfor %}
                 {% endif %}
             {% endwith %}
-            <div class="last-connection auto-hide">
-                Última conexión: {{ usuario.ultima_conexion.strftime('%Y-%m-%d %H:%M:%S') }}
-            </div>
-            <div class="button-group">
-                <a href="{{ url_for('usuarios.change_password') }}" class="btn btn-primary">Cambiar Contraseña</a>
-                <a href="{{ url_for('usuarios.logout') }}" class="btn btn-danger">Cerrar Sesión</a>
-            </div>
-        </div>
-
         <!-- Dashboard Charts -->
-        <h3 class="mb-4">Dashboard de Ventas</h3>
+        <h3 class="mb-4" style="color: white;">Dashboard de Ventas</h3>
         <div class="row">
             <!-- Ventas Diarias -->
             <div class="col-md-6">

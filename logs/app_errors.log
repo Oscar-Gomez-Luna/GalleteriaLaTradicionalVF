@@ -1,0 +1,13 @@
+[2025-04-02 00:24:42] ERROR: Error al registrar empleado: (pymysql.err.IntegrityError) (1062, "Duplicate entry 'GOLUOS0204CAJA' for key 'usuario.nombreUsuario'")
+[SQL: INSERT INTO usuario (`nombreUsuario`, token, estatus, contrasenia, rol, ultima_conexion) VALUES (%(nombreUsuario)s, %(token)s, %(estatus)s, %(contrasenia)s, %(rol)s, %(ultima_conexion)s)]
+[parameters: {'nombreUsuario': 'GOLUOS0204CAJA', 'token': None, 'estatus': 1, 'contrasenia': 'scrypt:32768:8:1$9M3wAI9Rh7MvAZw0$516ab0a6715412d9b0995a9205c034280998b6788fba587a3d48e15fb53d0f4ff2fa100b87e14a76625cac5759e6e47dc7c8bdb8fdfda0be9c88ac86625f2b2c', 'rol': 'CAJA', 'ultima_conexion': None}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+[2025-04-02 00:24:47] ERROR: Error al registrar empleado: (pymysql.err.IntegrityError) (1062, "Duplicate entry 'GOLUOS0204CAJA' for key 'usuario.nombreUsuario'")
+[SQL: INSERT INTO usuario (`nombreUsuario`, token, estatus, contrasenia, rol, ultima_conexion) VALUES (%(nombreUsuario)s, %(token)s, %(estatus)s, %(contrasenia)s, %(rol)s, %(ultima_conexion)s)]
+[parameters: {'nombreUsuario': 'GOLUOS0204CAJA', 'token': None, 'estatus': 1, 'contrasenia': 'scrypt:32768:8:1$LG3ggEutr3wr28Cz$40b2f3d3a2ca4b21fb44421b2c2dd74bd9cbd51cdb353ea6c8e4c75ef935b191c690156b116aa5d0f9c55e53ef328db547e68dd9cdf0f534707c081859975e03', 'rol': 'CAJA', 'ultima_conexion': None}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+[2025-04-03 13:33:43] ERROR: Error al eliminar empleado (ID 3): 'Usuario' object has no attribute 'nombre'
+[2025-04-03 13:33:57] ERROR: Error al eliminar empleado (ID 2): 'Usuario' object has no attribute 'nombre'
+[2025-04-03 13:34:52] ERROR: Error al reactivar empleado (ID 2): 'Usuario' object has no attribute 'nombre'
+[2025-04-03 13:36:14] ERROR: Error al eliminar empleado (ID 2): 'Usuario' object has no attribute 'nombre'
+[2025-04-03 13:42:37] ERROR: Error al reactivar empleado (ID 2): 'Usuario' object has no attribute 'nombre'

@@ -1,0 +1,17 @@
+[2025-04-02 00:26:32] Usuario: {'id': 1, 'nombre': 'UsuarioEstatico', 'rol': 'Administrador'} - Registró un nuevo empleado: ID 12, NombreUsuario GOLUJO0204CAJA
+[2025-04-02 00:33:15] Usuario: {'id': 1, 'nombre': 'UsuarioEstatico', 'rol': 'Administrador'} - Eliminó (baja lógica) al empleado: ID 1, Usuario juan.garcia
+[2025-04-02 01:12:05] Usuario: {'id': 1, 'nombre': 'UsuarioEstatico', 'rol': 'Administrador'} - Reactivó al empleado: ID 1, Usuario juan.garcia
+[2025-04-02 01:22:27] Usuario: {'id': 1, 'nombre': 'UsuarioEstatico', 'rol': 'Administrador'} - Eliminó (baja lógica) al empleado: ID 2, Usuario maria.martinez
+[2025-04-02 01:22:52] Usuario: {'id': 1, 'nombre': 'UsuarioEstatico', 'rol': 'Administrador'} - Reactivó al empleado: ID 2, Usuario maria.martinez
+[2025-04-03 01:23:17] Usuario: {'id': 1, 'nombre': 'UsuarioEstatico', 'rol': 'Administrador'} - Registró un nuevo empleado: ID 11, NombreUsuario Gojo
+[2025-04-03 01:25:12] Usuario: {'id': 1, 'nombre': 'UsuarioEstatico', 'rol': 'Administrador'} - Registró un nuevo empleado: ID 12, NombreUsuario Lopezjuan.
+[2025-04-03 01:27:13] Usuario: {'id': 1, 'nombre': 'UsuarioEstatico', 'rol': 'Administrador'} - Registró un nuevo empleado: ID 13, NombreUsuario Gonzaleshugo.
+[2025-04-03 01:28:11] Usuario: {'id': 1, 'nombre': 'UsuarioEstatico', 'rol': 'Administrador'} - Eliminó (baja lógica) al empleado: ID 1, Usuario juan.garcia
+[2025-04-03 01:29:22] Usuario: {'id': 1, 'nombre': 'UsuarioEstatico', 'rol': 'Administrador'} - Registró un nuevo empleado: ID 14, NombreUsuario Moralesuriel.
+[2025-04-03 01:34:51] Usuario: {'id': 1, 'nombre': 'UsuarioEstatico', 'rol': 'Administrador'} - Registró un nuevo empleado: ID 11, NombreUsuario LopezJose
+[2025-04-03 01:37:00] Usuario: {'id': 1, 'nombre': 'UsuarioEstatico', 'rol': 'Administrador'} - Registró un nuevo empleado: ID 12, NombreUsuario GonzalesHugo
+[2025-04-03 01:38:40] Usuario: {'id': 1, 'nombre': 'UsuarioEstatico', 'rol': 'Administrador'} - Registró un nuevo empleado: ID 13, NombreUsuario PerezJuan
+[2025-04-03 13:05:22] Usuario: {'id': 1, 'nombre': 'UsuarioEstatico', 'rol': 'Administrador'} - Registró un nuevo empleado: ID 1, NombreUsuario LopezJose
+[2025-04-03 13:06:25] Usuario: {'id': 1, 'nombre': 'UsuarioEstatico', 'rol': 'Administrador'} - Registró un nuevo empleado: ID 2, NombreUsuario GonzalesHugo
+[2025-04-03 13:08:41] Usuario: {'id': 1, 'nombre': 'UsuarioEstatico', 'rol': 'Administrador'} - Registró un nuevo empleado: ID 3, NombreUsuario PerezJuan
+[2025-04-03 13:44:59] Usuario: {'id': 1, 'nombre': 'LopezJose', 'rol': 'ADMS'} - Reactivó al empleado: ID 3, Usuario PerezJuan

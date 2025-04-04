@@ -3,6 +3,7 @@ from model.detalle_venta_orden import DetalleVentaOrden
 
 class SolicitudProduccion(db.Model):
     __tablename__ = 'solicitudProduccion'
+    __table_args__ = {'extend_existing': True}
 
     idSolicitud = db.Column(db.Integer, primary_key=True, autoincrement=True)
     detalleorden_id = db.Column(db.Integer, db.ForeignKey('detalleVentaOrden.id_detalleVentaOrden'), nullable=False)

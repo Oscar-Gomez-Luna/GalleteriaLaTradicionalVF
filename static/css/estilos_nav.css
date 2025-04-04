@@ -46,3 +46,45 @@
     font-weight: bold;
     text-decoration: underline;
 }
+.welcome-container {
+    background-color: #a65323;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    border-left: 4px solid #4e73df;
+    text-align: right; /* Alinea todo el contenido a la derecha */
+}
+
+.welcome-header {
+    margin-bottom: 10px;
+}
+
+.welcome-title {
+    color: #fff;
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+.username {
+    color: #fff;
+    font-weight: 600;
+}
+
+.last-connection {
+    background-color: #e9ecef;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    display: inline-block; /* Para que no ocupe todo el ancho */
+}
+
+.connection-label {
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.connection-date {
+    color: #495057;
+    margin-left: 5px;
+}

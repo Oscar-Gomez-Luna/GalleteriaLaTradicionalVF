@@ -3,7 +3,7 @@
 <link href="{{ url_for('static', filename='css/estilos_insumos.css') }}" rel="stylesheet">
 
 {% import "_macros.html" as macros %}
-{% extends "layout_galleteria.html" %}
+{% extends "layaut.html" %}
 {% block container %}
 
 <main class="main">
@@ -96,21 +96,22 @@
             </div>
         </div>
 <br>
-        <div class="d-flex justify-content-between mt-3">
-            <div style="margin-left: 13%;">
-                <form method="POST" action="{{ url_for('insumo.insumos_comprar') }}" id="form-comprar">
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                    
-                    {% for compra in compras %}
-                    <input type="hidden" name="compras[]" value="{{ compra|tojson|safe }}">
-                    {% endfor %}
-                    <button type="submit" name="comprar" class="btn btn-success">Comprar</button>
-                    <a href="{{ url_for('insumo.limpiar_compras') }}" class="btn btn-danger ms-2">
-                        Limpiar Todo
-                    </a>
-                </form>
-            </div>
+    <div class="d-flex justify-content-between mt-3">
+        <div style="margin-left: 10%;">
+            <form method="POST" action="{{ url_for('insumo.insumos_comprar') }}" id="form-comprar">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                
+                {% for compra in compras %}
+                <input type="hidden" name="compras[]" value="{{ compra|tojson|safe }}">
+                {% endfor %}
+                <button type="submit" name="comprar" class="btn btn-success">Comprar</button>
+                <a href="{{ url_for('insumo.limpiar_compras') }}" class="btn btn-danger ms-2">
+                    Limpiar Todo
+                </a>
+                <a href="{{ url_for('insumo.insumos') }}" class="btn btn-danger ms-2">Regresar</a>
+            </form>
         </div>
+    </div>
     </section>
 </main>
 

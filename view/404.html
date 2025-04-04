@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos_notfound.css') }}">
+    <style>
+        body{
+            padding-top: 60px;}
+ 
+            .tr-head{background: #dff0d8;}  
+    </style>
+    <link href="../static/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet"/>
+</head>
+<body>
+    <div class="container">
+       
+                
+                {%with messages=get_flashed_messages()%}
+                    {%if messages%}
+                        {%for message in messages%}
+                        <div class="alert alert-success">
+                            {{message}}
+                        </div>
+                        {%endfor%}
+                    {%endif%}
+                {%endwith%}
+
+                <h1>404</h1>
+
+<div class="frame">
+    <div></div>
+    <div></div>
+    <div></div>
+</div>
+<div class="caps"><img src="http://ademilter.com/caps.png" alt=""></div>
+<canvas id="canvas"></canvas>
+<script src="{{ url_for('static', filename='js/notfound_404.js') }}"></script>
+           
+     
+ 
+</div>
+</body>
+</html>

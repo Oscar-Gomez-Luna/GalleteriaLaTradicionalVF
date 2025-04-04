@@ -467,61 +467,7 @@ button:hover {
 
 
 
-/* Estilo personalizado  de tabla ----------------------------------------------------------------------------------------------------------------------------------------*/
 
-
-
-
- /* Tabla general */
- table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: #f2c4a2;
-    color: black;
-    font-family: Arial, sans-serif;
-}
-
-th,
-td {
-    padding: 12px;
-    border: 1px solid #d1723f;
-    text-align: center;
-    vertical-align: middle;
-}
-
-th {
-    background-color: #f2c4a2;
-    font-size: 18px;
-}
-
-/* Estilo de acciones */
-.acciones i {
-    margin: 0 8px;
-    cursor: pointer;
-    font-size: 18px;
-    color: #444;
-    transition: transform 0.2s ease;
-}
-
-.acciones i:hover {
-    transform: scale(1.2);
-    color: #964b28;
-}
-
-/* Encabezado */
-h2 {
-    text-align: center;
-    margin: 20px 0;
-    color: #964b28;
-}
-
-/* Contenedor */
-.contenedor-tabla {
-    width: 95%;
-    margin: auto;
-    border-radius: 5px;
-    overflow: hidden;
-}
 
 /* Modal general */
 .modal {
@@ -704,20 +650,100 @@ button {
 
 
 /* Contenedor con scroll para la tabla --------------------------------------------------------------------------------------------------------------------------*/
+/* Estilo tabla de producción (como tabla-scroll de galletas) */
 .contenedor-tabla {
-    max-height: 400px; /* Altura suficiente para mostrar 4 filas (ajustable según tu diseño) */
-    overflow-y: auto; /* Habilita scroll vertical */
-    border: 3px solid #b66833; /* Opcional: un borde estilo galleta */
-    border-radius: 10px;
+    width: 97%;
+    max-height: 385px;
+    overflow-y: auto;
+    background-color: #ECC4A6;
+    border-radius: 8px;
+    margin-top: 20px;
 }
 
-/* Ajustes visuales del scrollbar (opcional) */
-.contenedor-tabla::-webkit-scrollbar {
-    width: 10px;
+.contenedor-tabla table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #ECC4A6;
+    font-family: Arial, sans-serif;
 }
 
-.contenedor-tabla::-webkit-scrollbar-thumb {
-    background-color: #b2afae;
-    border-radius: 10px;
+.contenedor-tabla thead th {
+    background-color: #F1B384;
+    color: #333;
+    text-align: center;
+    padding: 15px;
+    border: 1px solid #a65323;
+    position: sticky;
+    top: 0;
+    z-index: 1;
 }
 
+.contenedor-tabla tbody td {
+    background-color: #ECC4A6;
+    color: #000;
+    text-align: center;
+    padding: 15px;
+    border: 1px solid #a65323;
+}
+
+
+
+
+
+
+
+
+
+/* Aalert de flash */
+
+
+.flash-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 0 20px;
+  }
+  
+  .flash-message {
+    padding: 15px 20px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    font-size: 17px;
+    position: relative;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+  
+  /* Cierra mensaje */
+  .close-flash {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    cursor: pointer;
+    font-size: 22px;
+    font-weight: bold;
+  }
+  
+  /* Colores personalizados tipo Bootstrap */
+  .flash-success {
+    background-color: #d4edda;
+    color: #155724;
+    border-left: 6px solid #28a745;
+  }
+  
+  .flash-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-left: 6px solid #dc3545;
+  }
+  
+  .flash-warning {
+    background-color: #fff3cd;
+    color: #856404;
+    border-left: 6px solid #ffc107;
+  }
+  
+  .flash-info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border-left: 6px solid #17a2b8;
+  }
+  

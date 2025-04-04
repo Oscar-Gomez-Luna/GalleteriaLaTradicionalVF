@@ -1,11 +1,15 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from model.receta import db, Receta
 from forms.forms import RecetaForm
+from flask_login import login_required, current_user
+from extensions import role_required
 import json
 
 recetas_bp = Blueprint('recetas', __name__, url_prefix='/recetas', template_folder='view')
 
 @recetas_bp.route('/', methods=['GET', 'POST'])
+@login_required
+@role_required("ADMS") 
 def recetas():
     if request.method == 'POST':
         return redirect(url_for('recetas.agregar'))
@@ -22,9 +26,12 @@ def recetas():
                          receta=query.all(),
                          mostrar_inactivos=mostrar_inactivos,
                          active_page="administracion",
-                         active_page_admin="recetas")
+                         active_page_admin="recetas",
+                         usuario = current_user)
 
 @recetas_bp.route('/agregar', methods=['GET', 'POST'])
+@login_required
+@role_required("ADMS") 
 def agregar():
     receta_form = RecetaForm(request.form)
     
@@ -59,6 +66,8 @@ def agregar():
     return render_template('administracion/recetas/agregar_receta.html', form=receta_form)
 
 @recetas_bp.route('/eliminar', methods=['GET'])
+@login_required
+@role_required("ADMS") 
 def eliminar():
     idReceta = request.args.get('idReceta')
     receta = Receta.query.filter_by(idReceta=idReceta).first()
@@ -73,6 +82,8 @@ def eliminar():
     return redirect(url_for('administracion.recetas.recetas'))
 
 @recetas_bp.route('/activar', methods=['GET'])
+@login_required
+@role_required("ADMS") 
 def activar():
     idReceta = request.args.get('idReceta')
     receta = Receta.query.filter_by(idReceta=idReceta).first()
@@ -87,6 +98,8 @@ def activar():
     return redirect(url_for('administracion.recetas.recetas'))
 
 @recetas_bp.route('/modificar', methods=['GET', 'POST'])
+@login_required
+@role_required("ADMS") 
 def modificar():
     idReceta = request.args.get('idReceta')
     if not idReceta:
@@ -121,4 +134,4 @@ def modificar():
         return redirect(url_for('administracion.recetas.recetas'))
 
     return render_template('administracion/recetas/modificar_receta.html', form=receta_form, idReceta=idReceta, receta=receta, active_page="administracion",
-                         active_page_admin="recetas")
+                         active_page_admin="recetas", usuario=current_user)

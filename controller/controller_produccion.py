@@ -3,21 +3,25 @@ from model.galleta import db, Galleta
 from model.lote_galleta import LoteGalletas
 from model.receta import Receta
 from model.merma_galleta import MermaGalleta
-from model.merma_insumo import MermaInsumo
-from model.insumo import Insumo
+from model.merma_insumo import MermasInsumos
+from model.insumo import Insumos
 from model.lote_insumo import LoteInsumo
-
+from flask_login import login_required
+from extensions import role_required
 from sqlalchemy import text
 from forms.produccion_forms import LoteGalletasForm, MermaGalletaForm, MermaInsumoForm
 import datetime
 from datetime import date
+from flask_login import current_user
 import json
 from collections import defaultdict
 from flask_wtf.csrf import generate_csrf
 
-produccion_bp = Blueprint('produccion', __name__)
+produccion_bp = Blueprint('produccion', __name__, url_prefix="/produccion")
 
 @produccion_bp.route('/produccion', methods=['GET', 'POST'])
+@login_required
+@role_required("ADMS", "PROD") 
 def produccion():
     form = LoteGalletasForm()
     merma_form = MermaGalletaForm()
@@ -26,7 +30,7 @@ def produccion():
     text("SELECT id_tipo_galleta FROM tipo_galleta WHERE nombre = 'Unidad'")
     ).scalar()
     merma_insumo_form = MermaInsumoForm()
-    merma_insumo_form.insumo_id.choices = [(i.id_insumo, i.nombreInsumo) for i in Insumo.query.all()]
+    merma_insumo_form.insumo_id.choices = [(i.id_insumo, i.nombreInsumo) for i in Insumos.query.all()]
 
      # Cargar opciones para el select
     form.galleta_id.choices = [
@@ -225,15 +229,17 @@ def produccion():
         mostrar_modal_merma=mostrar_modal_merma,
         galleta_seleccionada=galleta_seleccionada,
         galleta_id=galleta_id,
-        lote_merma=lote_merma,alertas_agotamiento=alertas_agotamiento,  # ✅ AGREGADO
+        lote_merma=lote_merma,alertas_agotamiento=alertas_agotamiento,  
         alertas_caducidad=alertas_caducidad, 
         merma_insumo_form=merma_insumo_form, 
         active_page="produccion",
-        csrf_token=generate_csrf()
+        csrf_token=generate_csrf(),
+        usuario = current_user
     )
 
-
 @produccion_bp.route('/eliminar-lote', methods=['POST'])
+@login_required
+@role_required("ADMS", "PROD") 
 def eliminar_lote():
     lote_id = request.form.get('lote_id')
     galleta_nombre = request.form.get('galleta_nombre')
@@ -248,7 +254,7 @@ def eliminar_lote():
         flash("Lote no encontrado.", "danger")
         return redirect(url_for('produccion.produccion'))
 
-    # 🔥 Eliminar primero las mermas relacionadas
+    #  Eliminar primero las mermas relacionadas
     MermaGalleta.query.filter_by(lote_id=lote.id_lote).delete()
 
     db.session.delete(lote)
@@ -259,11 +265,13 @@ def eliminar_lote():
 
 
 @produccion_bp.route('/merma-insumo', methods=['POST'])
+@login_required
+@role_required("ADMS", "PROD") 
 def merma_insumo():
     merma_insumo_form = MermaInsumoForm()
      
-    # ✅ Cargar opciones ANTES de validar
-    merma_insumo_form.insumo_id.choices = [(i.id_insumo, i.nombreInsumo) for i in Insumo.query.all()]
+    # Cargar opciones ANTES de validar
+    merma_insumo_form.insumo_id.choices = [(i.id_insumo, i.nombreInsumo) for i in Insumos.query.all()]
 
     if not merma_insumo_form.validate_on_submit():
         flash("Formulario de merma inválido.", "danger")
@@ -286,7 +294,7 @@ def merma_insumo():
         descontar = min(lote.cantidad, cantidad_faltante)
         lote.cantidad -= descontar
 
-        merma = MermaInsumo(
+        merma = MermasInsumos(
             lote_id=lote.idLote,
             cantidad=descontar,
             tipo_merma=merma_insumo_form.tipo_merma.data,

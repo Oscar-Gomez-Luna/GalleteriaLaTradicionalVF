@@ -10,8 +10,8 @@
     <nav class="nav_admin">
         <a href="{{ url_for('administracion.proveedor.proveedores') }}" class="{{ 'activo' if active_page_admin == 'proveedores' else '' }}">Proveedores</a>
         <a href="{{ url_for('administracion.usuario.empleados') }}" class="{{ 'activo' if active_page_admin == 'usuarios' else '' }}">Usuarios</a>
-        <a href="" class="{{ 'activo' if active_page == 'clientes' else '' }}">Clientes</a>
-        <a href="" class="{{ 'activo' if active_page == 'recetas' else '' }}">Recetas</a>
+        <a href="{{url_for('administracion.clientes.clientes')}}" class="{{ 'activo' if active_page_admin == 'clientes' else '' }}">Clientes</a>
+        <a href="{{url_for('administracion.recetas.recetas')}}" class="{{ 'activo' if active_page_admin == 'recetas' else '' }}">Recetas</a>
     </nav>
     
     {% block contenido %}

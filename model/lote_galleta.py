@@ -13,7 +13,7 @@ class LoteGalletas(db.Model):
     costo = db.Column(db.Numeric(10, 2), nullable=False)
     existencia = db.Column(db.Integer, nullable=False)
     # Relacioon con la tabla Galleta
-    galleta = db.relationship('Galleta', backref='lotes', lazy=True)
+    galleta = db.relationship('Galleta', backref='galleta_lotes', lazy=True) 
 
     def __repr__(self):
         return f'<LoteGalletas {self.id_lote}>'

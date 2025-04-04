@@ -1,4 +1,4 @@
-{% extends "layout_galleteria.html" %}
+{% extends "layaut.html" %}
 
 {% block links %}
     <link href="{{ url_for('static', filename='css/estilos_nav_admin.css') }}" rel="stylesheet" type="text/css" ç/>
@@ -8,8 +8,8 @@
 
 {% block container %}
     <nav class="nav_admin">
-        <a href="" class="{{ 'activo' if active_page == 'proveedores' else '' }}">Proveedores</a>
-        <a href="" class="{{ 'activo' if active_page == 'usuarios' else '' }}">Usuarios</a>
+        <a href="{{ url_for('administracion.proveedor.proveedores') }}" class="{{ 'activo' if active_page_admin == 'proveedores' else '' }}">Proveedores</a>
+        <a href="{{ url_for('administracion.usuario.empleados') }}" class="{{ 'activo' if active_page_admin == 'usuarios' else '' }}">Usuarios</a>
         <a href="{{url_for('administracion.clientes.clientes')}}" class="{{ 'activo' if active_page_admin == 'clientes' else '' }}">Clientes</a>
         <a href="{{url_for('administracion.recetas.recetas')}}" class="{{ 'activo' if active_page_admin == 'recetas' else '' }}">Recetas</a>
     </nav>

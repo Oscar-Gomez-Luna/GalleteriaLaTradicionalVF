@@ -12,6 +12,8 @@ from datetime import datetime, timedelta
 import secrets
 import requests
 import re
+from flask_login import login_required
+from extensions import role_required
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
@@ -26,7 +28,7 @@ print(f"Template folder configurado como: {TEMPLATE_DIR}")
 usuarios_bp = Blueprint('usuarios', __name__, template_folder=TEMPLATE_DIR)
 
 # Configuración
-RECAPTCHA_SECRET_KEY = '6Lfzv_gqAAAAALxgoUOobpOFldn0VikXsHcuoGRl'  # Reemplaza con tu clave secreta de reCAPTCHA
+RECAPTCHA_SECRET_KEY = '6Lfzv_gqAAAAALxgoUOobpOFldn0VikXsHcuoGRl'
 UNSAFE_PASSWORDS = [
     'password123',
     '12345678',
@@ -37,7 +39,6 @@ UNSAFE_PASSWORDS = [
 SCOPES = ['https://www.googleapis.com/auth/gmail.send']
 CREDENTIALS_FILE = 'credentials.json'
 
-# Funciones auxiliares
 def validate_password(password):
     if len(password) < 8:
         return False, "La contraseña debe tener al menos 8 caracteres."
@@ -108,7 +109,6 @@ def make_session_permanent():
             return redirect(url_for('usuarios.index'))
     session['last_activity'] = datetime.now().isoformat()
 
-# Rutas
 @usuarios_bp.route('/login/')
 def index():
     form_login = LoginForm()
@@ -118,9 +118,6 @@ def index():
 
 @usuarios_bp.route('/login', methods=['GET', 'POST'])
 def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('usuarios.index'))
-
     form_login = LoginForm()
     form_register = RegisterForm()
     if form_login.validate_on_submit():
@@ -133,22 +130,38 @@ def login():
         else:
             usuario = Usuario.query.filter_by(nombreUsuario=form_login.username.data).first()
             if usuario and usuario.check_password(form_login.password.data) and usuario.estatus == 1:
-                verificacion = VerificacionUsuario.query.filter_by(idUsuario=usuario.idUsuario).first()
-                if not verificacion or not verificacion.verificado:
-                    flash('Por favor, verifica tu correo antes de iniciar sesión.', 'error')
+                if usuario.rol == "CLIE":
+                    verificacion = VerificacionUsuario.query.filter_by(idUsuario=usuario.idUsuario).first()
+                    if not verificacion or not verificacion.verificado:
+                        flash('Por favor, verifica tu correo antes de iniciar sesión.', 'error')
+                        return redirect(url_for("usuarios.login"))
+
+                usuario.ultima_conexion = datetime.now()
+                if usuario.seguridad:
+                    usuario.seguridad.failed_login_attempts = 0
                 else:
-                    usuario.ultima_conexion = datetime.now()
-                    if usuario.seguridad:
-                        usuario.seguridad.failed_login_attempts = 0
-                    else:
-                        seguridad = UsuarioSeguridad(idUsuario=usuario.idUsuario, failed_login_attempts=0)
-                        db.session.add(seguridad)
-                    db.session.commit()
-                    print(f"Inicio de sesión exitoso. failed_login_attempts reiniciado a: {usuario.seguridad.failed_login_attempts}")
-                    login_user(usuario, remember=False, duration=timedelta(minutes=10))
-                    session['last_activity'] = datetime.now().isoformat()
-                    flash('¡Inicio de sesión exitoso!', 'success')
-                    return redirect(url_for('dashboard.dashboard'))
+                    seguridad = UsuarioSeguridad(idUsuario=usuario.idUsuario, failed_login_attempts=0)
+                    db.session.add(seguridad)
+                db.session.commit()
+
+                print(f"Rol del usuario: {usuario.rol}")
+                
+                print(f"Inicio de sesión exitoso. failed_login_attempts reiniciado a: {usuario.seguridad.failed_login_attempts}")
+                login_user(usuario, remember=False, duration=timedelta(minutes=10))
+                session['last_activity'] = datetime.now().isoformat()
+                flash('¡Inicio de sesión exitoso!', 'success')
+
+                if usuario.rol == "ADMS":
+                    return redirect(url_for("galletas.galletas"))
+                elif usuario.rol == "CAJA":
+                    return redirect(url_for("venta.ventas"))
+                elif usuario.rol == "PROD":
+                    return redirect(url_for("produccion.produccion"))
+                elif usuario.rol == "CLIE":
+                    return redirect(url_for("portal_cliente.index"))
+                else:
+                    return redirect(url_for("usuarios.index"))
+
             else:
                 if usuario:
                     if not usuario.seguridad:
@@ -167,8 +180,10 @@ def login():
                         flash(f'Usuario o contraseña incorrectos. Intento {usuario.seguridad.failed_login_attempts}/3.', 'error')
                 else:
                     flash('Usuario o contraseña incorrectos.', 'error')
+
     print(f"Intentando renderizar login.html desde: {os.path.join(TEMPLATE_DIR, 'login.html')}")
     return render_template('login.html', form_login=form_login, form_register=form_register)
+    
 
 @usuarios_bp.route('/register', methods=['POST'])
 def register():
@@ -283,7 +298,7 @@ def change_password():
                 current_user.seguridad.password_last_changed = datetime.now()
                 db.session.commit()
                 flash('Contraseña cambiada exitosamente.', 'success')
-                return redirect(url_for('dashboard.dashboard'))  # Endpoint correcto
+                return redirect(url_for('dashboard.dashboard'))  
     return render_template('cambiarContraseña.html')
 
 @usuarios_bp.route('/logout')

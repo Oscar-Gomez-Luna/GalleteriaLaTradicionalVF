@@ -15,9 +15,10 @@ class Usuario(db.Model):
     rol = db.Column(db.String(4), nullable=False)
     ultima_conexion = db.Column(db.DateTime)
 
-    clientes = db.relationship('Cliente', backref='usuario', lazy=True)
+    clientes = db.relationship('Cliente', backref='usuario_cliente', lazy=True)
     verificacion = db.relationship('VerificacionUsuario', backref='usuario', uselist=False, lazy=True)
     seguridad = db.relationship('UsuarioSeguridad', backref='usuario', uselist=False, lazy=True)
+
 
     def set_password(self, password):
         """Encripta la contraseña y la almacena."""

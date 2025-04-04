@@ -14,16 +14,28 @@
 
 <body class="custom-background">
     <img src="{{ url_for('static', filename='img/logo.png') }}" alt="" class="custom-logo">
-
+    {% if usuario %}
+        <div class="welcome-container text-right">
+            <div class="welcome-header">
+                <h2 class="welcome-title">¡Bienvenido de nuevo, <span class="username">{{ usuario.nombreUsuario }}</span>!</h2>
+            </div>
+            
+            <div class="last-connection">
+                <span class="connection-label">Última conexión:</span>
+                <span class="connection-date">{{ usuario.ultima_conexion.strftime('%d/%m/%Y a las %H:%M') }}</span>
+            </div>
+        </div>
+    {% endif %}
     <header class="custom-header">
         <nav class="custom-nav">
-            <a href="" class="{{ 'custom-active' if active_page == 'galletas' else '' }}">Galletas</a>
+            <a href="{{ url_for('galletas.galletas') }}" class="{{ 'custom-active' if active_page == 'galletas' else '' }}">Galletas</a>
             <a href="{{ url_for('venta.ventas') }}" class="{{ 'custom-active' if active_page == 'ventas' else '' }}">Ventas</a>
-            <a href="" class="{{ 'custom-active' if active_page == 'produccion' else '' }}">Producción</a>
-            <a href="" class="{{ 'custom-active' if active_page == 'insumos' else '' }}">Insumos</a>
-            <a href="" class="{{ 'custom-active' if active_page == 'ordenes' else '' }}">Ordenes</a>
-            <a href="" class="{{ 'custom-active' if active_page == 'ganancias' else '' }}">Ganancias</a>
+            <a href="{{ url_for('produccion.produccion') }}" class="{{ 'custom-active' if active_page == 'produccion' else '' }}">Producción</a>
+            <a href="{{ url_for('insumo.insumos') }}" class="{{ 'custom-active' if active_page == 'insumos' else '' }}">Insumos</a>
+            <a href="{{ url_for('orden.ordenes') }}" class="{{ 'custom-active' if active_page == 'ordenes' else '' }}">Ordenes</a>
+            <a href="{{ url_for('dashboard.dashboard') }}" class="{{ 'custom-active' if active_page == 'dashboard' else '' }}">Dashboard</a>
             <a href="{{ url_for('administracion.proveedor.proveedores') }}" class="{{ 'custom-active' if active_page == 'administracion' else '' }}">Administración</a>
+            <a href="{{ url_for('usuarios.logout') }}">Cerrar Sesión</a>
         </nav>
     </header>
 

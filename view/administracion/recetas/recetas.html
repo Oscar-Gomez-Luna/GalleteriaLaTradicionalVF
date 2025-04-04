@@ -1,10 +1,13 @@
-{% extends "layout_administracion.html" %}
+{% extends "layaut_administracion.html" %}
 {% import '_macros.html' as macros %}
 {% block contenido %}
 
 {% block links2%}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link href="{{ url_for('static', filename='css/modal.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ url_for('static', filename='css/estilos_layout_galleteria.css') }}" rel="stylesheet" type="text/css" />
 {% endblock %}
 
 <body class="container-fluid">
@@ -18,91 +21,92 @@
   {% endif %}
   {% endwith %}
   
-  <div class="table-container">
-    <h2 class="mb-4 text-center">Listado de Recetas</h2>
+  <div class="container-fluid">
+    <div class="table-container">
 
-    <form id="filterForm" method="GET" action="{{ url_for('administracion.recetas.recetas') }}">
-      <div class="form-check form-switch" style="margin-bottom: 20px;">
-        <input onchange="document.getElementById('filterForm').submit()" 
-               class="form-check-input" 
-               type="checkbox" 
-               id="inactivos" 
-               name="inactivos" 
-               {% if request.args.get('inactivos') == 'on' %}checked{% endif %}>
-        <label class="form-check-label" for="inactivos" style="color: #ffffff;">
-            Eliminadas
-        </label>
-      </div>
-    </form>
-      <table class="table table-bordered align-middle table-responsive">
-        <thead>
-          <tr>
-            <th scope="col">Nombre Receta</th>
-            <th scope="col">Descripción</th>
-            <th scope="col">Ingredientes</th>
-            <th scope="col">Cantidad de galletas</th>
-            <th scope="col">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for recet in receta %}
-          <tr>
-            <td>{{ recet.nombreReceta }}</td>
-            <td>{{ recet.Descripccion }}</td>
-            <td>
-              <ul class="list-unstyled">
-                {% for ingrediente in recet.ingredientes %}
-                <li><strong>{{ ingrediente.insumo }}:</strong> {{ ingrediente.cantidad }} {{ ingrediente.unidad }}</li>
-                {% endfor %}
-              </ul>
-            </td>
-            <td>
-              Receta para: {{ recet.cantidad_galletas }} galletas
-            </td>
-            <td>
-              <a href="modificar?idReceta={{ recet.idReceta }}" class="btn" title="Editar">
-                <i class="fas fa-edit fa-lg"></i>
-              </a>
-              
-              {% if recet.estatus == 1 %}
-                <a href="eliminar?idReceta={{ recet.idReceta }}" class="btn" title="Desactivar">
-                  <i class="fas fa-trash-can fa-lg"></i>
-                </a>
-              {% else %}
-                <a href="activar?idReceta={{ recet.idReceta }}" class="btn" title="Reactivar">
-                  <i class="fas fa-undo fa-lg"></i>
-                </a>
-              {% endif %}
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-    
-    <div class="custom-extra-section">
-      <div class="custom-button-container" style="display: flex; align-items: center;">
-        <a href="{{ url_for('administracion.recetas.agregar') }}" class="custom-btn" style="text-decoration: none;">
-          <i class="fa-solid fa-circle-plus"></i> Agregar
-        </a>
-        
-        <!-- Input de búsqueda (oculto inicialmente) -->
-        <div id="search-input-container" style="display: none; margin-right: 10px;">
-          <div class="filtro-form d-flex align-items-center" style="background: white; padding: 5px; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-            <input type="text" 
-                   class="form-control" 
-                   id="buscar" 
-                   placeholder="Buscar receta..."
-                   style="width: 180px; height: 30px; padding: 0 5px; font-size: 12px; border: 1px solid #ddd;"
-                   onkeyup="buscar_recetas()">
-            <i class="fa-solid" style="color: gray; margin-left: 5px;"></i>
-          </div>
+      <form id="filterForm" method="GET" action="{{ url_for('administracion.recetas.recetas') }}">
+        <div class="form-check form-switch" style="margin-bottom: 20px;">
+          <input onchange="document.getElementById('filterForm').submit()" 
+                 class="form-check-input" 
+                 type="checkbox" 
+                 id="inactivos" 
+                 name="inactivos" 
+                 {% if request.args.get('inactivos') == 'on' %}checked{% endif %}>
+          <label class="form-check-label" for="inactivos" style="color: #ffffff;">
+              Eliminadas
+          </label>
         </div>
-        
-        <!-- Botón de búsqueda -->
-        <button class="custom-btn" id="search-button" onclick="toggleSearch()">
-          <i class="fa-solid fa-magnifying-glass"></i> Buscar
-        </button>
+      </form>
+        <table class="table table-bordered align-middle table-responsive">
+          <thead>
+            <tr>
+              <th scope="col">Nombre Receta</th>
+              <th scope="col">Descripción</th>
+              <th scope="col">Ingredientes</th>
+              <th scope="col">Cantidad de galletas</th>
+              <th scope="col">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for recet in receta %}
+            <tr>
+              <td>{{ recet.nombreReceta }}</td>
+              <td>{{ recet.Descripccion }}</td>
+              <td>
+                <ul class="list-unstyled">
+                  {% for ingrediente in recet.ingredientes %}
+                  <li><strong>{{ ingrediente.insumo }}:</strong> {{ ingrediente.cantidad }} {{ ingrediente.unidad }}</li>
+                  {% endfor %}
+                </ul>
+              </td>
+              <td>
+                Receta para: {{ recet.cantidad_galletas }} galletas
+              </td>
+              <td>
+                <a href="modificar?idReceta={{ recet.idReceta }}" class="btn" title="Editar">
+                  <i class="fas fa-edit fa-lg"></i>
+                </a>
+                
+                {% if recet.estatus == 1 %}
+                  <a href="eliminar?idReceta={{ recet.idReceta }}" class="btn" title="Desactivar">
+                    <i class="fas fa-trash-can fa-lg"></i>
+                  </a>
+                {% else %}
+                  <a href="activar?idReceta={{ recet.idReceta }}" class="btn" title="Reactivar">
+                    <i class="fas fa-undo fa-lg"></i>
+                  </a>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="custom-extra-section">
+        <div class="custom-button-container" style="display: flex; align-items: center;">
+          <a href="{{ url_for('administracion.recetas.agregar') }}" class="custom-btn" style="text-decoration: none;">
+            <i class="fa-solid fa-circle-plus"></i> Agregar
+          </a>
+          
+          <!-- Input de búsqueda (oculto inicialmente) -->
+          <div id="search-input-container" style="display: none; margin-right: 10px;">
+            <div class="filtro-form d-flex align-items-center" style="background: white; padding: 5px; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+              <input type="text" 
+                     class="form-control" 
+                     id="buscar" 
+                     placeholder="Buscar receta..."
+                     style="width: 180px; height: 30px; padding: 0 5px; font-size: 12px; border: 1px solid #ddd;"
+                     onkeyup="buscar_recetas()">
+              <i class="fa-solid" style="color: gray; margin-left: 5px;"></i>
+            </div>
+          </div>
+          
+          <!-- Botón de búsqueda -->
+          <button class="custom-btn" id="search-button" onclick="toggleSearch()">
+            <i class="fa-solid fa-magnifying-glass"></i> Buscar
+          </button>
+        </div>
       </div>
     </div>
   </div>

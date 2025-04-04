@@ -13,19 +13,21 @@ from flask import (
     flash,
     session,
 )
+from flask_login import login_required, current_user
+from extensions import role_required
 from datetime import datetime, timedelta
 from sqlalchemy import desc, func
 from extensions import db
 from model.insumo import Insumos
 from model.lote_insumo import LoteInsumo
-from model.lote_galleta import LoteGalleta
+from model.lote_galleta import LoteGalletas
 from model.merma_insumo import MermasInsumos
 from model.receta import Receta
 from model.tipo_galleta import TipoGalleta
 from model.galleta import Galleta
-from model.detalle_Orden import DetalleVentaOrden
+from model.detalle_venta_orden import DetalleVentaOrden
 from model.orden import Orden
-from model.solicitud import SolicitudProduccion
+from model.solicitud_produccion import SolicitudProduccion
 from forms.ordenMerma_form import MermaForm 
 from decimal import Decimal
 
@@ -40,6 +42,8 @@ def estado_a_texto(estado):
         3: 'LOTE'
     }.get(estado, 'DESCONOCIDO')
 
+@login_required
+@role_required("ADMS", "PROD") 
 def obtener_detalle_orden(id_detalle):
     """Obtiene el detalle completo de la orden"""
     return db.session.query(
@@ -60,6 +64,8 @@ def obtener_detalle_orden(id_detalle):
         DetalleVentaOrden.id_detalleVentaOrden == id_detalle
     ).first()
 
+@login_required
+@role_required("ADMS", "PROD") 
 def parsear_ingredientes(ingredientes_raw):
     """Convierte los ingredientes a una lista válida"""
     if isinstance(ingredientes_raw, str):
@@ -77,6 +83,8 @@ def parsear_ingredientes(ingredientes_raw):
         return ingredientes_raw
     raise ValueError("Formato de ingredientes no válido")
 
+@login_required
+@role_required("ADMS", "PROD") 
 def calcular_cantidad_ingrediente(cantidad_original, factor, unidad):
     """Calcula la cantidad necesaria con el redondeo apropiado"""
     cantidad_calculada = cantidad_original * factor
@@ -93,6 +101,8 @@ def calcular_cantidad_ingrediente(cantidad_original, factor, unidad):
     else:
         return round(cantidad_calculada, 2), False
 
+@login_required
+@role_required("ADMS", "PROD") 
 def procesar_ingredientes(receta, cantidad_galletas, cantidad_pedido, presentacion=None):
     """Procesa ingredientes con conversión CORRECTA de cajas a galletas"""
     print(f"\n=== INICIANDO PROCESAR INGREDIENTES ===")
@@ -105,11 +115,11 @@ def procesar_ingredientes(receta, cantidad_galletas, cantidad_pedido, presentaci
             return ingredientes
 
         # CONVERSIÓN DEFINITIVA A GALLETAS (CORRECCIÓN CLAVE)
-        presentacion = presentacion.lower() if presentacion else None
-        if presentacion == 'caja de kilo':
+        presentacion = presentacion if presentacion else None
+        if presentacion == 'Caja de Kilo':
             total_galletas = int(cantidad_pedido * 27)  # 27 galletas por caja
             print(f"Conversión: {cantidad_pedido} cajas de kilo = {total_galletas} galletas")
-        elif presentacion == 'caja de 700':
+        elif presentacion == 'Caja de 700 Gramos':
             total_galletas = int(cantidad_pedido * 19)  # 19 galletas por caja
             print(f"Conversión: {cantidad_pedido} cajas de 700 = {total_galletas} galletas")
         else:
@@ -129,7 +139,7 @@ def procesar_ingredientes(receta, cantidad_galletas, cantidad_pedido, presentaci
                 cantidad_final, ajustado = calcular_cantidad_ingrediente(
                     cantidad_original,
                     factor,
-                    ingrediente.get('unidad', '')
+                    ingrediente.get('Unidad', '')
                 )
                 print(f"  - {ingrediente['insumo']}: {cantidad_original} -> {cantidad_final}")
 
@@ -153,6 +163,8 @@ def procesar_ingredientes(receta, cantidad_galletas, cantidad_pedido, presentaci
     print("=== FIN DE PROCESAR INGREDIENTES ===\n")
     return ingredientes
 
+@login_required
+@role_required("ADMS", "PROD") 
 def obtener_presentacion_galleta(id_galleta):
     """Obtiene el tipo de presentación de una galleta"""
     return db.session.query(
@@ -163,6 +175,8 @@ def obtener_presentacion_galleta(id_galleta):
         Galleta.id_galleta == id_galleta
     ).scalar()
 
+@login_required
+@role_required("ADMS", "PROD") 
 def verificar_actualizar_estatus_orden(id_orden):
     """Verifica si la fecha de entrega ha pasado y actualiza el estatus a 3 (LOTE) si es necesario"""
     try:
@@ -227,7 +241,8 @@ def verificar_actualizar_estatus_orden(id_orden):
         db.session.rollback()
         return False
 
-
+@login_required
+@role_required("ADMS", "PROD") 
 def calcular_cantidad_total_galletas(cantidad_pedido, presentacion):
     """Calcula la cantidad total de galletas según la presentación"""
     if presentacion.lower() == 'caja de kilo':
@@ -237,6 +252,8 @@ def calcular_cantidad_total_galletas(cantidad_pedido, presentacion):
     else:
         return int(cantidad_pedido)  # Unidades individuales
 
+@login_required
+@role_required("ADMS", "PROD") 
 def insertar_lote_galleta(galleta_id, cantidad, fecha_caducidad):
     """Inserta un nuevo registro en la tabla lotesGalletas"""
     try:
@@ -244,7 +261,7 @@ def insertar_lote_galleta(galleta_id, cantidad, fecha_caducidad):
         fecha_produccion = fecha_caducidad - timedelta(days=7)
         
         # Crear el nuevo lote
-        nuevo_lote = LoteGalleta(
+        nuevo_lote = LoteGalletas(
             galleta_id=galleta_id,
             cantidad=cantidad,
             costo=200.00,  # Costo fijo de producción
@@ -265,6 +282,8 @@ def insertar_lote_galleta(galleta_id, cantidad, fecha_caducidad):
 
 #ruta principal donde muestra los pedidos y llama las funciones anteirores para las fechas y los estatus y agregar a lotes
 @orden_bp.route("/")
+@login_required
+@role_required("ADMS", "PROD") 
 def ordenes():
     try:
         #fecha actual
@@ -332,7 +351,8 @@ def ordenes():
         return render_template(
             "Orden/Ordenes.html",
             ordenes=datos_ordenes,
-            active_page="ordenes"
+            active_page="ordenes",
+            usuario = current_user
         )
 
     except Exception as e:
@@ -346,6 +366,8 @@ def ordenes():
 
 #ruta que abre el detalle y receta dependiendo del id para saber las cantidades
 @orden_bp.route("/detalles/<int:id_detalle>")
+@login_required
+@role_required("ADMS", "PROD") 
 def detalles_receta(id_detalle):
 
     try:
@@ -394,6 +416,8 @@ def detalles_receta(id_detalle):
 
 #ruta para abrir merma de insumos y carga todos los insumos y poner los lotes
 @orden_bp.route("/merma_orden", methods=["GET", "POST"])
+@login_required
+@role_required("ADMS", "PROD") 
 def merma_orden():
     form = MermaForm(request.form if request.method == "POST" else None)
     
@@ -486,6 +510,8 @@ def merma_orden():
 
 #ruta para registrar la merma 
 @orden_bp.route("/registrar_merma", methods=["GET", "POST"])
+@login_required
+@role_required("ADMS", "PROD") 
 def registrar_merma():
     form = MermaForm(request.form)
     
@@ -555,6 +581,8 @@ def registrar_merma():
 
 #ruta para cambiar el estatus y registrar en solicitud de produccion insertando los datos
 @orden_bp.route("/completar/<int:id_detalle>", methods=['POST'])
+@login_required
+@role_required("ADMS", "PROD") 
 def completar_orden(id_detalle):
     try:
 

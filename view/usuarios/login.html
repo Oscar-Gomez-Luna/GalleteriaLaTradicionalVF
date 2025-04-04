@@ -17,23 +17,23 @@
                 <div class="form-columns">
                     <!-- Columna izquierda -->
                     <div class="column-left">
-                        {{ macro.camposNuevos(form_register.username, placeholder="Nombre de Usuario") }}
-                        {{ macro.camposNuevos(form_register.apMaterno, placeholder="Apellido Materno") }}
-                        {{ macro.camposNuevos(form_register.genero, placeholder="Género") }}
-                        {{ macro.camposNuevos(form_register.calle, placeholder="Calle") }}
-                        {{ macro.camposNuevos(form_register.email, placeholder="Correo") }}
-                        {{ macro.camposNuevos(form_register.password, placeholder="Contraseña", type="password") }}
+                        {{ macro.camposNuevosLogin(form_register.username, placeholder="Nombre de Usuario") }}
+                        {{ macro.camposNuevosLogin(form_register.apMaterno, placeholder="Apellido Materno") }}
+                        {{ macro.camposNuevosLogin(form_register.genero, placeholder="Género") }}
+                        {{ macro.camposNuevosLogin(form_register.calle, placeholder="Calle") }}
+                        {{ macro.camposNuevosLogin(form_register.email, placeholder="Correo") }}
+                        {{ macro.camposNuevosLogin(form_register.password, placeholder="Contraseña", type="password") }}
                     </div>
 
                     <!-- Columna derecha -->
                     <div class="column-right">
-                        {{ macro.camposNuevos(form_register.apPaterno, placeholder="Apellido Paterno") }}
-                        {{ macro.camposNuevos(form_register.nombre, placeholder="Nombre") }}
-                        {{ macro.camposNuevos(form_register.telefono, placeholder="Teléfono", type="text") }}
-                        {{ macro.camposNuevos(form_register.numero, placeholder="Número", type="number") }}
-                        {{ macro.camposNuevos(form_register.colonia, placeholder="Colonia") }}
-                        {{ macro.camposNuevos(form_register.codigoPostal, placeholder="Código Postal", type="number") }}
-                        {{ macro.camposNuevos(form_register.fechaNacimiento, placeholder="Fecha de Nacimiento", type="date") }}
+                        {{ macro.camposNuevosLogin(form_register.apPaterno, placeholder="Apellido Paterno") }}
+                        {{ macro.camposNuevosLogin(form_register.nombre, placeholder="Nombre") }}
+                        {{ macro.camposNuevosLogin(form_register.telefono, placeholder="Teléfono", type="text") }}
+                        {{ macro.camposNuevosLogin(form_register.numero, placeholder="Número", type="number") }}
+                        {{ macro.camposNuevosLogin(form_register.colonia, placeholder="Colonia") }}
+                        {{ macro.camposNuevosLogin(form_register.codigoPostal, placeholder="Código Postal", type="number") }}
+                        {{ macro.camposNuevosLogin(form_register.fechaNacimiento, placeholder="Fecha de Nacimiento", type="date") }}
                     </div>
                 </div>
 
@@ -48,8 +48,8 @@
             {{ form_login.hidden_tag() }}
             <label for="chk" aria-hidden="true">Iniciar Sesión</label>
 
-            {{ macro.camposNuevos(form_login.username, placeholder="Nombre de Usuario") }}
-            {{ macro.camposNuevos(form_login.password, placeholder="Contraseña", type="password") }}
+            {{ macro.camposNuevosLogin(form_login.username, placeholder="Nombre de Usuario") }}
+            {{ macro.camposNuevosLogin(form_login.password, placeholder="Contraseña", type="password") }}
 
             <div class="g-recaptcha" data-sitekey="6Lfzv_gqAAAAACe6rNuoX0zGOsCe3Ltjfb9P6dZU"></div>
             <button type="submit">Ingresar</button>

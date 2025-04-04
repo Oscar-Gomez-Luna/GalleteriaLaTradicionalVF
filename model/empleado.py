@@ -13,5 +13,5 @@ class Empleado(db.Model):
     idPersona = db.Column(db.Integer, db.ForeignKey('persona.idPersona'), nullable=False)
     idUsuario = db.Column(db.Integer, db.ForeignKey('usuario.idUsuario'), nullable=False)
 
-    persona = db.relationship('Persona', backref=db.backref('empleados', cascade='all, delete-orphan'))
+    persona = db.relationship('Persona', backref=db.backref('empleados_relacionados', cascade='all, delete-orphan'))
     usuario = db.relationship('Usuario', backref=db.backref('empleados', cascade='all, delete-orphan'))

@@ -12,6 +12,7 @@ class DetalleVentaOrden(db.Model):
     orden_id = db.Column(db.Integer, db.ForeignKey('orden.id_orden'), nullable=False)
 
     # Relación con el modelo Orden
-    orden = db.relationship('Orden', backref=db.backref('detalleVentaOrden', lazy=True))
+    orden = db.relationship('model.orden.Orden', backref=db.backref('detalle_venta_orden', lazy=True))
+
     # Relación con el modelo Galletas
-    galletas = db.relationship('Galleta', backref=db.backref('detalleVentaOrden', lazy=True))
+    galletas = db.relationship('model.galleta.Galleta', backref=db.backref('detalleVentaOrdenGalleta', lazy=True))
