@@ -37,13 +37,10 @@
                                 </select>
                             </div>
                             <div class="form-item">
-                                <label for="lote">Lotes:</label>
-                                <select name="lote" id="lote" class="form-select" required>
-                                    <option value="">Eligá un tipo de galleta...</option>
-                                </select>
-                                <input type="hidden" id="existencia_lote" name="existencia_lote">
-                                <input type="hidden" id="fecha_caducidad_lote" name="fecha_caducidad_lote">
+                                <label for="existencia_total">Existencia disponible:</label>
+                                <input type="text" id="existencia_total" class="form-control" readonly>
                             </div>
+                            <input type="hidden" id="fecha_caducidad_lote" name="fecha_caducidad_lote">
                             <div class="form-item">
                                 {{macro.camposNuevos(form.cantidad,class="form-control", placeholder="Cantidad")}}
                             </div>

@@ -141,6 +141,14 @@
     width: auto;
     height: 325px;
     overflow: auto;
+    position: relative;
+}
+
+.table thead th {
+    position: sticky;
+    top: 0;
+    background-color: #F1B384; /* Mismo color que tu th actual */
+    z-index: 10; /* Asegura que los títulos estén por encima del contenido */
 }
 
 .table-container table {

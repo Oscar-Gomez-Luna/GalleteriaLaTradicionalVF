@@ -3,221 +3,427 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Galleteria La tradicional</title>
+    <title>Galleteria La Tradicional</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Estilos del layout -->
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <!-- Estilos personalizados -->
     <link href="{{ url_for('static', filename='css/estilos_layout_portal.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/estilos_portal.css') }}" rel="stylesheet">
-
+    <style>
+        /* Estilos mejorados */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(rgba(166, 83, 35, 0.9), rgba(241, 179, 132, 0.9)), 
+                        url('https://images.unsplash.com/photo-1587241321921-91a834d6d191?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-logo {
+            max-width: 350px;
+            margin-bottom: 2rem;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.4));
+            animation: pulse 2s infinite ease-in-out;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .login-btn {
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            background-color: #5a2e12;
+            border: 2px solid white;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .login-btn:hover {
+            background-color: #a65323;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+        
+        .login-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .login-btn:hover::before {
+            left: 100%;
+        }
+        
+        .mv-section {
+            background-color: #F1B384;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .mv-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1562440499-64c9a111f713?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.1;
+        }
+        
+        .mv-card {
+            background: rgba(236, 196, 166, 0.85);
+            border-radius: 15px;
+            padding: 2.5rem;
+            height: 100%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.5s;
+            border: 2px solid #a65323;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .mv-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+        
+        .mv-card h3 {
+            position: relative;
+            display: inline-block;
+            color: #5a2e12;
+        }
+        
+        .mv-card h3::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #a65323, #F1B384);
+            border-radius: 3px;
+        }
+        
+        .testimonials-section {
+            background-color: #ECC4A6;
+        }
+        
+        .testimonial-card {
+            background-color: #F1B384;
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.4s;
+            border-left: 5px solid #5a2e12;
+            height: 100%;
+        }
+        
+        .testimonial-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+        
+        .client-photo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #a65323;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        footer {
+            background-color: #5a2e12;
+            color: white;
+            padding: 3rem 0;
+        }
+        
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #a65323;
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            transition: all 0.3s;
+        }
+        
+        .social-icon:hover {
+            background-color: #d17a45;
+            transform: translateY(-5px);
+        }
+        
+        .footer-link {
+            color: #ECC4A6;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .footer-link:hover {
+            color: white;
+            padding-left: 5px;
+        }
+    </style>
+</head>
 <body>
-    <a href="">
-        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" class="logo">
-    </a>
-    <div class="main-content">
-        {% with messages = get_flashed_messages(with_categories=True) %}
-            {% if messages %}
-            <div class="container mt-3">
-                {% for category, message in messages %}
-                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
-                </div>
-                {% endfor %}
-            </div>
-            {% endif %}
-        {% endwith %}
-        <!-- Hero Section -->
-        <div class="welcome-hero" style="background: linear-gradient(rgba(166, 83, 35, 0.8), rgba(241, 179, 132, 0.8)), url('https://images.unsplash.com/photo-1587241321921-91a834d6d191?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80'); background-size: cover; background-position: center;">
-            <div class="container-fluid text-center py-5">
-                <h1 class="display-4 fw-bold text-white">¡Bienvenido Pastelero!</h1>
-                <p class="lead text-light">"La Tradicional" Donde cada galleta es una obra de arte</p>
-                <a href="{{ url_for('usuarios.index') }}" class="btn btn-lg btn-warning mt-3">
-                    Iniciar Sesión y/o Registrarse <i class="bi bi-arrow-right"></i>
-                </a>
-            </div>
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container text-center text-white py-5">
+            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" class="hero-logo">
+            <h1 class="display-3 fw-bold mb-4">¡Bienvenido a La Tradicional!</h1>
+            <p class="lead mb-5 fs-4">Donde cada galleta es una obra de arte y cada bocado una experiencia única</p>
+            <a href="{{ url_for('usuarios.index') }}" class="btn btn-warning btn-lg login-btn">
+                Iniciar Sesión <i class="bi bi-arrow-right ms-2"></i>
+            </a>
         </div>
-        <!-- Galería de Galletas Animada -->
-        <div class="container-fluid py-5" style="background-color: #F1B384;">
-            <div class="container">
-                <h2 class="text-center text-dark mb-5">Nuestras Deliciosas Creaciones</h2>
-                
-                <div class="row g-4 gallery-container">
-                    <!-- Galleta 1 -->
-                    <div class="col-md-4 col-6 gallery-item">
-                        <div class="card border-0 rounded-4 overflow-hidden h-100 gallery-card" style="background-color: #ECC4A6;">
-                            <img src="https://images.unsplash.com/photo-1558961363-fa8fdf82db35?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1365&q=80" 
-                                 class="card-img-top img-fluid gallery-img" 
-                                 alt="Galleta de Chocolate">
-                            <div class="card-body">
-                                <h5 class="card-title">Clásica de Chocolate</h5>
-                                <p class="card-text">Crujiente por fuera, suave por dentro.</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Galleta 2 -->
-                    <div class="col-md-4 col-6 gallery-item">
-                        <div class="card border-0 rounded-4 overflow-hidden h-100 gallery-card" style="background-color: #ECC4A6;">
-                            <img src="{{ url_for('static', filename='img/chispas.jpg') }}" 
-                                 class="card-img-top img-fluid gallery-img" 
-                                 alt="Galleta con Chispas">
-                            <div class="card-body">
-                                <h5 class="card-title">Chispas de Colores</h5>
-                                <p class="card-text">Divertida y llena de sabor.</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Galleta 3 -->
-                    <div class="col-md-4 col-6 gallery-item">
-                        <div class="card border-0 rounded-4 overflow-hidden h-100 gallery-card" style="background-color: #ECC4A6;">
-                            <img src="https://images.unsplash.com/photo-1590080874088-eec64895b423?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1374&q=80" 
-                                 class="card-img-top img-fluid gallery-img" 
-                                 alt="Galleta Artesanal">
-                            <div class="card-body">
-                                <h5 class="card-title">Artesanal Familiar</h5>
-                                <p class="card-text">Receta tradicional de la abuela.</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Galleta 4 -->
-                    <div class="col-md-4 col-6 gallery-item">
-                        <div class="card border-0 rounded-4 overflow-hidden h-100 gallery-card" style="background-color: #ECC4A6;">
-                            <img src="https://images.unsplash.com/photo-1499636136210-6f4ee915583e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1364&q=80" 
-                                 class="card-img-top img-fluid gallery-img" 
-                                 alt="Galleta con Nuez">
-                            <div class="card-body">
-                                <h5 class="card-title">Nuez y Canela</h5>
-                                <p class="card-text">Delicioso equilibrio de sabores.</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Galleta 5 -->
-                    <div class="col-md-4 col-6 gallery-item">
-                        <div class="card border-0 rounded-4 overflow-hidden h-100 gallery-card" style="background-color: #ECC4A6;">
-                            <img src="{{ url_for('static', filename='img/paquete.jpg') }}"  
-                                 class="card-img-top img-fluid gallery-img" 
-                                 alt="Galletas Empacadas">
-                            <div class="card-body">
-                                <h5 class="card-title">Presentación Regalo</h5>
-                                <p class="card-text">Perfecta para ocasiones especiales.</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Galleta 6 -->
-                    <div class="col-md-4 col-6 gallery-item">
-                        <div class="card border-0 rounded-4 overflow-hidden h-100 gallery-card" style="background-color: #ECC4A6;">
-                            <img src="https://images.unsplash.com/photo-1618923850107-d1a234d7a73a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1386&q=80" 
-                                 class="card-img-top img-fluid gallery-img" 
-                                 alt="Galletas Decoradas">
-                            <div class="card-body">
-                                <h5 class="card-title">Decoradas a Mano</h5>
-                                <p class="card-text">Arte comestible en cada detalle.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="container-fluid py-5" style="background-color: #F1B384;">
-            <div class="row justify-content-center g-4">
-                <!-- Misión -->
-                <div class="col-md-4 text-center">
-                    <div class="feature-card p-4 rounded" style="background-color: #ECC4A6; min-height: 300px;">
-                        <i class="bi bi-bullseye display-4 text-dark mb-3"></i>
-                        <h3 class="text-dark">Misión</h3>
-                        <p class="text-dark">Elaborar galletas artesanales de la más alta calidad, utilizando ingredientes premium y recetas tradicionales, para endulzar los momentos especiales de nuestros clientes.</p>
+    </section>
+
+    <!-- Misión, Visión y Valores -->
+    <section class="mv-section py-5">
+        <div class="container py-5 position-relative">
+            <h2 class="text-center mb-5 display-4 fw-bold" style="color: #5a2e12;">Nuestra Esencia</h2>
+            
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="mv-card">
+                        <h3 class="mb-4">Misión</h3>
+                        <p class="mb-0">Elaborar galletas artesanales de la más alta calidad, utilizando ingredientes premium y recetas tradicionales, para endulzar los momentos especiales de nuestros clientes.</p>
                     </div>
                 </div>
                 
-                <!-- Visión -->
-                <div class="col-md-4 text-center">
-                    <div class="feature-card p-4 rounded" style="background-color: #ECC4A6; min-height: 300px;">
-                        <i class="bi bi-eye-fill display-4 text-dark mb-3"></i>
-                        <h3 class="text-dark">Visión</h3>
-                        <p class="text-dark">Ser reconocidos como la pastelería líder en galletas artesanales, innovando constantemente mientras mantenemos nuestras raíces tradicionales y expandiendo nuestro dulce legado.</p>
+                <div class="col-md-4">
+                    <div class="mv-card">
+                        <h3 class="mb-4">Visión</h3>
+                        <p class="mb-0">Ser reconocidos como la pastelería líder en galletas artesanales, innovando constantemente mientras mantenemos nuestras raíces tradicionales y expandiendo nuestro dulce legado.</p>
                     </div>
                 </div>
                 
-                <!-- Valores -->
-                <div class="col-md-4 text-center">
-                    <div class="feature-card p-4 rounded" style="background-color: #ECC4A6; min-height: 300px;">
-                        <i class="bi bi-stars display-4 text-dark mb-3"></i>
-                        <h3 class="text-dark">Valores</h3>
-                        <ul class="text-dark text-start">
-                            <li>Calidad premium</li>
-                            <li>Tradición familiar</li>
-                            <li>Creatividad e innovación</li>
-                            <li>Pasión por lo artesanal</li>
-                            <li>Compromiso con el cliente</li>
+                <div class="col-md-4">
+                    <div class="mv-card">
+                        <h3 class="mb-4">Valores</h3>
+                        <ul class="mb-0">
+                            <li class="mb-2">Calidad premium en cada producto</li>
+                            <li class="mb-2">Tradición familiar en cada receta</li>
+                            <li class="mb-2">Creatividad e innovación constante</li>
+                            <li class="mb-2">Pasión por lo artesanal</li>
+                            <li>Compromiso con cada cliente</li>
                         </ul>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <style>
-        /* Animaciones para la galería */
-        .gallery-card {
-            transition: all 0.3s ease;
-            transform: translateY(0);
-            border: none !important;
-        }
-        
-        .gallery-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-        }
-        
-        .gallery-img {
-            transition: transform 0.5s ease;
-            height: 250px;
-            object-fit: cover;
-        }
-        
-        .gallery-card:hover .gallery-img {
-            transform: scale(1.05);
-        }
-        
-        /* Efecto de carga */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .gallery-item {
-            animation: fadeIn 0.6s ease forwards;
-            opacity: 0;
-        }
-        
-        .gallery-item:nth-child(1) { animation-delay: 0.1s; }
-        .gallery-item:nth-child(2) { animation-delay: 0.2s; }
-        .gallery-item:nth-child(3) { animation-delay: 0.3s; }
-        .gallery-item:nth-child(4) { animation-delay: 0.4s; }
-        .gallery-item:nth-child(5) { animation-delay: 0.5s; }
-        .gallery-item:nth-child(6) { animation-delay: 0.6s; }
-        
-        .card-body {
-            background-color: #ECC4A6 !important;
-        }
-        
-        /* Estilo para la lista de valores */
-        .feature-card ul {
-            padding-left: 1rem;
-            margin-bottom: 0;
-        }
-        
-        .feature-card li {
-            margin-bottom: 0.3rem;
-        }
-    </style>
+    </section>
+
+    <!-- Galería de Productos -->
+    <section class="py-5" style="background-color: #F1B384;">
+        <div class="container">
+            <h2 class="text-center mb-5 display-4 fw-bold" style="color: #5a2e12;">Nuestras Deliciosas Creaciones</h2>
+            
+            <div class="row g-4 gallery-container">
+                <!-- Galleta 1 -->
+                <div class="col-md-4 col-6 gallery-item">
+                    <div class="card border-0 rounded-4 overflow-hidden h-100 gallery-card" style="background-color: #ECC4A6;">
+                        <img src="https://images.unsplash.com/photo-1558961363-fa8fdf82db35?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1365&q=80" 
+                             class="card-img-top img-fluid gallery-img" 
+                             alt="Galleta de Chocolate">
+                        <div class="card-body">
+                            <h5 class="card-title">Clásica de Chocolate</h5>
+                            <p class="card-text">Crujiente por fuera, suave por dentro.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Galleta 2 -->
+                <div class="col-md-4 col-6 gallery-item">
+                    <div class="card border-0 rounded-4 overflow-hidden h-100 gallery-card" style="background-color: #ECC4A6;">
+                        <img src="{{ url_for('static', filename='img/chispas.jpg') }}" 
+                             class="card-img-top img-fluid gallery-img" 
+                             alt="Galleta con Chispas">
+                        <div class="card-body">
+                            <h5 class="card-title">Chispas de Colores</h5>
+                            <p class="card-text">Divertida y llena de sabor.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Galleta 3 -->
+                <div class="col-md-4 col-6 gallery-item">
+                    <div class="card border-0 rounded-4 overflow-hidden h-100 gallery-card" style="background-color: #ECC4A6;">
+                        <img src="https://images.unsplash.com/photo-1590080874088-eec64895b423?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1374&q=80" 
+                             class="card-img-top img-fluid gallery-img" 
+                             alt="Galleta Artesanal">
+                        <div class="card-body">
+                            <h5 class="card-title">Artesanal Familiar</h5>
+                            <p class="card-text">Receta tradicional de la abuela.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonios de Clientes -->
+    <section class="testimonials-section py-5">
+        <div class="container py-5">
+            <h2 class="text-center mb-5 display-4 fw-bold" style="color: #5a2e12;">Lo que dicen nuestros clientes</h2>
+            
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="testimonial-card">
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://randomuser.me/api/portraits/women/65.jpg" class="client-photo me-3">
+                            <div>
+                                <h5 class="mb-0">María González</h5>
+                                <small class="text-muted">Cliente desde 2015</small>
+                            </div>
+                        </div>
+                        <p class="mb-0">"Las galletas de La Tradicional me recuerdan a las que hacía mi abuela. Cada bocado es un viaje a mi infancia. ¡Simplemente irresistibles!"</p>
+                        <div class="mt-2 text-warning">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="testimonial-card">
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" class="client-photo me-3">
+                            <div>
+                                <h5 class="mb-0">Carlos Martínez</h5>
+                                <small class="text-muted">Cliente corporativo</small>
+                            </div>
+                        </div>
+                        <p class="mb-0">"Siempre encargamos las galletas de La Tradicional para nuestros eventos. Son el producto estrella que todos nuestros invitados elogian."</p>
+                        <div class="mt-2 text-warning">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="testimonial-card">
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://randomuser.me/api/portraits/women/44.jpg" class="client-photo me-3">
+                            <div>
+                                <h5 class="mb-0">Laura Jiménez</h5>
+                                <small class="text-muted">Nueva cliente</small>
+                            </div>
+                        </div>
+                        <p class="mb-0">"Descubrí La Tradicional por recomendación y ahora no puedo vivir sin sus galletas. La calidad y el sabor son incomparables."</p>
+                        <div class="mt-2 text-warning">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-half"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h4 class="mb-4">Galletería La Tradicional</h4>
+                    <p>Desde 1985 endulzando momentos especiales con nuestras recetas tradicionales.</p>
+                    <div class="mt-4">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <h4 class="mb-4">Contacto</h4>
+                    <p><i class="fas fa-map-marker-alt me-2"></i> Av. Principal #123, Ciudad</p>
+                    <p><i class="fas fa-phone me-2"></i> (555) 123-4567</p>
+                    <p><i class="fas fa-envelope me-2"></i> contacto@latradicional.com</p>
+                    <p><i class="fas fa-clock me-2"></i> Lunes a Sábado: 8:00 AM - 8:00 PM</p>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <h4 class="mb-4">Enlaces Rápidos</h4>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="footer-link">Inicio</a></li>
+                        <li class="mb-2"><a href="#" class="footer-link">Nuestros Productos</a></li>
+                        <li class="mb-2"><a href="#" class="footer-link">Sobre Nosotros</a></li>
+                        <li class="mb-2"><a href="#" class="footer-link">Términos y Condiciones</a></li>
+                        <li><a href="#" class="footer-link">Política de Privacidad</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <hr class="my-4" style="border-color: rgba(255,255,255,0.1);">
+            
+            <div class="text-center">
+                <p class="mb-0">&copy; 2023 Galletería La Tradicional. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Animación suave al hacer scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Efecto de aparición al hacer scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate__animated', 'animate__fadeInUp');
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        document.querySelectorAll('.gallery-item, .mv-card, .testimonial-card').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
 </body>
 </html>

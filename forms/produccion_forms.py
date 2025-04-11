@@ -61,3 +61,13 @@ class MermaInsumoForm(FlaskForm):
     fecha = DateField('Fecha de Merma', format='%Y-%m-%d', validators=[DataRequired()])
     descripcion = TextAreaField('Descripción de la Merma', validators=[Length(max=500)])
     submit = SubmitField('Registrar Merma')
+
+class EmpaqueForm(FlaskForm):
+    tipo_empaque = SelectField('Tipo de Empaque', choices=[
+        ('unidad', 'Por Unidad'),
+        ('kilo', 'Caja de Kilo'),
+        ('700', 'Caja de 700 gramos')
+    ], validators=[DataRequired()])
+    galleta_id = SelectField('Galleta', coerce=int, validators=[DataRequired()])
+    cantidad_por_empaque = IntegerField('Cantidad por Empaque', validators=[DataRequired()])
+    cantidad_empaques = IntegerField('Cantidad de Empaques', validators=[DataRequired(), NumberRange(min=1)])

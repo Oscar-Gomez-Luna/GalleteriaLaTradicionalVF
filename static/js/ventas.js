@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function() {
         let tipoVentaId = this.value;
         
         // Limpiar opciones anteriores
-        tipoGalletaSelect.innerHTML = '<option value="">Seleccione un lote...</option>';
+        tipoGalletaSelect.innerHTML = '<option value="">Seleccione una galleta...</option>';
 
         // Hacer la petición solo si hay un tipo de venta seleccionado
         if (tipoVentaId) {
@@ -27,50 +27,74 @@ document.addEventListener("DOMContentLoaded", function() {
 
 document.addEventListener("DOMContentLoaded", function() {
     let galletaSelect = document.getElementById("tipo_galleta");
-    let loteSelect = document.getElementById("lote");
-    let existenciaInput = document.getElementById("existencia_lote");
-    let fechaCaducidadInput = document.getElementById("fecha_caducidad_lote");
+    let existenciaInput = document.getElementById("existencia_total");
+    let cantidadInput = document.getElementById("cantidad");
+    let loteSelect = document.getElementById("lote_select"); // Assuming you have a lote select element
 
-    // Cargar tipos de galleta iniciales (si es necesario)
-    // fetch('/ruta/para/tipos_galleta')... 
+    // Función para actualizar la existencia disponible
+    function actualizarExistencia() {
+        let galletaId = galletaSelect.value;
+        if (!galletaId) {
+            existenciaInput.value = '';
+            // Clear lote select options
+            if (loteSelect) {
+                loteSelect.innerHTML = '<option value="">Seleccione un lote</option>';
+            }
+            return;
+        }
 
-    galletaSelect.addEventListener("change", function() {
-        let galletaId = this.value;
-        loteSelect.innerHTML = '<option value="">Seleccione un lote...</option>';
-        existenciaInput.value = '';
-        fechaCaducidadInput.value = '';
-
-        if (galletaId) {
-            fetch(`/venta/obtener_lotes/${galletaId}`)
-                .then(response => response.json())
-                .then(data => {
+        fetch(`/venta/obtener_lotes/${galletaId}`)
+            .then(response => response.json())
+            .then(data => {
+                // Calcular existencia total
+                let existenciaTotal = data.reduce((total, lote) => total + lote.existencia, 0);
+                existenciaInput.value = existenciaTotal;
+                
+                // Establecer el máximo permitido en el input de cantidad
+                cantidadInput.max = existenciaTotal;
+                
+                // Si hay un select de lotes, actualizar sus opciones
+                if (loteSelect) {
+                    loteSelect.innerHTML = '<option value="">Seleccione un lote</option>';
+                    
+                    // Agregar cada lote como opción
                     data.forEach(lote => {
-                        let option = document.createElement("option");
+                        let option = document.createElement('option');
                         option.value = lote.id;
-                        option.textContent = `Lote: ${lote.id} - Cantidad: ${lote.existencia} - Caducidad: ${lote.fechaCaducidad}`;
-                        // Agregar datos como atributos
-                        option.dataset.existencia = lote.existencia;
-                        option.dataset.fechaCaducidad = lote.fechaCaducidad;
+                        option.textContent = `Lote #${lote.id} - Disp: ${lote.existencia} - Cad: ${lote.fechaCaducidad}`;
+                        option.dataset.existencia = lote.existencia; // Guardar la existencia como dato
                         loteSelect.appendChild(option);
                     });
-                })
-                .catch(error => console.error("Error al obtener los lotes:", error));
-        }
-    });
+                    
+                    // Si hay un controlador para el cambio de lote
+                    loteSelect.addEventListener('change', function() {
+                        if (this.selectedIndex > 0) {
+                            let selectedOption = this.options[this.selectedIndex];
+                            let existencia = parseInt(selectedOption.dataset.existencia);
+                            cantidadInput.max = existencia;
+                        } else {
+                            cantidadInput.max = existenciaTotal;
+                        }
+                    });
+                }
+            })
+            .catch(error => console.error("Error:", error));
+    }
 
-    // Actualizar campos ocultos cuando seleccionan un lote
-    loteSelect.addEventListener("change", function() {
-        if (this.value) {
-            const selectedOption = this.options[this.selectedIndex];
-            existenciaInput.value = selectedOption.dataset.existencia;
-            fechaCaducidadInput.value = selectedOption.dataset.fechaCaducidad;
-        } else {
-            existenciaInput.value = '';
-            fechaCaducidadInput.value = '';
-        }
+    // 1. Llamar al cargar la página
+    actualizarExistencia();
+
+    // 2. Llamar cuando cambia la selección de galleta
+    galletaSelect.addEventListener("change", actualizarExistencia);
+    
+    // 3. Actualizar después de agregar un ítem al detalle
+    document.querySelectorAll('form').forEach(form => {
+        form.addEventListener('submit', function() {
+            // Actualizar después de un breve retraso para dar tiempo a que se procese la solicitud
+            setTimeout(actualizarExistencia, 500);
+        });
     });
 });
-
 document.addEventListener("DOMContentLoaded", function () {
     const ticketLinks = document.querySelectorAll(".ticket-link");
 
@@ -180,20 +204,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-document.addEventListener("DOMContentLoaded", function() {
-    fetch('obtener/lotes')
-        .then(response => response.json())
-        .then(data => {
-            const selectLotes = document.getElementById("lote_merma");
-            data.forEach(lote => {
-                const option = document.createElement("option");
-                option.value = lote.id_lote;
-                option.textContent = `Lote ${lote.id_lote} - Cantidad: ${lote.existencia} - ${lote.nombre_galleta} - ${lote.tipo_galleta}`;
-                selectLotes.appendChild(option);
-            });
-        })
-        .catch(error => console.error("Error cargando los lotes:", error));
-});
 document.addEventListener("DOMContentLoaded", function () {
     // Para los botones de cobrar
     document.querySelectorAll(".btn-merma").forEach(boton => {
@@ -220,14 +230,17 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-// Lógica para ocultar mensajes automáticamente
-const messages = document.querySelectorAll('.auto-hide');
-messages.forEach(function(message) {
-    setTimeout(function() {
-        message.style.transition = 'opacity 0.5s ease';
-        message.style.opacity = '0';
-        setTimeout(function() {
-            message.remove();
-        }, 500); // Espera a que termine la transición antes de eliminar
-    }, 5000); // 5 segundos
+document.addEventListener("DOMContentLoaded", function() {
+    fetch('obtener/lotes')
+        .then(response => response.json())
+        .then(data => {
+            const selectLotes = document.getElementById("lote_merma");
+            data.forEach(lote => {
+                const option = document.createElement("option");
+                option.value = lote.id_lote;
+                option.textContent = `Lote ${lote.id_lote} - Cantidad: ${lote.existencia} - ${lote.nombre_galleta} - ${lote.tipo_galleta}`;
+                selectLotes.appendChild(option);
+            });
+        })
+        .catch(error => console.error("Error cargando los lotes:", error));
 });

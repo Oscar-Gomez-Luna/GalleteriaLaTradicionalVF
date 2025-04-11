@@ -7,6 +7,7 @@ class VentaForm(FlaskForm):
     tipo_venta = SelectField(
         'Tipo de venta',
         choices=[
+            (0, 'Elige una opción...'),
             (1, 'Unidad'),
             (2, 'Caja De Kilo'),
             (3, 'Caja De 700 Gramos'),

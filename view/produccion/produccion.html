@@ -3,14 +3,15 @@
 {% block title %}Producción de Galletas{% endblock %}
 
 {% block content %}
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            {% for category, message in messages %}
-                <div class="alert alert-{{ category }} auto-hide">{{ message }}</div>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
+
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+<div class="alert alert-{{ category }} auto-hide">{{ message }}</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
 <div class="contenedor-tabla">
 
     <table>
@@ -38,100 +39,75 @@
                 <td>{{ g.nombreReceta }}</td>
                 <td class="acciones">
 
-                    <!-- Botones de acción -->
-                    <div class="modal-buttons">
-                        <button type="button" class="btn-merma-insumo" onclick="abrirModal('modalMermasInsumo')">
-                            <img src="{{ url_for('static', filename='img/eliminar.png') }}" width="20" height="20"
-                                alt="Registrar Merma" />
+                    <form method="GET" action="{{ url_for('produccion.produccion') }}">
+                        <input type="hidden" name="merma_lote_id" value="{{ g.id_lote }}">
+                        <button type="submit" title="Merma de Galletas">
+                            <img src="{{ url_for('static', filename='img/galleta.png') }}" width="20" height="20"
+                                alt="Merma Galletas" />
                         </button>
-
-                        <form method="GET" action="{{ url_for('produccion.produccion') }}">
-                            <input type="hidden" name="galleta_id" value="{{ g.id_galleta }}">
-                            <button type="submit" title="Producir lote">
-                                <img src="{{ url_for('static', filename='img/produccion.png') }}" width="20" height="20"
-                                    alt="Agregar Lote" />
-                            </button>
-                        </form>
-
-                        <form method="GET" action="{{ url_for('produccion.produccion') }}">
-                            <input type="hidden" name="merma_lote_id" value="{{ g.id_lote }}">
-                            <button type="submit" title="Merma de Galletas">
-                                <img src="{{ url_for('static', filename='img/galleta.png') }}" width="20" height="20"
-                                    alt="Merma Galletas" />
-                            </button>
-                        </form>
-
-                        <form method="POST" action="{{ url_for('produccion.eliminar_lote') }}"
-                            class="form-eliminar-lote">
-                            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                            <input type="hidden" name="lote_id" value="{{ g.id_lote }}">
-                            <input type="hidden" name="galleta_nombre" value="{{ g.galleta }}">
-                            <button type="button" class="btn-eliminar" data-galleta="{{ g.galleta }}">
-                                <img src="{{ url_for('static', filename='img/borrarmerma.png') }}" width="20"
-                                    height="20" alt="Eliminar Lote" />
-                            </button>
-                        </form>
-
-
-                    </div>
-
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+                    </form>
 </div>
 
+</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
 {% if mostrar_modal %}
-<!-- Modal para producción de lotes -->
-<div class="modal" id="nuevoLoteModal" style="display:block;">
+<div id="nuevoLoteModal" class="modal" style="display: block;">
     {% else %}
-    <div class="modal" id="nuevoLoteModal" style="display:none;">
+    <div id="nuevoLoteModal" class="modal" style="display: none;">
         {% endif %}
-        <div class="modal-dialog">
-            <div class="modal-header">
-                <span>Producción de Lote</span>
-                <a href="{{ url_for('produccion.produccion') }}" class="close">&times;</a>
-            </div>
-            <div class="modal-body">
-                <form id="formProduccion" method="POST" action="{{ url_for('produccion.produccion') }}"
-                    class="form-container">
-                    {{ form.hidden_tag() }}
+        <div class="modal-content-mermas">
+            <span class="close-mermas" onclick="cerrarModal('nuevoLoteModal')">&times;</span>
+            <h2 style="text-align: center;">Producción de Lote</h2>
 
-                    <label for="galleta">Galleta:</label>
-                    <select class="form-control" id="galleta" name="galleta_id">
-                        {% for g in form.galleta_id.choices %}
-                        <option value="{{ g[0] }}" {% if form.galleta_id.data==g[0] %}selected{% endif %}>
-                            {{ g[1] }}
-                        </option>
-                        {% endfor %}
-                    </select>
+            <!-- FORMULARIO PARA CAMBIAR GALLETA Y ACTUALIZAR CANTIDAD Y COSTO -->
+            <form method="GET" action="{{ url_for('produccion.produccion') }}">
+                <label for="galleta">Galleta:</label>
+                <select class="form-control" id="galleta" name="galleta_id" onchange="this.form.submit()">
+                    {% for g in form.galleta_id.choices %}
+                    <option value="{{ g[0] }}" {% if form.galleta_id.data==g[0] %}selected{% endif %}>{{ g[1] }}
+                    </option>
+                    {% endfor %}
+                </select>
+                <input type="hidden" name="mostrar_modal" value="1">
+            </form>
 
+            <!-- FORMULARIO PARA GUARDAR PRODUCCIÓN -->
+            <form id="formProduccion" method="POST" action="{{ url_for('produccion.produccion') }}">
+                {{ form.hidden_tag() }}
 
-                    <label for="fechaProduccion">Fecha de Producción:</label>
-                    <input type="date" class="form-control" id="fecha_produccion" name="fechaProduccion"
-                        value="{{ fecha_hoy }}" required>
+                <input type="hidden" name="galleta_id" value="{{ form.galleta_id.data }}">
 
-                    <label for="fechaCaducidad">Fecha de Caducidad:</label>
-                    <input type="date" class="form-control" id="fecha_caducidad" name="fechaCaducidad"
-                        value="{{ fecha_caducidad }}" readonly>
+                <label for="fechaProduccion">Fecha de Producción:</label>
+                <input type="date" class="form-control" id="fecha_produccion" name="fechaProduccion"
+                    value="{{ fecha_hoy }}" required>
 
-                    <label for="cantidad">Cantidad:</label>
-                    <input type="number" class="form-control" id="cantidad" name="cantidad" min="1"
-                        value="{{ form.cantidad.data or '' }}" required>
+                <label for="fechaCaducidad">Fecha de Caducidad:</label>
+                <input type="date" class="form-control" id="fecha_caducidad" name="fechaCaducidad"
+                    value="{{ fecha_caducidad }}" readonly>
 
-                    <label for="costo">Costo de Producción:</label>
-                    <input type="text" class="form-control" id="costo" name="costo" value="{{ form.costo.data or '' }}"
-                        readonly>
+                <label for="cantidad">Cantidad:</label>
+                <input type="number" class="form-control" id="cantidad" name="cantidad" min="1"
+                    value="{{ form.cantidad.data or '' }}" required>
 
-                    <input type="hidden" id="existencia" name="existencia" value="{{ form.existencia.data or '' }}">
+                <label for="costo">Costo de Producción:</label>
+                <input type="text" class="form-control" id="costo" name="costo" value="{{ form.costo.data or '' }}"
+                    readonly>
 
+                <input type="hidden" id="existencia" name="existencia" value="{{ form.existencia.data or '' }}">
+
+                <div class="modal-buttons">
                     <button type="submit" class="btn-guardar">Producir</button>
                     <a href="{{ url_for('produccion.produccion') }}" class="btn-cancelar">Cancelar</a>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     </div>
+
+
 
     {% if mostrar_modal_merma and lote_merma %}
     <div id="modalMermasGalleta" class="modal-mermas" style="display: block;">
@@ -222,35 +198,136 @@
                 </div>
             </div>
 
+            {% if form_empaque is defined and form_empaque.tipo_empaque.data %}
+    {% set tipo = form_empaque.tipo_empaque.data %}
+{% else %}
+    {% set tipo = '' %}
+{% endif %}
+
+{% if tipo == 'kilo' %}
+    {% set cantidad_default = 27 %}
+{% elif tipo == '700' %}
+    {% set cantidad_default = 20 %}
+{% else %}
+    {% set cantidad_default = 1 %}
+{% endif %}
+
+<div id="modalEmpaquetado" class="modal {% if mostrar_modal_empaque %}mostrar{% else %}ocultar{% endif %}">
+    <div class="modal-content-empaque">
+        <span class="close-empaque" onclick="cerrarModal('modalEmpaquetado')">&times;</span>
+        <h2 style="text-align: center;">Empaquetado</h2>
+
+        <!-- FORMULARIO SOLO PARA CAMBIAR TIPO DE EMPAQUE (GET) -->
+        <form method="GET" action="{{ url_for('produccion.produccion') }}">
+            <input type="hidden" name="abrir_modal_empaque" value="1">
+            <input type="hidden" name="galleta_id" value="{{ form_empaque.galleta_id.data }}">
+            <label for="tipo_empaque">Tipo de Empaque:</label>
+            <select id="tipo_empaque" name="tipo_empaque" class="form-control" onchange="this.form.submit()">
+                <option value="unidad" {% if tipo == 'unidad' %}selected{% endif %}>Por Unidad</option>
+                <option value="kilo" {% if tipo == 'kilo' %}selected{% endif %}>Caja de Kilo</option>
+                <option value="700" {% if tipo == '700' %}selected{% endif %}>Caja de 700 gramos</option>
+            </select>
+        </form>
+
+        <!-- FORMULARIO PRINCIPAL DE EMPAQUETADO (POST) -->
+        <form method="POST" action="{{ url_for('produccion.empaquetar') }}">
+            {{ form_empaque.hidden_tag() }}
+
+            <!-- Se pasa tipo explícitamente en POST -->
+            <input type="hidden" name="tipo_empaque" value="{{ tipo }}">
+
+            <label for="galleta">Galleta:</label>
+            <select id="galleta" name="galleta_id" class="form-control">
+                {% for id_galleta, nombre in form_empaque.galleta_id.choices %}
+                <option value="{{ id_galleta }}" {% if form_empaque.galleta_id.data == id_galleta %}selected{% endif %}>{{ nombre }}</option>
+                {% endfor %}
+            </select>
+            
+
+            <label for="cantidad_por_empaque">Cantidad por Empaque:</label>
+            <input type="number"
+                id="cantidad_por_empaque"
+                name="cantidad_por_empaque"
+                class="form-control"
+                value="{{ form_empaque.cantidad_por_empaque.data or cantidad_default }}"
+                {% if tipo == 'unidad' %}readonly{% endif %}>
+
+            <label for="cantidad_empaques">Cantidad de Empaques:</label>
+            <input type="number" id="cantidad_empaques" name="cantidad_empaques" class="form-control" min="1" required value="{{ form_empaque.cantidad_empaques.data or '' }}">
+
+            <div class="modal-buttons">
+                <button type="submit" class="btn-guardar">Empacar</button>
+                <button type="button" class="btn-cancelar" onclick="cerrarModal('modalEmpaquetado')">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+            <!-- Botones para producción y merma -->
+            <div class="custom-extra-section">
+                <div class="custom-button-container justify-content-center">
+
+                    <!-- Botón para abrir modal de producción -->
+                    <form method="GET" action="{{ url_for('produccion.produccion') }}">
+                        <input type="hidden" name="galleta_id" value="{{ form.galleta_id.choices[0][0] }}">
+                        <button type="submit" class="custom-btn-cafe">Agregar Producción</button>
+                    </form>
+
+
+                    <!-- Botón para abrir modal de merma de insumo -->
+                    <button type="button" class="custom-btn-cafe" onclick="abrirModal('modalMermasInsumo')">
+                        Registrar Merma de Insumo
+                    </button>
+
+                    <!-- Botón para abrir modal de empaquetado -->
+                    <form method="GET" action="{{ url_for('produccion.produccion') }}">
+                        <input type="hidden" name="tipo_empaque" value="kilo">
+                        <input type="hidden" name="abrir_modal_empaque" value="1">
+                        <button type="submit" class="btn-empaquetar">Empaquetar Galletas</button>
+                    </form>
+                    
+                    
+                    
+                    
+
+                </div>
+            </div>
 
 
             <div class="alertas-recuadro">
                 <h3>Alertas de galletas</h3>
                 <ul>
-                    {% for alerta in alertas_agotamiento %}
+                    {% for galleta in alertas_sin_existencia %}
                     <li style="color: red;">
-                        La galleta <strong>{{ alerta.nombre.replace("_", " ").title() }}</strong> está a punto de acabarse: hay {{ alerta.total }} en existencia.
+                        No hay galletas de <strong>{{ galleta.replace("_", " ").title() }}</strong>.
                     </li>
                     {% endfor %}
-            
+
+                    {% for alerta in alertas_agotamiento %}
+                    <li style="color: red;">
+                        La galleta <strong>{{ alerta.nombre.replace("_", " ").title() }}</strong> está a punto de
+                        acabarse: hay {{ alerta.total }} en existencia.
+                    </li>
+                    {% endfor %}
+
                     {% for alerta in alertas_caducidad %}
                     <li style="color: #eeb50c;">
-                        {% if alerta.dias_restantes < 0 %}
-                            Las galletas <strong>{{ alerta.nombre.replace("_", " ").title() }}</strong> del lote con {{ alerta.existencia }} en existencia <strong>ya se caducaron</strong>.
-                        {% elif alerta.dias_restantes == 0 %}
-                            Las galletas <strong>{{ alerta.nombre.replace("_", " ").title() }}</strong> del lote con {{ alerta.existencia }} en existencia <strong>se caducan hoy</strong>.
-                        {% else %}
-                            Las galletas <strong>{{ alerta.nombre.replace("_", " ").title() }}</strong> del lote con {{ alerta.existencia }} en existencia se caducan en {{ alerta.dias_restantes }} días.
-                        {% endif %}
+                        {% if alerta.dias_restantes < 0 %} Las galletas <strong>{{ alerta.nombre.replace("_", "
+                            ").title() }}</strong> del lote con {{ alerta.existencia }} en existencia <strong>ya se
+                                caducaron</strong>.
+                            {% elif alerta.dias_restantes == 0 %}
+                            Las galletas <strong>{{ alerta.nombre.replace("_", " ").title() }}</strong> del lote con {{
+                            alerta.existencia }} en existencia <strong>se caducan hoy</strong>.
+                            {% else %}
+                            Las galletas <strong>{{ alerta.nombre.replace("_", " ").title() }}</strong> del lote con {{
+                            alerta.existencia }} en existencia se caducan en {{ alerta.dias_restantes }} días.
+                            {% endif %}
                     </li>
                     {% endfor %}
                 </ul>
             </div>
-            
-            
-            
-
-
 
             <script>
                 function abrirModal(id) {
@@ -262,44 +339,7 @@
                 }
             </script>
 
-
-            <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    const botonesEliminar = document.querySelectorAll('.btn-eliminar');
-
-                    botonesEliminar.forEach(boton => {
-                        boton.addEventListener('click', function () {
-                            const form = this.closest('form');
-                            const nombreGalleta = this.dataset.galleta;
-
-                            Swal.fire({
-                                title: `¿Eliminar lote de '${nombreGalleta}'?`,
-                                text: "Esta acción no se puede deshacer.",
-                                icon: 'warning',
-                                showCancelButton: true,
-                                confirmButtonColor: '#d33',
-                                cancelButtonColor: '#6c757d',
-                                confirmButtonText: 'Sí, eliminar',
-                                cancelButtonText: 'Cancelar'
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    form.submit();
-                                }
-                            });
-                        });
-                    });
-                });
-                // Lógica para ocultar mensajes automáticamente
-                const messages = document.querySelectorAll('.auto-hide');
-                messages.forEach(function(message) {
-                    setTimeout(function() {
-                        message.style.transition = 'opacity 0.5s ease';
-                        message.style.opacity = '0';
-                        setTimeout(function() {
-                            message.remove();
-                        }, 500); // Espera a que termine la transición antes de eliminar
-                    }, 5000); // 5 segundos
-                });
-            </script>
+          
+            
 
             {% endblock %}

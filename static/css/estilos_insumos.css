@@ -390,10 +390,23 @@ input, select {
     height: 50px;
 }
 
+/* Oculta solo los labels de fecha_caducidad */
+label[for^="fecha_caducidad_"] {
+    display: none !important;
+}
+
 .table-container {
     width: auto;
-    height: 210px;
+    height: 230px;
     overflow: auto;
+    position: relative;
+}
+
+.table thead th {
+    position: sticky;
+    top: 0;
+    background-color: #F1B384; /* Mismo color que tu th actual */
+    z-index: 10; /* Asegura que los títulos estén por encima del contenido */
 }
 
 .table-container table {
@@ -430,6 +443,7 @@ input, select {
     height: 80%; /* Alto del modal */
     justify-content: center;
     align-items: center;
+    z-index: 1050;
 }
 
 .modal-dialog {

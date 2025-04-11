@@ -4,7 +4,7 @@
 
 {% block links2%}
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 <link href="{{ url_for('static', filename='css/modal.css') }}" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 {% endblock %}
@@ -52,7 +52,7 @@ integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLAS
             style="background-color: #F1B384; padding: 20px; border-radius: 10px; margin: 20px auto; max-width: 800px;">
             <h2 class="mb-4 text-center">Agregar Nueva Receta</h2>
 
-            <form action="{{ url_for('administracion.recetas.agregar')}}" method="post" novalidate>
+            <form action="{{ url_for('administracion.recetas.agregar')}}" method="post" novalidate enctype="multipart/form-data">
                 {{ form.csrf_token }}
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
@@ -78,6 +78,12 @@ integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLAS
 
                 <div class="mb-3">
                     {{ macros.campo_form(form.cantidad_galletas) }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="imagen_galleta" class="form-label">Imagen de la galleta</label>
+                    <input type="file" class="form-control" id="imagen_galleta" name="imagen_galleta" accept="image/*">
+                    <small class="text-muted">Formatos permitidos: .jpg, .jpeg, .png, .gif</small>
                 </div>
 
                 <div class="custom-extra-section">

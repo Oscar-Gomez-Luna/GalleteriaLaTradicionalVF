@@ -254,3 +254,101 @@
 
 /* Iconos de Bootstrap Icons */
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css");
+
+/* Nuevos estilos para las cards de galletas */
+.section-title {
+    color: var(--dark-color);
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 8px;
+    margin-bottom: 20px;
+}
+
+.galleta-card {
+    background-color: #ECC4A6;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--primary-color);
+}
+
+.galleta-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.galleta-img-container {
+    height: 180px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #F1B384;
+}
+
+.galleta-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 15px;
+}
+
+.galleta-body {
+    padding: 15px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #ECC4A6;
+}
+
+.galleta-title {
+    font-size: 1.1rem;
+    color: var(--dark-color);
+    margin-bottom: 5px;
+}
+
+.galleta-tipo {
+    font-size: 0.9rem;
+    color: #5a2e12;
+    margin-bottom: 5px;
+}
+
+.galleta-precio {
+    font-size: 1.2rem;
+    color: var(--primary-color);
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.galleta-form .input-group {
+    margin-top: auto;
+}
+
+.galleta-form .form-control {
+    background-color: white;
+}
+
+.empty-cart {
+    background-color: #ECC4A6;
+    border-radius: 10px;
+    padding: 30px;
+    border: 1px solid var(--primary-color);
+}
+
+.empty-cart .text-muted {
+    color: #5a2e12 !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .galleta-img-container {
+        height: 150px;
+    }
+    
+    .galleta-card {
+        margin-bottom: 20px;
+    }
+}

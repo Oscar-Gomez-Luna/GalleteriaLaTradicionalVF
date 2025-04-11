@@ -694,56 +694,203 @@ button {
 
 
 
-/* Aalert de flash */
 
+/* modal nuevo lote  */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(2px);
+}
 
-.flash-container {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 0 20px;
-  }
-  
-  .flash-message {
-    padding: 15px 20px;
-    margin-bottom: 15px;
-    border-radius: 6px;
-    font-size: 17px;
+.modal-content-mermas {
+    background-color: white;
+    margin: auto;
+    margin-top: 80px;
+    padding: 30px;
+    width: 380px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     position: relative;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  }
-  
-  /* Cierra mensaje */
-  .close-flash {
-    position: absolute;
-    top: 10px;
-    right: 15px;
+    animation: entradaModal 0.3s ease-out;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.btn-guardar {
+    background-color: #964b28;
+    color: white;
+    border: none;
+    padding: 10px 20px;
     cursor: pointer;
+    border-radius: 5px;
+}
+
+.btn-cancelar {
+    background-color: #8B4513;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.close-mermas {
+    position: absolute;
+    top: 8px;
+    right: 10px;
     font-size: 22px;
     font-weight: bold;
-  }
-  
-  /* Colores personalizados tipo Bootstrap */
-  .flash-success {
-    background-color: #d4edda;
-    color: #155724;
-    border-left: 6px solid #28a745;
-  }
-  
-  .flash-danger {
-    background-color: #f8d7da;
-    color: #721c24;
-    border-left: 6px solid #dc3545;
-  }
-  
-  .flash-warning {
-    background-color: #fff3cd;
-    color: #856404;
-    border-left: 6px solid #ffc107;
-  }
-  
-  .flash-info {
-    background-color: #d1ecf1;
-    color: #0c5460;
-    border-left: 6px solid #17a2b8;
-  }
-  
+    color: black;
+    cursor: pointer;
+}
+
+@keyframes entradaModal {
+    from { opacity: 0; transform: translateY(-15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+
+
+/* Recuadro con fondo crema claro, bordes redondeados y sombra */
+.custom-extra-section {
+    background-color: #ECC4A6; /* mismo fondo claro */
+    padding: 20px;
+    margin-top: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;               /* ancho relativo para responsividad */
+    max-width: 1820px;         /* límite máximo de ancho */
+    margin-left: auto;
+    margin-right: auto;       /* centrado horizontal */
+}
+
+/* Contenedor de botones con espaciado */
+.custom-button-container {
+    display: flex;
+    gap: 15px;                /* espacio entre botones */
+}
+
+/* Centrado horizontal si se aplica */
+.custom-button-container.justify-content-center {
+    justify-content: center;
+}
+
+/* Estilo de botón café consistente */
+.custom-btn-cafe {
+    background-color: #a65323; /* color base café */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    color: white;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.custom-btn-cafe:hover {
+    background-color: #e09566; /* café claro al pasar el mouse */
+    color: white;
+}
+
+
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(2px);
+}
+
+.modal-content-empaque {
+    background-color: #fff7f2;
+    margin: auto;
+    margin-top: 80px;
+    padding: 30px;
+    width: 400px;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+    position: relative;
+    animation: entradaModal 0.3s ease-out;
+}
+
+.close-empaque {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    font-size: 22px;
+    font-weight: bold;
+    color: #000;
+    cursor: pointer;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.btn-guardar {
+    background-color: #964b28;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.btn-cancelar {
+    background-color: #8B4513;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+@keyframes entradaModal {
+    from { opacity: 0; transform: translateY(-15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.btn-empaquetar {
+    background-color: #964b28; /* mismo café que .btn-guardar */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-empaquetar:hover {
+    background-color: #b75f34; /* un tono un poco más claro al pasar el mouse */
+}
+
+
+
+
+.modal.ocultar {
+    display: none;
+}
+
+.modal.mostrar {
+    display: block;
+}

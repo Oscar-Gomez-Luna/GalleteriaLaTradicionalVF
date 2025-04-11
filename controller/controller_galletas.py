@@ -72,18 +72,45 @@ def galletas():
             'costo': g.costo,
             'existencia': g.existencia
         })
+    # Consultar existencia de galletas por tipo: "Caja de Kilo"
+    # Para Caja de Kilo
+    caja_kilo = db.session.query(
+        Galleta.galleta.label("nombre_galleta"),
+        TipoGalleta.costo,
+        Galleta.existencia
+    ).join(TipoGalleta, Galleta.tipo_galleta_id == TipoGalleta.id_tipo_galleta)\
+    .filter(TipoGalleta.nombre == "Caja de Kilo")\
+    .filter(Galleta.existencia > 0)\
+    .all()
+
+    for g in caja_kilo:
         galletas_caja_kilo.append({
             'nombre_galleta': g.nombre_galleta,
             'tipo_empaquetado': 'Caja de Kilo',
-            'costo': 230.00,
-            'existencia': g.existencia // 25
+            'costo': g.costo,
+            'existencia': g.existencia
         })
+
+    # Repite igual para 700 gramos:
+    caja_700 = db.session.query(
+        Galleta.galleta.label("nombre_galleta"),
+        TipoGalleta.costo,
+        Galleta.existencia
+    ).join(TipoGalleta, Galleta.tipo_galleta_id == TipoGalleta.id_tipo_galleta)\
+    .filter(TipoGalleta.nombre == "Caja de 700 gramos")\
+    .filter(Galleta.existencia > 0)\
+    .all()
+
+    for g in caja_700:
         galletas_caja_medio_kilo.append({
             'nombre_galleta': g.nombre_galleta,
             'tipo_empaquetado': 'Caja de 700 gramos',
-            'costo': 160.00,
-            'existencia': g.existencia // 20
+            'costo': g.costo,
+            'existencia': g.existencia
         })
+
+
+
 
     return render_template(
         "galleta/galletas.html",

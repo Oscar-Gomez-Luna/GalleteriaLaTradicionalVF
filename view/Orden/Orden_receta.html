@@ -6,58 +6,131 @@
 {% block container %}
 
 <main class="main">
-<div>
-    <div class="form-container receta-container">
-        <div class="receta-header">
-            <div class="header-content">
-                <h3 class="receta-title">{{ receta.nombreReceta }}</h3>
-                <div class="cantidad-info">
-                    <span class="receta-badge">{{ cantidad }}</span>
-                    {% if ingredientes and ingredientes[0].presentacion != 'Unidad' %}
+    <div>
+        <div class="form-container receta-container">
+            <br><br><br>
+            <div class="receta-header">
+                <div class="header-content">
+
+                    <h3 class="receta-title">{{ receta.nombreReceta }}</h3>
+                    <div class="cantidad-info">
+                        <span style="margin-left: 20%;" class="receta-badge">{{ cantidad }}</span>
+                        {% if tipo_presentacion != 'unidad' %}
                         <span class="presentacion-info">
-                            ({{ ingredientes[0].presentacion }} - 
-                            {{ ingredientes[0].cantidad_pedido_original }} cajas = 
-                            {{ ingredientes[0].total_galletas }} galletas)
+                            ({{ tipo_presentacion }} = {{ produccion.galletas_solicitadas }})
                         </span>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
+                        {% endif %}
 
-        <div class="receta-body">
-            <div class="mb-4">
-                <h5 class="receta-subtitle">Descripción:</h5>
-                <textarea class="form-control receta-textarea" rows="3" readonly>{{ receta.Descripccion }}</textarea>
-            </div>
+                        <!-- Tabla de Inventario simplificada -->
+                        <!-- Tabla de Inventario según la presentación -->
+                        <div class="inventory-details mt-2">
+                            <table class="table table-sm table-bordered">
+                                <thead>
+                                    <tr class="table-light">
+                                        <th>Tipo</th>
+                                        <th>Existencia</th>
+                                        <th>Unidades</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if tipo_presentacion.lower() == 'unidad' and inventario.unidades > 0 %}
+                                    <tr>
+                                        <td>Unidades</td>
+                                        <td>{{ inventario.unidades }}</td>
+                                        <td>{{ inventario.unidades }}</td>
+                                    </tr>
+                                    {% elif 'kilo' in tipo_presentacion.lower() and inventario.cajas_kilo > 0 %}
+                                    <tr>
+                                        <td>Caja de Kilo</td>
+                                        <td>{{ inventario.cajas_kilo }}</td>
+                                        <td>{{ inventario.cajas_kilo * 27 }}</td>
+                                    </tr>
+                                    {% elif '700' in tipo_presentacion.lower() and inventario.cajas_700 > 0 %}
+                                    <tr>
+                                        <td>Caja de 700g</td>
+                                        <td>{{ inventario.cajas_700 }}</td>
+                                        <td>{{ inventario.cajas_700 * 19 }}</td>
+                                    </tr>
+                                    {% else %}
+                                    <tr>
+                                        <td colspan="3" class="text-center">No hay inventario disponible para esta
+                                            presentación.</td>
+                                    </tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
 
-            <div class="mb-4">
-                {% if ingredientes %}
-                <div class="row">
-                    {% for item in ingredientes %}
-                    <div class="col-md-6 mb-3">
-                        <div class="form-group">
-                            <label class="ingrediente-label">{{ item.insumo }}</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control ingrediente-input"
-                                    value="{{ item.cantidad_necesaria }}" readonly>
-                                <span class="input-group-text ingrediente-unidad">{{ item.unidad }}</span>
-                            </div>
+
+                        <div class="inventory-details mt-2">
+                            <p class="mb-2">
+                                
+                            </p>
+
+                            <p class="mb-2"><strong>Orden:</strong> {{ produccion.galletas_solicitadas }} ({{ cantidad
+                                }} {{ produccion.presentacion_solicitada }}) |
+                                
+                                <strong>Faltante:</strong>
+                                <strong class="text-danger">
+                                    {% if produccion.galletas_solicitadas - produccion.galletas_cubiertas > 0 %}
+                                    {{ produccion.galletas_solicitadas - produccion.galletas_cubiertas }}
+                                    {% else %}
+                                    0
+                                    {% endif %}
+                                </strong>
+                            </p>
+
+                            {% if produccion.lotes_necesarios > 0 %}
+                            <p class="production-info mb-2">
+                                <strong>Producción requerida:</strong>
+                                {{ produccion.lotes_necesarios }} lotes de {{ receta.cantidad_galletas }}
+                                ({{ produccion.lotes_necesarios * receta.cantidad_galletas }})
+                            </p>
+                            {% else %}
+                            <p class="text-success mb-2">
+                                <strong>No se requiere producción adicional</strong>
+                            </p>
+                            {% endif %}
                         </div>
                     </div>
-                    {% endfor %}
                 </div>
-                {% else %}
-                <div class="receta-alert">
-                    No se pudieron cargar los ingredientes
-                </div>
-                {% endif %}
             </div>
+            <div class="receta-body">
+                <br><br>
+                <div class="mb-4">
+                    <h5 class="receta-subtitle">Descripción:</h5>
+                    <textarea class="form-control receta-textarea" rows="3"
+                        readonly>{{ receta.Descripccion }}</textarea>
+                </div>
 
-            <div class="form-buttons">
-                <a href="{{ url_for('orden.ordenes') }}" class="btn receta-btn">Volver</a>
+                <div class="mb-4">
+                    {% if ingredientes %}
+                    <div class="row">
+                        {% for item in ingredientes %}
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label class="ingrediente-label">{{ item.insumo }}</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control ingrediente-input"
+                                        value="{{ item.cantidad_necesaria }}" readonly>
+                                    <span class="input-group-text ingrediente-unidad">{{ item.unidad }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="receta-alert">
+                        No se pudieron cargar los ingredientes
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-buttons">
+                    <a href="{{ url_for('orden.ordenes') }}" class="btn receta-btn">Volver</a>
+                </div>
             </div>
         </div>
     </div>
-</div>
 </main>
 {% endblock %}

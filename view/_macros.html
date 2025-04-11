@@ -27,7 +27,7 @@
     {% if field.errors %}
     <ul class="errors">
         {% for error in field.errors %}
-        <li style="color: red;">{{ error }}</li>
+        <li style="color: black;">{{ error }}</li>
         {% endfor %}
     </ul>
     {% endif %}
@@ -56,7 +56,7 @@
         {% if field.errors %}
             <div class="text-danger mt-1">
                 {% for error in field.errors %}
-                    <li style="color: red;">{{ error }}</li>
+                    <li style="color: black;">{{ error }}</li>
                 {% endfor %}
             </div>
         {% endif %}

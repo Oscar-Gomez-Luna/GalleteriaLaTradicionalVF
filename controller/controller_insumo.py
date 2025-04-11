@@ -1,5 +1,5 @@
 
-from flask import (Blueprint,Flask,render_template,request,redirect,url_for,flash,session,)
+from flask import (Blueprint,Flask, jsonify,render_template,request,redirect,url_for,flash,session,)
 from datetime import datetime, timedelta
 from flask_login import login_required, current_user
 from extensions import role_required
@@ -211,7 +211,7 @@ def registrar_insumo():
 @login_required
 @role_required("ADMS", "PROD")
 def comprar_insumos():
-
+    # Configuración inicial de unidades
     UNIDADES = [
         ("Kilogramos", "Kilogramos"),
         ("Gramos", "Gramos"),
@@ -219,18 +219,16 @@ def comprar_insumos():
         ("Mililitros", "Mililitros"),
         ("Unidad", "Unidad"),
     ]
-
-    # proveedores activos
-    proveedores_activos = [
-        (p.id_proveedor, p.empresa) for p in Proveedor.query.filter_by(estatus=1).all()
-    ]
-
+    
+    # Obtener proveedores activos
+    proveedores_activos = [(p.id_proveedor, p.empresa) for p in Proveedor.query.filter_by(estatus=1).all()]
+    
+    # Inicializar formulario
     form = ComprarInsumos(request.form if request.method == "POST" else None)
-
     form.id_proveedor.choices = proveedores_activos
     form.unidad.choices = UNIDADES
 
-    # validadores originales
+    # Validadores originales
     original_validators = {
         "unidad": form.unidad.validators.copy(),
         "cantidad": form.cantidad.validators.copy(),
@@ -238,27 +236,25 @@ def comprar_insumos():
         "precio": form.precio.validators.copy(),
         "id_insumo": form.id_insumo.validators.copy(),
     }
-
-    # carrito de compras
+    
+    # Inicializar carrito de compras en sesión
     if "compras" not in session:
         session["compras"] = []
 
-    # Recuperar proveedor e insumo si vienen en el get
-    proveedor_id = request.args.get('proveedor_id')
-    insumo_id = request.args.get('insumo_id')
+    # Manejar parámetros GET o datos del formulario
+    proveedor_id = request.args.get('proveedor_id', form.id_proveedor.data)
+    insumo_id = request.args.get('insumo_id', form.id_insumo.data)
     
+    # Cargar insumos del proveedor seleccionado (si existe)
     if proveedor_id:
         form.id_proveedor.data = proveedor_id
-        # Cargar insumos proveedor 
-        form.id_insumo.choices = [
-            (i.id_insumo, i.nombreInsumo)
-            for i in Insumos.query.filter_by(id_proveedor=proveedor_id)
-            .order_by(Insumos.nombreInsumo)
-            .all()
-        ]
+        insumos_proveedor = Insumos.query.filter_by(id_proveedor=proveedor_id).order_by(Insumos.nombreInsumo).all()
+        form.id_insumo.choices = [(i.id_insumo, i.nombreInsumo) for i in insumos_proveedor]
+        
         if insumo_id:
             form.id_insumo.data = insumo_id
 
+    # Manejar solicitudes POST
     if request.method == "POST":
         # Cargar insumos del proveedor seleccionado
         if form.id_proveedor.data:
@@ -270,7 +266,7 @@ def comprar_insumos():
             ]
 
         if "filtrar_proveedor" in request.form:
-            # Desactivar validaciines
+            # Desactivar validaciones temporales
             form.unidad.validators = []
             form.cantidad.validators = []
             form.peso.validators = []
@@ -279,9 +275,7 @@ def comprar_insumos():
 
             # Validar proveedor
             if form.id_proveedor.validate(form):
-                flash("Insumos del proveedor cargados", "info")
-                # Restaurar opciones del proveedor
-                form.id_proveedor.choices = proveedores_activos
+                flash("Insumos del proveedor cargados correctamente", "info")
 
         elif "guardar_compra" in request.form:
             # Restaurar validadores
@@ -292,119 +286,133 @@ def comprar_insumos():
             form.id_insumo.validators = original_validators["id_insumo"]
 
             if form.validate():
+                try:
+                    insumo = Insumos.query.get(form.id_insumo.data)
+                    proveedor = Proveedor.query.get(form.id_proveedor.data)
+                    
+                    # Validar unidad compatible
+                    CONVERSIONES = {
+                        'Gramos': ['Gramos', 'Kilogramos'],
+                        'Kilogramos': ['Kilogramos', 'Gramos'],
+                        'Mililitros': ['Mililitros', 'Litros'],
+                        'Litros': ['Litros', 'Mililitros'],
+                        'Unidad': ['Unidad']
+                    }
+                    
+                    if form.unidad.data not in CONVERSIONES.get(insumo.unidad, [insumo.unidad]):
+                        flash("Unidad incompatible con el insumo seleccionado", "danger")
+                        return redirect(url_for('insumo.comprar_insumos'))
+                    
+                    # Procesar cantidades con cálculo completo
+                    cantidad = float(form.cantidad.data)
+                    precio = float(form.precio.data)
+                    peso = float(form.peso.data)
+                    
+                    # Conversión de unidades con multiplicación por cantidad
+                    if form.unidad.data == "Kilogramos":
+                        peso_total = (peso * 1000) * cantidad  # Convertir a gramos y multiplicar por cantidad
+                        unidad_almacen = "Gramos"
+                    elif form.unidad.data == "Litros":
+                        peso_total = (peso * 1000) * cantidad  # Convertir a mililitros y multiplicar por cantidad
+                        unidad_almacen = "Mililitros"
+                    else:
+                        peso_total = peso * cantidad  # Multiplicar directamente por cantidad
+                        unidad_almacen = form.unidad.data
 
-                proveedor = Proveedor.query.get(form.id_proveedor.data)
-                insumo = Insumos.query.get(form.id_insumo.data)
-                unidad = form.unidad.data
-                peso = float(form.peso.data)
-                cantidad = float(form.cantidad.data)
-                precio = float(form.precio.data)
+                    precio_total = cantidad * precio
 
-                # Conversiones de unidades
-                if unidad == "Kilogramos":
-                    peso_total = (peso * 1000) * cantidad
-                    unidad_almacen = "Gramos"
-                elif unidad == "Litros":
-                    peso_total = (peso * 1000) * cantidad
-                    unidad_almacen = "Mililitros"
-                else:
-                    peso_total = peso * cantidad
-                    unidad_almacen = unidad
+                    # Crear objeto compra
+                    compra = {
+                        "id_insumo": insumo.id_insumo,
+                        "insumo": insumo.nombreInsumo,
+                        "proveedor": proveedor.empresa,
+                        "proveedor_id": proveedor.id_proveedor,
+                        "cantidad": cantidad,
+                        "unidad_compra": form.unidad.data,
+                        "peso": peso,
+                        "peso_total": peso_total,
+                        "unidad_almacen": unidad_almacen,
+                        "precio_unitario": precio,
+                        "precio_total": precio_total,
+                        "fecha": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    }
 
-                precio_total = cantidad * precio
+                    session["compras"].append(compra)
+                    session.modified = True
+                    flash(f"{insumo.nombreInsumo} agregado al carrito", "success")
+                    
+                    # Guardar valores proveedor e insumo
+                    proveedor_id = form.id_proveedor.data
+                    insumo_id = form.id_insumo.data
+                    
+                    # Limpiar campos específicos
+                    form.cantidad.data = ''
+                    form.peso.data = ''
+                    form.precio.data = ''
+                    
+                    # Recargar página manteniendo proveedor e insumo
+                    return redirect(url_for('insumo.comprar_insumos', 
+                                        proveedor_id=proveedor_id, 
+                                        insumo_id=insumo_id))
 
-                # Crear objeto compra
-                compra = {
-                    "proveedor": proveedor.empresa,
-                    "proveedor_id": proveedor.id_proveedor,
-                    "id_insumo": insumo.id_insumo,
-                    "insumo": insumo.nombreInsumo,
-                    "unidad_original": unidad,
-                    "peso": peso,
-                    "cantidad": cantidad,
-                    "peso_total": peso_total,
-                    "unidad_almacen": unidad_almacen,
-                    "precio_unitario": precio,
-                    "precio_total": precio_total,
-                    "fecha": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                }
-
-                # Agregar sesion
-                session["compras"].append(compra)
-                session.modified = True
-                flash("Compra agregada correctamente", "success")
-                
-                # Guardar valores proveedor e insumo
-                proveedor_id = form.id_proveedor.data
-                insumo_id = form.id_insumo.data
-                
-                # Limpiar campos especificos
-                form.cantidad.data = ''
-                form.peso.data = ''
-                form.precio.data = ''
-                
-                # Recargar pagina manteniendo proveedor e insumo
-                return redirect(url_for('insumo.comprar_insumos', 
-                                    proveedor_id=proveedor_id, 
-                                    insumo_id=insumo_id))
+                except Exception as e:
+                    flash(f"Error al procesar compra: {str(e)}", "danger")
             else:
                 flash("Corrige los errores en el formulario", "danger")
 
-        elif "comprar" in request.form:
-            if not session["compras"]:
-                flash("No hay compras para procesar", "warning")
-            else:
-                try:
-                    # Registrar compra principal
-                    nueva_compra = ComprasRealizadas(
-                        id_proveedor=session["compras"][0]["proveedor_id"],
-                        precio=sum(item["precio_total"] for item in session["compras"]),
-                        fecha=datetime.now().date(),
-                        numeroOrden=f"ORD-{datetime.now().strftime('%Y%m%d%H%M%S')}",
-                        estatus=0,
+        elif "comprar" in request.form and session["compras"]:
+            # Procesar todas las compras del carrito
+            try:
+                # Crear registro de compra principal
+                nueva_compra = ComprasRealizadas(
+                    id_proveedor=session["compras"][0]["proveedor_id"],
+                    precio=sum(item["precio_total"] for item in session["compras"]),
+                    fecha=datetime.now().date(),
+                    numeroOrden=f"ORD-{datetime.now().strftime('%Y%m%d%H%M%S')}",
+                    estatus=1
+                )
+                db.session.add(nueva_compra)
+                db.session.flush()
+
+                # Procesar cada item
+                for item in session["compras"]:
+                    # Detalle de compra
+                    detalle = DetalleCompra(
+                        compra_id=nueva_compra.id_comprasRealizadas,
+                        descripcion={
+                            "id_insumo": item["id_insumo"],
+                            "nombre": item["insumo"],
+                            "unidad_compra": item["unidad_compra"],
+                            "unidad_almacen": item["unidad_almacen"],
+                            "cantidad": item["cantidad"],
+                            "peso": item["peso_total"],
+                            "precio_unitario": item["precio_unitario"],
+                            "precio_total": item["precio_total"]
+                        }
                     )
-                    db.session.add(nueva_compra)
-                    db.session.flush()
+                    db.session.add(detalle)
 
-                    # Registrar detalles y lotes
-                    for item in session["compras"]:
-                        # Detalle de compra
-                        detalle = DetalleCompra(
-                            descripcion={
-                                "id_insumo": item["id_insumo"],
-                                "insumo": item["insumo"],
-                                "peso": item["peso_total"],
-                                "unidad": item["unidad_almacen"],
-                                "cantidad": item["cantidad"],
-                                "precio_unitario": item["precio_unitario"],
-                                "precio_total": item["precio_total"],
-                            },
-                            compra_id=nueva_compra.id_comprasRealizadas,
-                        )
-                        db.session.add(detalle)
+                    # Crear lote
+                    nuevo_lote = LoteInsumo(
+                        id_insumo=item["id_insumo"],
+                        fechaIngreso=datetime.now().date(),
+                        fechaCaducidad=datetime.now().date() + timedelta(days=365),
+                        cantidad=item["peso_total"],
+                        costo=item["precio_unitario"]
+                    )
+                    db.session.add(nuevo_lote)
 
-                        # Nuevo lote
-                        nuevo_lote = LoteInsumo(
-                            id_insumo=item["id_insumo"],
-                            fechaIngreso=datetime.now().date(),
-                            fechaCaducidad=datetime.now().date() + timedelta(days=365),
-                            cantidad=item["peso_total"],
-                            costo=item["precio_unitario"],
-                        )
-                        db.session.add(nuevo_lote)
+                    # Actualizar stock
+                    insumo = Insumos.query.get(item["id_insumo"])
+                    insumo.total += item["peso_total"]
 
-                        # Actualizar stock
-                        insumo = Insumos.query.get(item["id_insumo"])
-                        insumo.total += item["peso_total"]
+                db.session.commit()
+                session["compras"] = []
+                flash("Compra registrada exitosamente", "success")
 
-                    db.session.commit()
-                    session["compras"] = []
-                    flash("Compra registrada exitosamente", "success")
-                    return redirect(url_for("insumo.comprar_insumos"))
-
-                except Exception as e:
-                    db.session.rollback()
-                    flash(f"Error al registrar compra: {str(e)}", "danger")
+            except Exception as e:
+                db.session.rollback()
+                flash(f"Error al registrar compra: {str(e)}", "danger")
 
     # Restaurar validadores antes de renderizar
     form.unidad.validators = original_validators["unidad"]
@@ -417,9 +425,27 @@ def comprar_insumos():
         "Insumos/Insumos_comprar.html",
         form=form,
         compras=session["compras"],
-        unidades=UNIDADES,
-        active_page="insumos",
+        active_page="insumos"
     )
+
+@insumo_bp.route("/get_unidades/<int:insumo_id>")
+@login_required
+@role_required("ADMS", "PROD")
+def get_unidades(insumo_id):
+    try:
+        insumo = Insumos.query.get_or_404(insumo_id)
+        CONVERSIONES = {
+            'Gramos': ['Gramos', 'Kilogramos'],
+            'Kilogramos': ['Kilogramos', 'Gramos'],
+            'Mililitros': ['Mililitros', 'Litros'],
+            'Litros': ['Litros', 'Mililitros'],
+            'Unidad': ['Unidad']
+        }
+        unidades = CONVERSIONES.get(insumo.unidad, [insumo.unidad])
+        return jsonify({'success': True, 'unidades': unidades})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
 
 #guarda lo de la tabla temporal en la base de datos
 @insumo_bp.route("/comprar/lista", methods=["GET", "POST"])

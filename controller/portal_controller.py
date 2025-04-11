@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, session, flash
+from flask import Blueprint, render_template, request, redirect, url_for, session, flash, make_response
 from datetime import datetime, timedelta
 from model.tipo_galleta import db, TipoGalleta
 from model.galleta import db, Galleta
@@ -9,6 +9,7 @@ from model.cliente import db, Cliente
 from model.persona import db, Persona
 from flask_login import login_required, current_user
 from extensions import role_required
+import json
 
 portal_cliente_bp = Blueprint('portal_cliente', __name__,
                             url_prefix='/portal',
@@ -22,11 +23,35 @@ def obtener_cliente_desde_usuario(user_id):
     """Obtiene el cliente asociado a un usuario"""
     return Cliente.query.filter_by(idUsuario=user_id).first()
 
+def get_cliente_carrito(cliente_id):
+    """Obtiene el carrito del cliente desde las cookies"""
+    carrito_cookie = request.cookies.get(f'carrito_{cliente_id}')
+    return json.loads(carrito_cookie) if carrito_cookie else []
+
+def set_cliente_carrito(cliente_id, carrito):
+    """Guarda el carrito del cliente en las cookies"""
+    response = make_response(redirect(url_for('portal_cliente.portal_cliente')))
+    response.set_cookie(
+        f'carrito_{cliente_id}',
+        json.dumps(carrito),
+        max_age=30*24*60*60,  # 30 días de duración
+        httponly=True,
+        secure=True,  # Solo para HTTPS
+        samesite='Lax'
+    )
+    return response
+
 @portal_cliente_bp.route('/')
 @login_required
 @role_required('CLIE')
 def index():
-    return render_template('portal/welcome.html')
+    cliente = obtener_cliente_desde_usuario(current_user.idUsuario)
+    if cliente and cliente.persona:
+        nombre_completo = f"{cliente.persona.nombre} {cliente.persona.apPaterno}"
+    else:
+        nombre_completo = current_user.nombre
+    
+    return render_template('portal/welcome.html', nombre_completo=nombre_completo)
 
 @portal_cliente_bp.route('/portal-cliente', methods=['GET', 'POST'])
 @login_required
@@ -39,18 +64,8 @@ def portal_cliente():
         flash('No se encontró su perfil de cliente', 'error')
         return redirect(url_for('usuarios.index'))
     
-    # Guardar el ID del cliente en sesión
-    session['cliente_id'] = cliente.idCliente
-    
-    # Obtener tipos de galletas para el select
-    tipos_galletas = TipoGalleta.query.all()
-    
-    # Inicializar carrito si no existe para este cliente
-    if 'carritos' not in session:
-        session['carritos'] = {}
-    
-    if str(cliente.idCliente) not in session['carritos']:
-        session['carritos'][str(cliente.idCliente)] = []
+    # Obtener carrito desde cookies
+    carrito = get_cliente_carrito(cliente.idCliente)
     
     # Procesar formulario cuando se envía
     if request.method == 'POST':
@@ -65,14 +80,21 @@ def portal_cliente():
         
         return redirect(url_for('portal_cliente.portal_cliente'))
     
-    # Obtener galletas si se seleccionó un tipo
+    from sqlalchemy.orm import joinedload
+    
+    # Obtener tipos de galletas para el select
+    tipos_galletas = TipoGalleta.query.all()
+    
+    # Obtener galletas basadas en el filtro o todas si no hay filtro
     tipo_seleccionado = request.args.get('tipo_galleta')
-    galletas = []
+    galletas = Galleta.query.options(joinedload(Galleta.galletas_receta))
+    
     if tipo_seleccionado:
-        galletas = Galleta.query.filter_by(tipo_galleta_id=tipo_seleccionado).all()
+        galletas = galletas.filter_by(tipo_galleta_id=tipo_seleccionado)
+    
+    galletas = galletas.all()
     
     # Calcular total del carrito
-    carrito = session['carritos'].get(str(cliente.idCliente), [])
     total = sum(item['subtotal'] for item in carrito)
     
     return render_template('portal/portal_cliente.html',
@@ -115,56 +137,59 @@ def agregar_al_carrito(cliente_id):
     
     galleta = Galleta.query.get(galleta_id)
     if galleta:
-        # Verificar disponibilidad
-        if cantidad > galleta.existencia:
-            flash(f'No hay suficiente existencia. Disponibles: {galleta.existencia}', 'error')
-            return redirect(url_for('portal_cliente.portal_cliente'))
-        
-        item = {
-            'galleta_id': galleta.id_galleta,
-            'nombre': galleta.galleta,
-            'tipo': galleta.tipo_galleta.nombre,
-            'precio': float(galleta.tipo_galleta.costo),
-            'cantidad': cantidad,
-            'subtotal': float(galleta.tipo_galleta.costo) * cantidad
-        }
+        # Obtener carrito actual
+        carrito = get_cliente_carrito(cliente_id)
         
         # Buscar si ya existe el item en el carrito
-        carrito = session['carritos'][str(cliente_id)]
-        for i, item_carrito in enumerate(carrito):
-            if item_carrito['galleta_id'] == item['galleta_id']:
-                # Actualizar cantidad y subtotal
-                nueva_cantidad = item_carrito['cantidad'] + cantidad
-                if nueva_cantidad > galleta.existencia:
-                    flash(f'No hay suficiente existencia. Disponibles: {galleta.existencia}', 'error')
-                    return redirect(url_for('portal_cliente.portal_cliente'))
-                
-                carrito[i]['cantidad'] = nueva_cantidad
-                carrito[i]['subtotal'] = item_carrito['precio'] * nueva_cantidad
-                break
-        else:
-            # Si no existe, agregarlo
-            carrito.append(item)
+        item_existente = next((item for item in carrito if item['galleta_id'] == galleta_id), None)
         
-        session.modified = True
+        if item_existente:
+            # Actualizar cantidad
+            nueva_cantidad = item_existente['cantidad'] + cantidad
+            
+            item_existente['cantidad'] = nueva_cantidad
+            item_existente['subtotal'] = float(galleta.tipo_galleta.costo) * nueva_cantidad
+        else:
+            # Agregar nuevo item
+            carrito.append({
+                'galleta_id': galleta.id_galleta,
+                'nombre': galleta.galleta,
+                'tipo': galleta.tipo_galleta.nombre,
+                'precio': float(galleta.tipo_galleta.costo),
+                'cantidad': cantidad,
+                'subtotal': float(galleta.tipo_galleta.costo) * cantidad
+            })
+        
+        # Guardar carrito actualizado
+        response = set_cliente_carrito(cliente_id, carrito)
         flash('Producto agregado al carrito', 'success')
+        return response
     
     return redirect(url_for('portal_cliente.portal_cliente'))
 
 def eliminar_del_carrito(cliente_id):
     galleta_id = int(request.form.get('galleta_id'))
-    if 'carritos' in session and str(cliente_id) in session['carritos']:
-        session['carritos'][str(cliente_id)] = [item for item in session['carritos'][str(cliente_id)] if item['galleta_id'] != galleta_id]
-        session.modified = True
-        flash('Producto eliminado del carrito', 'info')
-    return redirect(url_for('portal_cliente.portal_cliente'))
+    
+    # Obtener carrito actual
+    carrito = get_cliente_carrito(cliente_id)
+    
+    # Filtrar para eliminar el item
+    nuevo_carrito = [item for item in carrito if item['galleta_id'] != galleta_id]
+    
+    # Guardar carrito actualizado
+    response = set_cliente_carrito(cliente_id, nuevo_carrito)
+    flash('Producto eliminado del carrito', 'info')
+    return response
 
 def limpiar_carrito(cliente_id):
-    if 'carritos' in session and str(cliente_id) in session['carritos']:
-        session['carritos'][str(cliente_id)] = []
-        session.modified = True
-        flash('Carrito vaciado', 'info')
-    return redirect(url_for('portal_cliente.portal_cliente'))
+    response = make_response(redirect(url_for('portal_cliente.portal_cliente')))
+    response.set_cookie(
+        f'carrito_{cliente_id}',
+        '',
+        expires=0  # Eliminar la cookie
+    )
+    flash('Carrito vaciado', 'info')
+    return response
 
 @portal_cliente_bp.route('/confirmar-pedido', methods=['POST'])
 @login_required
@@ -175,17 +200,22 @@ def confirmar_pedido():
         flash('Debe iniciar sesión como cliente para confirmar un pedido', 'error')
         return redirect(url_for('usuarios.index'))
     
-    cliente_id = cliente.idCliente
+    # Obtener carrito actual
+    carrito = get_cliente_carrito(cliente.idCliente)
     
-    if 'carritos' not in session or str(cliente_id) not in session['carritos'] or not session['carritos'][str(cliente_id)]:
+    if not carrito:
         flash('No hay productos en el carrito', 'error')
         return redirect(url_for('portal_cliente.portal_cliente'))
     
     try:
+        # Verificar disponibilidad antes de confirmar
+        for item in carrito:
+            galleta = Galleta.query.get(item['galleta_id'])
+                    
         # Crear la orden
         nueva_orden = Orden(
             descripcion="Pedido de galletas",
-            total=sum(item['subtotal'] for item in session['carritos'][str(cliente_id)]),
+            total=sum(item['subtotal'] for item in carrito),
             fechaAlta=datetime.now(),
             fechaEntrega=datetime.now() + timedelta(days=3),
             tipoVenta="Portal Cliente",
@@ -196,7 +226,7 @@ def confirmar_pedido():
         db.session.flush()
         
         # Crear los detalles de la orden
-        for item in session['carritos'][str(cliente_id)]:
+        for item in carrito:
             detalle = DetalleVentaOrden(
                 galletas_id=item['galleta_id'],
                 cantidad=item['cantidad'],
@@ -204,13 +234,22 @@ def confirmar_pedido():
                 orden_id=nueva_orden.id_orden
             )
             db.session.add(detalle)
+            
+            # Actualizar existencia
+            galleta = Galleta.query.get(item['galleta_id'])
+            galleta.existencia -= item['cantidad']
         
         db.session.commit()
-        session['carritos'][str(cliente_id)] = []
-        session.modified = True
         
+        # Limpiar carrito después de confirmar
+        response = make_response(redirect(url_for('portal_cliente.portal_cliente')))
+        response.set_cookie(
+            f'carrito_{cliente.idCliente}',
+            '',
+            expires=0
+        )
         flash(f'Pedido confirmado con éxito! Número de orden: {nueva_orden.id_orden}', 'success')
-        return redirect(url_for('portal_cliente.portal_cliente'))
+        return response
     
     except Exception as e:
         db.session.rollback()

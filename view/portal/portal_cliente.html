@@ -1,7 +1,7 @@
 {% extends "portal/layout_portal.html" %}
 
 {% block links %}
-    <link href="{{ url_for('static', filename='css/estilos_portal.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/estilos_portal.css') }}" rel="stylesheet">
 {% endblock %}
 
 {% block container %}
@@ -19,145 +19,163 @@
         <div class="main-card">
             <div class="card-body px-3">
                 {% with messages = get_flashed_messages(with_categories=true) %}
-                    {% if messages %}
-                        <div class="flash-messages mb-4">
-                            {% for category, message in messages %}
-                                <div class="alert alert-{{ category }} alert-dismissible fade show">
-                                    {{ message }}
-                                </div>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
+                {% if messages %}
+                <div class="flash-messages mb-4">
+                    {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
                 {% endwith %}
 
-                <div class="row g-3 mb-4 select-container">
-                    <div class="col-md-6">
-                        <form method="GET" action="{{ url_for('portal_cliente.portal_cliente') }}" id="form-tipo">
-                            <div class="form-floating">
-                                <select class="form-select" id="tipo_galleta" name="tipo_galleta" onchange="this.form.submit()">
-                                    <option value="">Seleccione un tipo</option>
-                                    {% for tipo in tipos_galletas %}
-                                        <option value="{{ tipo.id_tipo_galleta }}" 
-                                            {% if request.args.get('tipo_galleta') == tipo.id_tipo_galleta|string %}selected{% endif %}>
-                                            {{ tipo.nombre }} (${{ "%.2f"|format(tipo.costo) }})
-                                        </option>
-                                    {% endfor %}
-                                </select>
-                                <label for="tipo_galleta">Tipo de Galleta</label>
-                            </div>
-                        </form>
-                    </div>
-                    
-                    {% if galletas %}
-                    <div class="col-md-6">
-                        <form method="POST" action="{{ url_for('portal_cliente.portal_cliente') }}">
-                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                            <div class="input-group">
-                                <div class="form-floating flex-grow-1">
-                                    <select class="form-select" id="galleta" name="galleta_id" required>
-                                        <option value="">Seleccione una galleta</option>
-                                        {% for galleta in galletas %}
-                                            <option value="{{ galleta.id_galleta }}" 
-                                                data-existencia="{{ galleta.existencia }}">
-                                                {{ galleta.galleta }}
-                                            </option>
-                                        {% endfor %}
-                                    </select>
-                                    <label for="galleta">Galleta</label>
-                                </div>
-                                <input type="number" class="form-control" style="max-width: 100px;" 
-                                    id="cantidad" name="cantidad" min="1" value="1" required>
-                                <button type="submit" class="btn" name="action" value="agregar">
-                                    <i class="fas fa-plus me-1"></i> Agregar
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                    {% endif %}
-                </div>
-
-                <!-- Tabla de Carrito -->
-                <div class="table-responsive mb-4">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th class="text-nowrap"><i class="fas me-2"></i>Descripción</th>
-                                <th class="text-nowrap"><i class="fas me-2"></i>Tipo</th>
-                                <th class="text-nowrap text-end"><i class="fa me-2"></i>Precio Unitario</th>
-                                <th class="text-nowrap text-center"><i class="fas me-2"></i>Cantidad</th>
-                                <th class="text-nowrap text-end"><i class="fas me-2"></i>Subtotal</th>
-                                <th class="text-nowrap text-center"><i class="fas me-2"></i>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for item in carrito %}
-                            <tr>
-                                <td>{{ item.nombre }}</td>
-                                <td><span class="badge">{{ item.tipo }}</span></td>
-                                <td class="text-end">${{ "%.2f"|format(item.precio) }}</td>
-                                <td class="text-center">{{ item.cantidad }}</td>
-                                <td class="text-end fw-bold">${{ "%.2f"|format(item.subtotal) }}</td>
-                                <td class="text-center">
-                                    <form method="POST" action="{{ url_for('portal_cliente.portal_cliente') }}" class="d-inline">
-                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                                        <input type="hidden" name="galleta_id" value="{{ item.galleta_id }}">
-                                        <input type="hidden" name="action" value="eliminar">
-                                        <button type="submit" class="btn btn-sm">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                            {% else %}
-                            <tr>
-                                <td colspan="6" class="text-center py-4 text-muted">
-                                    <i class="fas fa-shopping-cart fa-2x mb-3"></i>
-                                    <p class="h5">No hay productos la orden</p>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td colspan="4" class="text-end fw-bold h5">Total:</td>
-                                <td class="text-end fw-bold h5 total-price">${{ "%.2f"|format(total) }}</td>
-                                <td></td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
-
-                <div class="extra-section">
-                    <div class="button-container">
-                        {% if carrito %}
-                        <form method="POST" action="{{ url_for('portal_cliente.portal_cliente') }}" class="d-inline">
-                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                            <input type="hidden" name="action" value="limpiar">
-                            <button type="submit" class="btn">
-                                <i class="fas fa-broom me-1"></i> Limpiar Carrito
-                            </button>
-                        </form>
-                        {% endif %}
-                        
-                        {% if carrito %}
-                        <form method="POST" action="{{ url_for('portal_cliente.confirmar_pedido') }}">
-                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                            <button type="submit" class="btn">
-                                <i class="fas fa-check-circle me-1"></i> Confirmar Pedido
-                            </button>
-                        </form>
-                        {% endif %}
-                        
-                        <div class="total-price">
-                            <span>Total: </span><span id="total-importe">${{ "%.2f"|format(total) }}</span>
+                <!-- Sección de Cards de Galletas -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h3 class="section-title mb-3">Selecciona tus galletas</h3>
+                        <div class="form-floating mb-3">
+                            <select class="form-select" id="tipo_galleta" name="tipo_galleta"
+                                onchange="window.location.href='{{ url_for('portal_cliente.portal_cliente') }}?tipo_galleta='+this.value">
+                                <option value="">Todos los tipos</option>
+                                {% for tipo in tipos_galletas %}
+                                <option value="{{ tipo.id_tipo_galleta }}" {% if
+                                    request.args.get('tipo_galleta')==tipo.id_tipo_galleta|string %}selected{% endif %}>
+                                    {{ tipo.nombre }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                            <label for="tipo_galleta">Filtrar por tipo</label>
                         </div>
+
+                        <div class="row g-3">
+                            {% if galletas %}
+                            {% for galleta in galletas %}
+                            <div class="col-md-4 col-lg-3">
+                                <div class="galleta-card">
+                                    <div class="galleta-img-container">
+                                        {% if galleta.galletas_receta %}
+                                            {% set receta_galleta = galleta.galletas_receta %}
+                                            {% if receta_galleta.imagen_galleta %}
+                                                <img src="{{ url_for('static', filename='img/galletas/' + receta_galleta.imagen_galleta) }}"
+                                                     alt="{{ galleta.galleta }}" 
+                                                     class="galleta-img"
+                                                     onerror="this.src='{{ url_for('static', filename='img/galletas/default.png') }}'">
+                                            {% else %}
+                                                <img src="{{ url_for('static', filename='img/galletas/default.png') }}"
+                                                     alt="{{ galleta.galleta }}" 
+                                                     class="galleta-img">
+                                            {% endif %}
+                                        {% else %}
+                                            <img src="{{ url_for('static', filename='img/galletas/default.png') }}"
+                                                 alt="{{ galleta.galleta }}" 
+                                                 class="galleta-img">
+                                        {% endif %}
+                                    </div>
+                                    <div class="galleta-body">
+                                        <h5 class="galleta-title">{{ galleta.galleta }}</h5>
+                                        <p class="galleta-tipo">{{ galleta.tipo_galleta.nombre }}</p>
+                                        <p class="galleta-precio">${{ "%.2f"|format(galleta.tipo_galleta.costo) }}</p>
+                                        <form method="POST" action="{{ url_for('portal_cliente.portal_cliente') }}"
+                                            class="galleta-form">
+                                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                            <input type="hidden" name="galleta_id" value="{{ galleta.id_galleta }}">
+                                            <div class="input-group mb-2">
+                                                <input type="number" class="form-control" name="cantidad" value="1"
+                                                    min="1" max="">
+                                                <button type="submit" class="btn btn-sm" name="action" value="agregar">
+                                                    <i class="fas fa-plus"></i>
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sección de Carrito -->
+                <div class="row">
+                    <div class="col-12">
+                        <h3 class="section-title mb-3">Tu carrito de compras</h3>
+
+                        {% if carrito %}
+                        <div class="table-responsive mb-4">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Descripción</th>
+                                        <th>Tipo</th>
+                                        <th class="text-end">Precio Unitario</th>
+                                        <th class="text-center">Cantidad</th>
+                                        <th class="text-end">Subtotal</th>
+                                        <th class="text-center">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in carrito %}
+                                    <tr>
+                                        <td>{{ item.nombre }}</td>
+                                        <td><span class="badge">{{ item.tipo }}</span></td>
+                                        <td class="text-end">${{ "%.2f"|format(item.precio) }}</td>
+                                        <td class="text-center">{{ item.cantidad }}</td>
+                                        <td class="text-end fw-bold">${{ "%.2f"|format(item.subtotal) }}</td>
+                                        <td class="text-center">
+                                            <form method="POST" action="{{ url_for('portal_cliente.portal_cliente') }}"
+                                                class="d-inline">
+                                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                                <input type="hidden" name="galleta_id" value="{{ item.galleta_id }}">
+                                                <input type="hidden" name="action" value="eliminar">
+                                                <button type="submit" class="btn btn-sm">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="4" class="text-end fw-bold h5">Total:</td>
+                                        <td class="text-end fw-bold h5 total-price">${{ "%.2f"|format(total) }}</td>
+                                        <td></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+
+                        <div class="extra-section">
+                            <div class="button-container">
+                                <form method="POST" action="{{ url_for('portal_cliente.portal_cliente') }}">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <input type="hidden" name="action" value="limpiar">
+                                    <button type="submit" class="btn btn-danger">
+                                        <i class="fas fa-broom me-1"></i> Limpiar Carrito
+                                    </button>
+                                </form>
+
+                                <form method="POST" action="{{ url_for('portal_cliente.confirmar_pedido') }}">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="fas fa-check-circle me-1"></i> Confirmar Pedido
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="empty-cart text-center py-5">
+                            <i class="fas fa-shopping-cart fa-4x mb-3 text-muted"></i>
+                            <h5 class="text-muted">Tu carrito está vacío</h5>
+                            <p class="text-muted">Selecciona galletas para agregar a tu pedido</p>
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-{% endblock %}
-
-{% block scripts %}
 {% endblock %}

@@ -1,46 +1,454 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos_notfound.css') }}">
+    <title>¡UPS! Galleta no encontrada</title>
     <style>
-        body{
-            padding-top: 60px;}
- 
-            .tr-head{background: #dff0d8;}  
+        /* RESET Y BASE */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Luckiest Guy', cursive;
+            background: linear-gradient(135deg, #FFD3A5, #f18b46);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #5D4037;
+            perspective: 1000px;
+        }
+
+        /* CONTENEDOR PRINCIPAL */
+        .container {
+            text-align: center;
+            position: relative;
+            z-index: 100;
+            padding: 20px;
+        }
+
+        /* TEXTO 404 */
+        .error-code {
+            font-size: clamp(8rem, 25vw, 15rem);
+            font-weight: 900;
+            color: #FFF;
+            text-shadow: 
+                5px 5px 0 rgba(93, 64, 55, 0.4),
+                10px 10px 0 rgba(93, 64, 55, 0.2);
+            animation: pulse 2s infinite alternate;
+            line-height: 0.9;
+            margin-bottom: -10px;
+        }
+
+        /* MENSAJE DE ERROR */
+        .error-message {
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            margin: 20px 0;
+            color: #FFF;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        /* BOTONES */
+        .btn {
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s;
+            margin: 10px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            font-weight: bold;
+        }
+
+        .btn-cookie {
+            background: #FFA726;
+            color: white;
+        }
+
+        .btn-home {
+            background: #5D4037;
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            z-index: -1;
+            transition: all 0.4s;
+            opacity: 0;
+        }
+
+        .btn:hover::after {
+            opacity: 1;
+            transform: scale(1.5);
+        }
+
+        /* ANIMACIONES PRINCIPALES */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.05); }
+        }
+
+        /* GALLETAS REALISTAS */
+        .cookie {
+            width: 120px;
+            height: 120px;
+            background: #F5CBA7;
+            border-radius: 50%;
+            position: absolute;
+            box-shadow: 
+                0 10px 25px rgba(0, 0, 0, 0.2),
+                inset 0 -8px 15px rgba(0, 0, 0, 0.1),
+                inset 0 8px 15px rgba(255, 255, 255, 0.4);
+            animation: float 5s ease-in-out infinite;
+            cursor: pointer;
+            transition: transform 0.3s;
+            z-index: 5;
+        }
+
+        .cookie::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, #3E2723 8px, transparent 8px),
+                radial-gradient(circle at 70% 30%, #3E2723 8px, transparent 8px),
+                radial-gradient(circle at 30% 70%, #3E2723 8px, transparent 8px),
+                radial-gradient(circle at 80% 70%, #3E2723 8px, transparent 8px),
+                radial-gradient(circle at 50% 50%, #3E2723 8px, transparent 8px);
+            border-radius: 50%;
+        }
+
+        .cookie::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 50%;
+            box-shadow: 
+                inset 0 0 20px rgba(255, 255, 255, 0.6),
+                inset 0 -5px 10px rgba(0, 0, 0, 0.2);
+            background: radial-gradient(circle at 40% 40%, rgba(255,255,255,0.8) 0%, transparent 50%);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-40px) rotate(3deg); }
+        }
+
+        /* MIGAJAS MEJORADAS */
+        .crumb {
+            position: absolute;
+            background: #F5CBA7;
+            border-radius: 30% 70% 60% 40% / 40% 60% 40% 60%;
+            animation: fall linear forwards;
+            box-shadow: 
+                0 2px 5px rgba(0, 0, 0, 0.2),
+                inset 0 -2px 3px rgba(0, 0, 0, 0.1);
+            z-index: 4;
+            transform-origin: center;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(100vh) rotate(360deg) scale(0.5); opacity: 0; }
+        }
+
+        /* CHIPS DE CHOCOLATE 3D */
+        .chip {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: #3E2723;
+            border-radius: 50%;
+            box-shadow: 
+                inset -2px -2px 5px rgba(0, 0, 0, 0.4),
+                inset 1px 1px 2px rgba(255, 255, 255, 0.2);
+            z-index: 6;
+        }
+
+        /* EFECTO DE LECHE */
+        .milk {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+            filter: blur(30px);
+            animation: splash 4s infinite alternate;
+            opacity: 0.5;
+            z-index: 1;
+        }
+
+        @keyframes splash {
+            0% { transform: scale(0.8) rotate(0deg); opacity: 0.3; }
+            100% { transform: scale(1.2) rotate(5deg); opacity: 0.6; }
+        }
+
+        /* EFECTO DE CONFETI */
+        .confetti {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: #FFA726;
+            opacity: 0;
+            animation: confetti-fall 3s linear forwards;
+            z-index: 3;
+        }
+
+        @keyframes confetti-fall {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .cookie {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .btn {
+                padding: 12px 25px;
+                font-size: 1rem;
+            }
+        }
     </style>
-    <link href="../static/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet"/>
 </head>
 <body>
     <div class="container">
-       
+        <h1 class="error-code">404</h1>
+        <p class="error-message">¡Oops! La galleta que buscas se ha desmoronado...</p>
+        
+        <div class="btn-group">
+            <button class="btn btn-cookie" id="moreCookies">¡Más galletas!</button>
+            <button class="btn btn-home" id="goHome">Volver al inicio</button>
+        </div>
+    </div>
+
+    <!-- Efectos de fondo -->
+    <div class="milk" style="top: 20%; left: 15%;"></div>
+    <div class="milk" style="bottom: 15%; right: 10%; animation-delay: 1.5s;"></div>
+
+    <script>
+        // Sonidos (descomenta para activar)
+        const crunchSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-crunchy-bite-into-apple-2212.mp3');
+        const popSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-jump-coin-216.mp3');
+        
+        // Crea galletas ultra realistas
+        function createCookie(x, y) {
+            const cookie = document.createElement('div');
+            cookie.className = 'cookie';
+            
+            // Posición aleatoria si no se especifica
+            cookie.style.left = (x || Math.random() * (window.innerWidth - 120)) + 'px';
+            cookie.style.top = (y || Math.random() * (window.innerHeight / 2)) + 'px';
+            cookie.style.animationDelay = Math.random() * 2 + 's';
+            
+            // Añadir chips de chocolate 3D
+            for (let i = 0; i < 8; i++) {
+                const chip = document.createElement('div');
+                chip.className = 'chip';
+                chip.style.left = (10 + Math.random() * 80) + 'px';
+                chip.style.top = (10 + Math.random() * 80) + 'px';
                 
-                {%with messages=get_flashed_messages()%}
-                    {%if messages%}
-                        {%for message in messages%}
-                        <div class="alert alert-success">
-                            {{message}}
-                        </div>
-                        {%endfor%}
-                    {%endif%}
-                {%endwith%}
+                // Efecto 3D aleatorio
+                chip.style.transform = `rotateZ(${Math.random() * 360}deg) scale(${0.8 + Math.random() * 0.4})`;
+                cookie.appendChild(chip);
+            }
+            
+            // Efecto al hacer clic
+            cookie.addEventListener('click', function(e) {
+                e.stopPropagation();
+                
+                // Romper galleta
+                createCrumbs(20, 
+                    parseInt(this.style.left) + 60, 
+                    parseInt(this.style.top) + 60
+                );
+                
+                // Efecto visual
+                this.style.transform = 'scale(0) rotate(180deg)';
+                this.style.opacity = '0';
+                this.style.transition = 'all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                
+                Sonido (descomenta)
+                crunchSound.currentTime = 0;
+                crunchSound.play();
+                
+                // Eliminar después de la animación
+                setTimeout(() => {
+                    this.remove();
+                }, 500);
+            });
+            
+            document.body.appendChild(cookie);
+            return cookie;
+        }
 
-                <h1>404</h1>
+        // Crea migajas con física mejorada
+        function createCrumbs(count, x, y) {
+            for (let i = 0; i < count; i++) {
+                const crumb = document.createElement('div');
+                crumb.className = 'crumb';
+                
+                // Tamaño y forma aleatoria
+                const size = 5 + Math.random() * 20;
+                crumb.style.width = size + 'px';
+                crumb.style.height = size + 'px';
+                
+                // Posición inicial
+                const angle = Math.random() * Math.PI * 2;
+                const distance = 10 + Math.random() * 50;
+                crumb.style.left = (x + Math.cos(angle) * distance - size/2) + 'px';
+                crumb.style.top = (y + Math.sin(angle) * distance - size/2) + 'px';
+                
+                // Animación personalizada
+                crumb.style.animation = `
+                    fall ${1 + Math.random() * 2}s cubic-bezier(0.1, 0.8, 0.2, 1) forwards
+                `;
+                
+                // Rotación aleatoria
+                crumb.style.transform = `rotate(${Math.random() * 360}deg)`;
+                
+                document.body.appendChild(crumb);
+                
+                // Eliminar después de la animación
+                setTimeout(() => {
+                    crumb.remove();
+                }, 3000);
+            }
+            
+            // Añadir confeti
+            createConfetti(10, x, y);
+        }
 
-<div class="frame">
-    <div></div>
-    <div></div>
-    <div></div>
-</div>
-<div class="caps"><img src="http://ademilter.com/caps.png" alt=""></div>
-<canvas id="canvas"></canvas>
-<script src="{{ url_for('static', filename='js/notfound_404.js') }}"></script>
-           
-     
- 
-</div>
+        // Crea efecto de confeti
+        function createConfetti(count, x, y) {
+            for (let i = 0; i < count; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                
+                // Colores aleatorios
+                const colors = ['#FFA726', '#FF7043', '#FFEE58', '#66BB6A', '#42A5F5'];
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                
+                // Posición inicial
+                confetti.style.left = (x - 10 + Math.random() * 20) + 'px';
+                confetti.style.top = (y - 10 + Math.random() * 20) + 'px';
+                
+                // Tamaño y animación
+                const size = 5 + Math.random() * 10;
+                confetti.style.width = size + 'px';
+                confetti.style.height = size + 'px';
+                confetti.style.animationDuration = (2 + Math.random() * 3) + 's';
+                confetti.style.animationDelay = (Math.random() * 0.5) + 's';
+                
+                // Forma aleatoria
+                const shapes = ['50%', '0%', '30% 70% 70% 30% / 60% 40% 60% 40%'];
+                confetti.style.borderRadius = shapes[Math.floor(Math.random() * shapes.length)];
+                
+                document.body.appendChild(confetti);
+                
+                // Eliminar después
+                setTimeout(() => {
+                    confetti.remove();
+                }, 4000);
+            }
+        }
+
+        // Botón de más galletas
+        document.getElementById('moreCookies').addEventListener('click', function() {
+            Sonido (descomenta)
+            popSound.currentTime = 0;
+            popSound.play();
+            
+            // Crear 5 galletas con efecto escalonado
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    createCookie();
+                }, i * 200);
+            }
+            
+            // Efecto de botón
+            this.style.transform = 'scale(0.9)';
+            setTimeout(() => {
+                this.style.transform = 'scale(1)';
+            }, 300);
+            
+            // Confeti
+            createConfetti(15, 
+                this.getBoundingClientRect().left + this.offsetWidth/2,
+                this.getBoundingClientRect().top
+            );
+        });
+
+        // Botón de regreso al inicio
+        document.getElementById('goHome').addEventListener('click', function() {
+            // Aquí puedes cambiar la URL por tu página de inicio
+            window.location.href = '/';
+            
+            // Efecto visual
+            this.style.transform = 'scale(0.9)';
+            setTimeout(() => {
+                this.style.transform = 'scale(1)';
+            }, 300);
+        });
+
+        // Crear galletas iniciales
+        window.onload = function() {
+            // 8 galletas iniciales
+            for (let i = 0; i < 8; i++) {
+                setTimeout(() => {
+                    createCookie();
+                }, i * 300);
+            }
+            
+            // Migajas aleatorias
+            setInterval(() => {
+                if (Math.random() > 0.7) {
+                    createCrumbs(
+                        3,
+                        Math.random() * window.innerWidth,
+                        -20
+                    );
+                }
+            }, 1500);
+        };
+
+        // Crear galletas al hacer clic en cualquier parte
+        document.addEventListener('click', function(e) {
+            if (!e.target.classList.contains('btn') && 
+                !e.target.classList.contains('cookie') && 
+                e.target.id !== 'goHome') {
+                createCookie(e.clientX - 60, e.clientY - 60);
+            }
+        });
+    </script>
 </body>
 </html>

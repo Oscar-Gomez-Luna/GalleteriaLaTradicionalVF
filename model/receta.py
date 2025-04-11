@@ -10,6 +10,7 @@ class Receta(db.Model):
     Descripccion = db.Column(db.Text)
     estatus = db.Column(db.Integer, default=1)
     cantidad_galletas = db.Column(db.Integer, nullable=False)
+    imagen_galleta = db.Column(db.String(100), default='default.png')
     
     # Relacion
     galletas_rel = db.relationship('Galleta', backref='galletas_receta', lazy=True)

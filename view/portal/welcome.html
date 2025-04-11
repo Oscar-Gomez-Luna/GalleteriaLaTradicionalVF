@@ -1,197 +1,510 @@
 {% extends "portal/layout_portal.html" %}
 {% block links %}
     <link href="{{ url_for('static', filename='css/estilos_portal.css') }}" rel="stylesheet">
-{% endblock %}s
+    <!-- Animate.css para animaciones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        /* Estilos mejorados */
+        .welcome-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(rgba(166, 83, 35, 0.85), rgba(241, 179, 132, 0.85)), 
+                        url('https://images.unsplash.com/photo-1606787366850-de6330128bfc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.3);
+        }
+        
+        .welcome-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('{{ url_for('static', filename='img/cookie-pattern.png') }}');
+            background-size: 300px;
+            opacity: 0.1;
+            pointer-events: none;
+        }
+        
+        .welcome-card {
+            background: rgba(236, 196, 166, 0.95);
+            border-radius: 25px;
+            padding: 4rem;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3), 
+                        inset 0 0 20px rgba(255,255,255,0.2);
+            position: relative;
+            overflow: hidden;
+            border: 3px solid #a65323;
+            transition: all 0.5s;
+            backdrop-filter: blur(5px);
+            transform-style: preserve-3d;
+        }
+        
+        .welcome-card:hover {
+            transform: translateY(-15px) rotateX(5deg);
+            box-shadow: 0 40px 80px rgba(0,0,0,0.4), 
+                        inset 0 0 30px rgba(255,255,255,0.3);
+        }
+        
+        .welcome-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+            z-index: -1;
+        }
+        
+        .welcome-card::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 5%;
+            width: 90%;
+            height: 30px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 50%;
+            filter: blur(10px);
+            z-index: -1;
+            transition: all 0.5s;
+        }
+        
+        .welcome-card:hover::after {
+            bottom: -15px;
+            filter: blur(15px);
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .user-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 5px solid #a65323;
+            object-fit: cover;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3),
+                        inset 0 0 10px rgba(0,0,0,0.2);
+            margin-bottom: 2rem;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+        
+        .user-avatar:hover {
+            transform: scale(1.1) rotateY(20deg);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4),
+                        inset 0 0 15px rgba(0,0,0,0.3);
+        }
+        
+        .action-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(241, 179, 132, 0.2) 100%);
+            border-radius: 20px;
+            padding: 2.5rem;
+            height: 100%;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1),
+                        inset 0 0 10px rgba(255,255,255,0.5);
+            transition: all 0.5s;
+            border: 2px solid #F1B384;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+        }
+        
+        .action-card:hover {
+            transform: translateY(-15px) rotateX(5deg);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2),
+                        inset 0 0 15px rgba(255,255,255,0.7);
+            border-color: #a65323;
+        }
+        
+        .action-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('{{ url_for('static', filename='img/cookie-texture.png') }}');
+            opacity: 0.05;
+            pointer-events: none;
+        }
+        
+        .action-icon {
+            font-size: 3.5rem;
+            color: #a65323;
+            margin-bottom: 1.5rem;
+            transition: all 0.5s;
+            text-shadow: 0 3px 10px rgba(166, 83, 35, 0.3);
+        }
+        
+        .action-card:hover .action-icon {
+            transform: scale(1.2) rotate(10deg);
+            color: #d17a45;
+            text-shadow: 0 5px 15px rgba(166, 83, 35, 0.5);
+        }
+        
+        .action-btn {
+            background: linear-gradient(to right, #a65323, #d17a45);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            transition: all 0.5s;
+            margin-top: 1.5rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(166, 83, 35, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .action-btn:hover {
+            background: linear-gradient(to right, #5a2e12, #a65323);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+        
+        .action-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255,255,255,0.1);
+            transform: rotate(30deg);
+            transition: all 0.5s;
+        }
+        
+        .action-btn:hover::after {
+            left: 100%;
+        }
+        
+        .products-section {
+            background: linear-gradient(to bottom, #F1B384, #ECC4A6);
+            position: relative;
+            overflow: hidden;
+            padding: 5rem 0;
+        }
+        
+        .products-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('{{ url_for('static', filename='img/cookie-pattern-2.png') }}');
+            background-size: 400px;
+            opacity: 0.1;
+            pointer-events: none;
+        }
+        
+        .product-card {
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 3px solid #F1B384;
+            border-radius: 20px;
+            overflow: hidden;
+            background: rgba(255,255,255,0.9);
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+        
+        .product-card:hover {
+            transform: scale(1.05) rotateY(10deg);
+            z-index: 10;
+            border-color: #a65323;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+        }
+        
+        .product-img {
+            height: 280px;
+            object-fit: cover;
+            transition: all 0.5s;
+        }
+        
+        .product-card:hover .product-img {
+            transform: scale(1.1);
+        }
+        
+        .product-body {
+            background: linear-gradient(to bottom, #ECC4A6, #F1B384);
+            padding: 1.5rem;
+            position: relative;
+        }
+        
+        .product-body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('{{ url_for('static', filename='img/cookie-texture.png') }}');
+            opacity: 0.1;
+        }
+        
+        .section-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 3rem;
+            font-size: 2.5rem;
+            color: #5a2e12;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 5px;
+            background: linear-gradient(90deg, #a65323, #F1B384);
+            border-radius: 3px;
+            box-shadow: 0 2px 10px rgba(166, 83, 35, 0.3);
+        }
+        
+        .floating-cookies {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .cookie {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: url('{{ url_for('static', filename='img/cookie-icon.png') }}') no-repeat center/contain;
+            opacity: 0.3;
+            animation: float 15s infinite linear;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-100vh) rotate(360deg); }
+        }
+        
+        /* Generar cookies flotantes */
+        .cookie:nth-child(1) { left: 10%; top: 20%; animation-delay: 0s; animation-duration: 20s; }
+        .cookie:nth-child(2) { left: 25%; top: 80%; animation-delay: 2s; animation-duration: 25s; }
+        .cookie:nth-child(3) { left: 75%; top: 10%; animation-delay: 4s; animation-duration: 18s; }
+        .cookie:nth-child(4) { left: 80%; top: 70%; animation-delay: 6s; animation-duration: 22s; }
+        .cookie:nth-child(5) { left: 40%; top: 90%; animation-delay: 8s; animation-duration: 30s; }
+    </style>
+{% endblock %}
 {% block container %}
 <div class="main-content">
-    <!-- Hero Section -->
-    <div class="welcome-hero" style="background: linear-gradient(rgba(166, 83, 35, 0.8), rgba(241, 179, 132, 0.8)), url('https://images.unsplash.com/photo-1587241321921-91a834d6d191?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80'); background-size: cover; background-position: center;">
-        <div class="container-fluid text-center py-5">
-            <h1 class="display-4 fw-bold text-white">¡Bienvenido Pastelero!</h1>
-            <p class="lead text-light">"La Tradicional" Donde cada galleta es una obra de arte</p>
-            <a href="{{ url_for('portal_cliente.portal_cliente') }}" class="btn btn-lg btn-warning mt-3">
-                Ordenar ahora <i class="bi bi-arrow-right"></i>
-            </a>
+    <!-- Bienvenida Personalizada -->
+    <section class="welcome-section">
+        <div class="floating-cookies">
+            <div class="cookie"></div>
+            <div class="cookie"></div>
+            <div class="cookie"></div>
+            <div class="cookie"></div>
+            <div class="cookie"></div>
         </div>
-    </div>
-    <div class="container-fluid py-5" style="background-color: #F1B384;">
-        <div class="row justify-content-center g-4">
-            <!-- Misión -->
-            <div class="col-md-4 text-center">
-                <div class="feature-card p-4 rounded" style="background-color: #ECC4A6; min-height: 300px;">
-                    <i class="bi bi-bullseye display-4 text-dark mb-3"></i>
-                    <h3 class="text-dark">Misión</h3>
-                    <p class="text-dark">Elaborar galletas artesanales de la más alta calidad, utilizando ingredientes premium y recetas tradicionales, para endulzar los momentos especiales de nuestros clientes.</p>
-                </div>
-            </div>
-            
-            <!-- Visión -->
-            <div class="col-md-4 text-center">
-                <div class="feature-card p-4 rounded" style="background-color: #ECC4A6; min-height: 300px;">
-                    <i class="bi bi-eye-fill display-4 text-dark mb-3"></i>
-                    <h3 class="text-dark">Visión</h3>
-                    <p class="text-dark">Ser reconocidos como la pastelería líder en galletas artesanales, innovando constantemente mientras mantenemos nuestras raíces tradicionales y expandiendo nuestro dulce legado.</p>
-                </div>
-            </div>
-            
-            <!-- Valores -->
-            <div class="col-md-4 text-center">
-                <div class="feature-card p-4 rounded" style="background-color: #ECC4A6; min-height: 300px;">
-                    <i class="bi bi-stars display-4 text-dark mb-3"></i>
-                    <h3 class="text-dark">Valores</h3>
-                    <ul class="text-dark text-start">
-                        <li>Calidad premium</li>
-                        <li>Tradición familiar</li>
-                        <li>Creatividad e innovación</li>
-                        <li>Pasión por lo artesanal</li>
-                        <li>Compromiso con el cliente</li>
-                    </ul>
+        
+        <div class="container py-5 position-relative">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="welcome-card text-center animate__animated animate__fadeIn">
+                        <img src="https://ui-avatars.com/api/?name={{ nombre_completo }}&background=a65323&color=fff&size=256&bold=true&font-size=0.6" 
+                             class="user-avatar" 
+                             alt="Avatar de usuario">
+                        <h1 class="display-4 fw-bold mb-3" style="color: #5a2e12; text-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                            ¡Bienvenido, <span class="">{{ nombre_completo}}</span>!
+                        </h1>
+                        <p class="lead mb-4 fs-4">Estamos encantados de tenerte de nuevo en nuestro exclusivo portal de clientes</p>
+                        
+                        <div class="row mt-5">
+                            <div class="col-md-6 mb-4 animate__animated animate__fadeInLeft animate__delay-1s">
+                                <div class="action-card">
+                                    <i class="bi bi-basket3-fill action-icon"></i>
+                                    <h3 class="mb-3">Nuevo Pedido</h3>
+                                    <p class="mb-4">Crea un pedido personalizado con nuestras galletas artesanales. ¡Endulza tu día!</p>
+                                    <a href="{{ url_for('portal_cliente.portal_cliente') }}" class="btn action-btn btn-lg">
+                                        <i class="bi bi-plus-circle me-2"></i> Ordenar Ahora
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-4 animate__animated animate__fadeInRight animate__delay-1s">
+                                <div class="action-card">
+                                    <i class="bi bi-clock-history action-icon"></i>
+                                    <h3 class="mb-3">Mis Pedidos</h3>
+                                    <p class="mb-4">Revisa el estado de tus pedidos y el historial de tus compras anteriores.</p>
+                                    <a href="{{ url_for('portal_cliente.mis_pedidos') }}" class="btn action-btn btn-lg">
+                                        <i class="bi bi-list-check me-2"></i> Ver Pedidos
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Galería de Galletas Animada -->
-    <div class="container-fluid py-5" style="background-color: #F1B384;">
+    <!-- Productos Destacados -->
+    <section class="products-section">
         <div class="container">
-            <h2 class="text-center text-dark mb-5">Nuestras Deliciosas Creaciones</h2>
+            <h2 class="text-center section-title animate__animated animate__fadeInDown">
+                Nuestras Exquisitas Creaciones
+            </h2>
             
-            <div class="row g-4 gallery-container">
+            <div class="row g-4">
                 <!-- Galleta 1 -->
-                <div class="col-md-4 col-6 gallery-item">
-                    <div class="card border-0 rounded-4 overflow-hidden h-100 gallery-card" style="background-color: #ECC4A6;">
+                <div class="col-md-4 animate__animated animate__fadeInUp">
+                    <div class="card product-card h-100">
                         <img src="https://images.unsplash.com/photo-1558961363-fa8fdf82db35?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1365&q=80" 
-                             class="card-img-top img-fluid gallery-img" 
+                             class="card-img-top product-img" 
                              alt="Galleta de Chocolate">
-                        <div class="card-body">
-                            <h5 class="card-title">Clásica de Chocolate</h5>
-                            <p class="card-text">Crujiente por fuera, suave por dentro.</p>
+                        <div class="card-body product-body text-center">
+                            <h3 class="card-title fw-bold">Clásica de Chocolate</h3>
+                            <p class="card-text fs-5">Crujiente por fuera, suave y deliciosa por dentro.</p>
                         </div>
                     </div>
                 </div>
                 
                 <!-- Galleta 2 -->
-                <div class="col-md-4 col-6 gallery-item">
-                    <div class="card border-0 rounded-4 overflow-hidden h-100 gallery-card" style="background-color: #ECC4A6;">
+                <div class="col-md-4 animate__animated animate__fadeInUp animate__delay-1s">
+                    <div class="card product-card h-100">
                         <img src="{{ url_for('static', filename='img/chispas.jpg') }}" 
-                             class="card-img-top img-fluid gallery-img" 
+                             class="card-img-top product-img" 
                              alt="Galleta con Chispas">
-                        <div class="card-body">
-                            <h5 class="card-title">Chispas de Colores</h5>
-                            <p class="card-text">Divertida y llena de sabor.</p>
+                        <div class="card-body product-body text-center">
+                            <h3 class="card-title fw-bold">Chispas de Colores</h3>
+                            <p class="card-text fs-5">Divertida, vibrante y llena de sabor.</p>
                         </div>
                     </div>
                 </div>
                 
                 <!-- Galleta 3 -->
-                <div class="col-md-4 col-6 gallery-item">
-                    <div class="card border-0 rounded-4 overflow-hidden h-100 gallery-card" style="background-color: #ECC4A6;">
+                <div class="col-md-4 animate__animated animate__fadeInUp animate__delay-2s">
+                    <div class="card product-card h-100">
                         <img src="https://images.unsplash.com/photo-1590080874088-eec64895b423?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1374&q=80" 
-                             class="card-img-top img-fluid gallery-img" 
+                             class="card-img-top product-img" 
                              alt="Galleta Artesanal">
-                        <div class="card-body">
-                            <h5 class="card-title">Artesanal Familiar</h5>
-                            <p class="card-text">Receta tradicional de la abuela.</p>
+                        <div class="card-body product-body text-center">
+                            <h3 class="card-title fw-bold">Artesanal Familiar</h3>
+                            <p class="card-text fs-5">Receta tradicional que evoca los mejores recuerdos.</p>
                         </div>
                     </div>
                 </div>
                 
                 <!-- Galleta 4 -->
-                <div class="col-md-4 col-6 gallery-item">
-                    <div class="card border-0 rounded-4 overflow-hidden h-100 gallery-card" style="background-color: #ECC4A6;">
+                <div class="col-md-4 animate__animated animate__fadeInUp">
+                    <div class="card product-card h-100">
                         <img src="https://images.unsplash.com/photo-1499636136210-6f4ee915583e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1364&q=80" 
-                             class="card-img-top img-fluid gallery-img" 
+                             class="card-img-top product-img" 
                              alt="Galleta con Nuez">
-                        <div class="card-body">
-                            <h5 class="card-title">Nuez y Canela</h5>
-                            <p class="card-text">Delicioso equilibrio de sabores.</p>
+                        <div class="card-body product-body text-center">
+                            <h3 class="card-title fw-bold">Nuez y Canela</h3>
+                            <p class="card-text fs-5">Delicioso equilibrio de sabores clásicos.</p>
                         </div>
                     </div>
                 </div>
                 
                 <!-- Galleta 5 -->
-                <div class="col-md-4 col-6 gallery-item">
-                    <div class="card border-0 rounded-4 overflow-hidden h-100 gallery-card" style="background-color: #ECC4A6;">
+                <div class="col-md-4 animate__animated animate__fadeInUp animate__delay-1s">
+                    <div class="card product-card h-100">
                         <img src="{{ url_for('static', filename='img/paquete.jpg') }}"  
-                             class="card-img-top img-fluid gallery-img" 
+                             class="card-img-top product-img" 
                              alt="Galletas Empacadas">
-                        <div class="card-body">
-                            <h5 class="card-title">Presentación Regalo</h5>
-                            <p class="card-text">Perfecta para ocasiones especiales.</p>
+                        <div class="card-body product-body text-center">
+                            <h3 class="card-title fw-bold">Presentación Regalo</h3>
+                            <p class="card-text fs-5">Perfecta para ocasiones especiales.</p>
                         </div>
                     </div>
                 </div>
                 
                 <!-- Galleta 6 -->
-                <div class="col-md-4 col-6 gallery-item">
-                    <div class="card border-0 rounded-4 overflow-hidden h-100 gallery-card" style="background-color: #ECC4A6;">
+                <div class="col-md-4 animate__animated animate__fadeInUp animate__delay-2s">
+                    <div class="card product-card h-100">
                         <img src="https://images.unsplash.com/photo-1618923850107-d1a234d7a73a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1386&q=80" 
-                             class="card-img-top img-fluid gallery-img" 
+                             class="card-img-top product-img" 
                              alt="Galletas Decoradas">
-                        <div class="card-body">
-                            <h5 class="card-title">Decoradas a Mano</h5>
-                            <p class="card-text">Arte comestible en cada detalle.</p>
+                        <div class="card-body product-body text-center">
+                            <h3 class="card-title fw-bold">Decoradas a Mano</h3>
+                            <p class="card-text fs-5">Arte comestible en cada detalle.</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 </div>
 
-<style>
-    /* Animaciones para la galería */
-    .gallery-card {
-        transition: all 0.3s ease;
-        transform: translateY(0);
-        border: none !important;
-    }
-    
-    .gallery-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-    }
-    
-    .gallery-img {
-        transition: transform 0.5s ease;
-        height: 250px;
-        object-fit: cover;
-    }
-    
-    .gallery-card:hover .gallery-img {
-        transform: scale(1.05);
-    }
-    
-    /* Efecto de carga */
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    
-    .gallery-item {
-        animation: fadeIn 0.6s ease forwards;
-        opacity: 0;
-    }
-    
-    .gallery-item:nth-child(1) { animation-delay: 0.1s; }
-    .gallery-item:nth-child(2) { animation-delay: 0.2s; }
-    .gallery-item:nth-child(3) { animation-delay: 0.3s; }
-    .gallery-item:nth-child(4) { animation-delay: 0.4s; }
-    .gallery-item:nth-child(5) { animation-delay: 0.5s; }
-    .gallery-item:nth-child(6) { animation-delay: 0.6s; }
-    
-    .card-body {
-        background-color: #ECC4A6 !important;
-    }
-    
-    /* Estilo para la lista de valores */
-    .feature-card ul {
-        padding-left: 1rem;
-        margin-bottom: 0;
-    }
-    
-    .feature-card li {
-        margin-bottom: 0.3rem;
-    }
-</style>
+<script>
+    // Efecto de confeti mejorado al cargar la página
+    document.addEventListener('DOMContentLoaded', () => {
+        const welcomeCard = document.querySelector('.welcome-card');
+        
+        // Efecto de aparición
+        setTimeout(() => {
+            welcomeCard.style.animation = 'none';
+            welcomeCard.offsetHeight; // Trigger reflow
+            welcomeCard.style.animation = 'pulse 2s ease-in-out';
+            
+            // Efecto de sombra pulsante
+            let pulseCount = 0;
+            const pulseInterval = setInterval(() => {
+                welcomeCard.style.boxShadow = '0 0 0 15px rgba(166, 83, 35, 0.3)';
+                setTimeout(() => {
+                    welcomeCard.style.boxShadow = '0 30px 60px rgba(0,0,0,0.3), inset 0 0 20px rgba(255,255,255,0.2)';
+                }, 500);
+                
+                pulseCount++;
+                if (pulseCount >= 3) clearInterval(pulseInterval);
+            }, 2000);
+        }, 1000);
+        
+        // Animación escalonada para las cards de productos
+        const productCards = document.querySelectorAll('.product-card');
+        productCards.forEach((card, index) => {
+            card.style.transitionDelay = `${index * 0.2}s`;
+            
+            // Efecto hover mejorado
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'scale(1.05) rotateY(10deg)';
+                card.style.boxShadow = '0 25px 50px rgba(0,0,0,0.3)';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = '';
+                card.style.boxShadow = '';
+            });
+        });
+        
+        // Galletas flotantes adicionales
+        const floatingCookies = document.querySelector('.floating-cookies');
+        for (let i = 6; i <= 12; i++) {
+            const cookie = document.createElement('div');
+            cookie.className = 'cookie';
+            cookie.style.left = `${Math.random() * 90 + 5}%`;
+            cookie.style.top = `${Math.random() * 100}%`;
+            cookie.style.animationDuration = `${Math.random() * 15 + 10}s`;
+            cookie.style.animationDelay = `${Math.random() * 5}s`;
+            floatingCookies.appendChild(cookie);
+        }
+    });
+</script>
 {% endblock %}
