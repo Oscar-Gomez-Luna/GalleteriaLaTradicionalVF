@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function() {
         // Limpiar opciones anteriores
         tipoGalletaSelect.innerHTML = '<option value="">Seleccione una galleta...</option>';
 
-        // Hacer la petición solo si hay un tipo de venta seleccionado
+        // petición solo si hay un tipo de venta seleccionado
         if (tipoVentaId) {
             fetch(`/venta/obtener_galletas/${tipoVentaId}`)
                 .then(response => response.json())
@@ -29,14 +29,14 @@ document.addEventListener("DOMContentLoaded", function() {
     let galletaSelect = document.getElementById("tipo_galleta");
     let existenciaInput = document.getElementById("existencia_total");
     let cantidadInput = document.getElementById("cantidad");
-    let loteSelect = document.getElementById("lote_select"); // Assuming you have a lote select element
+    let loteSelect = document.getElementById("lote_select");
 
     // Función para actualizar la existencia disponible
     function actualizarExistencia() {
         let galletaId = galletaSelect.value;
         if (!galletaId) {
             existenciaInput.value = '';
-            // Clear lote select options
+
             if (loteSelect) {
                 loteSelect.innerHTML = '<option value="">Seleccione un lote</option>';
             }
@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 let existenciaTotal = data.reduce((total, lote) => total + lote.existencia, 0);
                 existenciaInput.value = existenciaTotal;
                 
-                // Establecer el máximo permitido en el input de cantidad
+                // máximo permitido en el input de cantidad
                 cantidadInput.max = existenciaTotal;
                 
                 // Si hay un select de lotes, actualizar sus opciones
@@ -62,11 +62,10 @@ document.addEventListener("DOMContentLoaded", function() {
                         let option = document.createElement('option');
                         option.value = lote.id;
                         option.textContent = `Lote #${lote.id} - Disp: ${lote.existencia} - Cad: ${lote.fechaCaducidad}`;
-                        option.dataset.existencia = lote.existencia; // Guardar la existencia como dato
+                        option.dataset.existencia = lote.existencia;
                         loteSelect.appendChild(option);
                     });
                     
-                    // Si hay un controlador para el cambio de lote
                     loteSelect.addEventListener('change', function() {
                         if (this.selectedIndex > 0) {
                             let selectedOption = this.options[this.selectedIndex];
@@ -81,16 +80,15 @@ document.addEventListener("DOMContentLoaded", function() {
             .catch(error => console.error("Error:", error));
     }
 
-    // 1. Llamar al cargar la página
     actualizarExistencia();
 
-    // 2. Llamar cuando cambia la selección de galleta
+    // cuando cambia la selección de galleta
     galletaSelect.addEventListener("change", actualizarExistencia);
     
-    // 3. Actualizar después de agregar un ítem al detalle
+    //Actualizar después de agregar un ítem al detalle
     document.querySelectorAll('form').forEach(form => {
         form.addEventListener('submit', function() {
-            // Actualizar después de un breve retraso para dar tiempo a que se procese la solicitud
+
             setTimeout(actualizarExistencia, 500);
         });
     });
@@ -105,7 +103,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const ventaId = this.getAttribute("data-id");
 
             try {
-                // Obtener el ticket en Base64 desde el backend
+
                 const response = await fetch(`obtener_ticket/${ventaId}`);
                 const data = await response.json();
 
@@ -120,7 +118,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 const byteArray = new Uint8Array(byteNumbers);
                 const blob = new Blob([byteArray], { type: "application/pdf" });
 
-                // Crear una URL y abrirla en nueva ventana
                 const pdfUrl = URL.createObjectURL(blob);
                 window.open(pdfUrl, "Ticket", "width=400,height=500,scrollbars=yes");
 
@@ -136,7 +133,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const cobrarBtn = document.getElementById("cobrar-btn");
     if (cobrarBtn) {
         cobrarBtn.addEventListener("click", function (event) {
-            event.preventDefault(); // Prevenir el envío del formulario inmediato
+            event.preventDefault();
 
             Swal.fire({
                 title: '¿Estás seguro de cobrar esta venta?',
@@ -149,7 +146,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 cancelButtonText: "Cancelar"
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Si el usuario confirma, se envía el formulario
                     document.getElementById("cobrar-form").submit();
                 }
             });
@@ -162,16 +158,16 @@ document.addEventListener("DOMContentLoaded", function() {
     // Función para filtrar las ventas
     buscarInput.addEventListener("input", function() {
         const fechaBuscada = this.value;
-        const filas = document.querySelectorAll("#tblDetalleVenta tr"); // Seleccionamos todas las filas de la tabla
+        const filas = document.querySelectorAll("#tblDetalleVenta tr");
 
         filas.forEach(function(fila) {
-            const fechaVenta = fila.querySelector("td:nth-child(1)").textContent.trim(); // Obtenemos la fecha de la venta
+            const fechaVenta = fila.querySelector("td:nth-child(1)").textContent.trim(); // fecha de la venta
 
             // Compara la fecha de la venta con la fecha buscada
             if (fechaVenta.includes(fechaBuscada) || fechaBuscada === "") {
-                fila.style.display = ""; // Muestra la fila si coincide o si el input está vacío
+                fila.style.display = ""; 
             } else {
-                fila.style.display = "none"; // Oculta la fila si no coincide
+                fila.style.display = "none";
             }
         });
     });
