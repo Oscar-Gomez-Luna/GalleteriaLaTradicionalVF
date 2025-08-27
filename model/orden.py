@@ -13,4 +13,4 @@ class Orden(db.Model):
     tipoVenta = db.Column(db.String(50), nullable=False)
     cliente_id = db.Column(db.Integer, db.ForeignKey('cliente.idCliente'), nullable=False)
 
-    detalles = db.relationship('DetalleVentaOrden', backref='orden_relacion', lazy=True)  # Cambié el backref a 'orden_relacion'
+    detalles = db.relationship('DetalleVentaOrden', backref='orden_relacion', lazy=True) 
