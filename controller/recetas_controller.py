@@ -65,12 +65,11 @@ def agregar():
         imagen_file = request.files.get('imagen_galleta')
         imagen_nombre = save_uploaded_image(imagen_file) if imagen_file else None
         
-        # Si no se subió imagen o hubo error, usar default.png
+        # Si no se subió imagen usar default.png
         if not imagen_nombre:
             imagen_nombre = 'default.png'
             flash("No se subió una imagen válida, se usará la imagen por defecto", "info")
-        
-        # Resto del código para crear la receta...
+    
         nombre = receta_form.nombreReceta.data
         descripcion = receta_form.descripcion.data
         cantidad_galletas = receta_form.cantidad_galletas.data
