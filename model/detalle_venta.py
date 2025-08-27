@@ -11,9 +11,6 @@ class DetalleVentaGalletas(db.Model):
     cantidad = db.Column(db.Integer, nullable=False)
     subtotal = db.Column(db.Numeric(10, 2), nullable=False)
 
-    # Elimina esta línea porque no es necesario definirla explícitamente
-    # venta = db.relationship("Venta", backref=db.backref("detalles", lazy=True))  # No es necesario definir otro backref
-
     lote = db.relationship(
         "LoteGalletas", backref=db.backref("ventas_detalle", lazy=True)
     )
