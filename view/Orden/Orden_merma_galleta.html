@@ -34,14 +34,13 @@
             <div class="mb-3">
                 <label class="form-label">Lote</label>
                 {% if form.id_lote.choices %}
-                    <!-- Quita el atributo disabled para que el campo se envíe -->
+                    
                     {{ macros.camposNuevos(form.id_lote, class="form-control") }}
                 {% else %}
                     <p class="text-danger">No hay lotes disponibles</p>
                 {% endif %}
             </div>
-        
-            <!-- Resto del formulario permanece igual -->
+    
             <div class="mb-3">
                 {{ macros.camposNuevos(form.tipo_merma, class="form-select") }}
             </div>
@@ -71,7 +70,7 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Validación adicional del formulario si es necesaria
+    // Validación adicional del formulario
     const formulario = document.getElementById('formulario-merma');
     formulario.addEventListener('submit', function(e) {
         const cantidad = parseFloat(document.querySelector('input[name="cantidad"]').value);
