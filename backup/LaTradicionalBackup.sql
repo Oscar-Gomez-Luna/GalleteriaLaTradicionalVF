@@ -1,3 +1,7 @@
+DROP DATABASE IF EXISTS LaTradicional;
+CREATE DATABASE LaTradicional;
+USE LaTradicional;
+
 -- MySQL dump 10.13  Distrib 8.0.41, for Win64 (x86_64)
 --
 -- Host: localhost    Database: latradicional
@@ -278,7 +282,7 @@ CREATE TABLE `insumos` (
 
 LOCK TABLES `insumos` WRITE;
 /*!40000 ALTER TABLE `insumos` DISABLE KEYS */;
-INSERT INTO `insumos` VALUES (1,'Harina','uhhk','Gramos',80000,1),(2,'Mantequilla','khkuh','Gramos',80500,1),(3,'Nuez','kjnkj','Gramos',80700,1),(4,'Azúcar','khk','Gramos',80600,1),(5,'Huevo','ljl','Unidad',993,1),(6,'Chocolate en polvo','fwef','Gramos',81000,1),(7,'Harina de trigo','Harina','Gramos',81000,1),(8,'Mantequilla sin sal','mante','Gramos',81000,1),(9,'Azúcar morena','azucar','Gramos',81000,1),(10,'Esencia de vainilla','vainilla','Mililitros',81000,1),(11,'Polvo para hornear','polvo','Gramos',81000,1);
+INSERT INTO `insumos` VALUES (1,'Harina','Harina R','Gramos',80000,1),(2,'Mantequilla','Mantequillin','Gramos',80500,1),(3,'Nuez','Nuez del mundo','Gramos',80700,1),(4,'Azúcar','Azúcar dulce','Gramos',80600,1),(5,'Huevo','La granja','Unidad',993,1),(6,'Chocolate en polvo','choco','Gramos',81000,1),(7,'Harina de trigo','Harina','Gramos',81000,1),(8,'Mantequilla sin sal','mante','Gramos',81000,1),(9,'Azúcar morena','azucar','Gramos',81000,1),(10,'Esencia de vainilla','vainilla','Mililitros',81000,1),(11,'Polvo para hornear','polvo','Gramos',81000,1);
 /*!40000 ALTER TABLE `insumos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -712,3 +716,27 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2025-04-09 22:08:29
+
+SELECT * FROM cliente;
+SELECT * FROM comprasrealizadas;
+SELECT * FROM corte_caja;
+SELECT * FROM detallecompra;
+SELECT * FROM detalleventagalletas;
+SELECT * FROM detalleventaorden;
+SELECT * FROM empleado;
+SELECT * FROM galletas;
+SELECT * FROM insumos;
+SELECT * FROM loteinsumo;
+SELECT * FROM lotesgalletas;
+SELECT * FROM mermasgalletas;
+SELECT * FROM mermasinsumos;
+SELECT * FROM orden;
+SELECT * FROM persona;
+SELECT * FROM proveedor;
+SELECT * FROM receta;
+SELECT * FROM solicitudproduccion;
+SELECT * FROM tipo_galleta;
+SELECT * FROM usuario;
+SELECT * FROM usuario_seguridad;
+SELECT * FROM ventas;
+SELECT * FROM verificacion_usuario;
