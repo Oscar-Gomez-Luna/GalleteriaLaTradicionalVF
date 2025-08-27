@@ -12,12 +12,12 @@ class Galleta(db.Model):
     receta_id = db.Column(db.Integer, db.ForeignKey('receta.idReceta'), nullable=False)
     
     # Relación con receta
-    receta = db.relationship('Receta', backref=db.backref('galletas', lazy=True))  # Este backref permanece igual
+    receta = db.relationship('Receta', backref=db.backref('galletas', lazy=True))
     detalles_venta = db.relationship('DetalleVentaOrden', backref='galleta', lazy=True)
-    tipo = db.relationship('TipoGalleta', back_populates='galletas')  # Usar back_populates correctamente
+    tipo = db.relationship('TipoGalleta', back_populates='galletas') 
     
-    # Modificar el backref para la relación con LoteGalletas
-    lotes = db.relationship('LoteGalletas', backref='galleta_lotes', lazy=True)  # Cambié 'galleta' a 'galleta_lotes'
+    #relación con LoteGalletas
+    lotes = db.relationship('LoteGalletas', backref='galleta_lotes', lazy=True)
 
 
     def __repr__(self):
