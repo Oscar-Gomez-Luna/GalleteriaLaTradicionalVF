@@ -121,7 +121,7 @@
                 <form method="POST" action="{{ url_for('produccion.produccion') }}" id="mermaFormGalletas">
                     {{ merma_form.hidden_tag() }}
 
-                    <!-- Tipo editable (solo una vez) -->
+                    <!-- Tipo editable -->
                     <label for="tipo_merma">Tipo:</label>
                     {{ merma_form.tipo_merma(id="tipo_merma", class="form-control") }}
 
@@ -217,7 +217,7 @@
         <span class="close-empaque" onclick="cerrarModal('modalEmpaquetado')">&times;</span>
         <h2 style="text-align: center;">Empaquetado</h2>
 
-        <!-- FORMULARIO SOLO PARA CAMBIAR TIPO DE EMPAQUE (GET) -->
+        <!-- FORMULARIO SOLO PARA CAMBIAR TIPO DE EMPAQUE -->
         <form method="GET" action="{{ url_for('produccion.produccion') }}">
             <input type="hidden" name="abrir_modal_empaque" value="1">
             <input type="hidden" name="galleta_id" value="{{ form_empaque.galleta_id.data }}">
@@ -233,7 +233,7 @@
         <form method="POST" action="{{ url_for('produccion.empaquetar') }}">
             {{ form_empaque.hidden_tag() }}
 
-            <!-- Se pasa tipo explícitamente en POST -->
+            <!-- Se pasa tipo -->
             <input type="hidden" name="tipo_empaque" value="{{ tipo }}">
 
             <label for="galleta">Galleta:</label>
