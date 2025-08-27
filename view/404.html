@@ -256,16 +256,16 @@
     <div class="milk" style="bottom: 15%; right: 10%; animation-delay: 1.5s;"></div>
 
     <script>
-        // Sonidos (descomenta para activar)
+        // Sonidos
         const crunchSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-crunchy-bite-into-apple-2212.mp3');
         const popSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-jump-coin-216.mp3');
         
-        // Crea galletas ultra realistas
+        // Crea galletas
         function createCookie(x, y) {
             const cookie = document.createElement('div');
             cookie.className = 'cookie';
             
-            // Posición aleatoria si no se especifica
+            // Posición aleatoria
             cookie.style.left = (x || Math.random() * (window.innerWidth - 120)) + 'px';
             cookie.style.top = (y || Math.random() * (window.innerHeight / 2)) + 'px';
             cookie.style.animationDelay = Math.random() * 2 + 's';
@@ -410,7 +410,6 @@
 
         // Botón de regreso al inicio
         document.getElementById('goHome').addEventListener('click', function() {
-            // Aquí puedes cambiar la URL por tu página de inicio
             window.location.href = '/';
             
             // Efecto visual
