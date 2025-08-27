@@ -59,13 +59,13 @@ def registrar_venta():
             return render_template('ventas/registrar_ventas.html', form=form, active_page="ventas", 
                                 detalle_venta=session['detalle_venta'])
 
-        # Calcular la cantidad total ya reservada para esta galleta en el detalle actual
+        # Calcular la cantidad total ya reservada para esta galleta
         cantidad_reservada = sum(
             item["cantidad"] for item in session['detalle_venta'] 
             if item["id_galleta"] == tipo_galleta_id
         )
 
-        # Obtener todos los lotes válidos ordenados por fecha (más antiguos primero)
+        # lotes válidos ordenados por fecha (más antiguos primero)
         lotes_disponibles = (LoteGalletas.query
                             .filter(LoteGalletas.galleta_id == tipo_galleta_id)
                             .filter(LoteGalletas.existencia > 0)
@@ -77,10 +77,10 @@ def registrar_venta():
             return render_template('ventas/registrar_ventas.html', form=form, active_page="ventas", 
                                 detalle_venta=session['detalle_venta'])
 
-        # Calcular existencia total disponible (sin considerar reservas aún)
+        # Calcular existencia total disponible
         existencia_total = sum(lote.existencia for lote in lotes_disponibles)
 
-        # Validar que haya suficiente existencia considerando lo ya reservado
+        # Validar que haya suficiente existencia considerando lo reservado
         if (cantidad + cantidad_reservada) > existencia_total:
             disponible = existencia_total - cantidad_reservada
             flash(f"Error: No hay suficiente existencia. Disponible: {max(0, disponible)}", "danger")
@@ -97,14 +97,14 @@ def registrar_venta():
         precio = tipo_galleta.tipo.costo
         subtotal = cantidad * precio
 
-        # Crear lista de lotes asignados
+        # Crear lista de lotes
         lotes_asignados = []
         cantidad_restante = cantidad
         
-        # Primero calcular disponibilidad por lote considerando reservas existentes
+        # calcular disponibilidad por lote
         lotes_con_disponibilidad = []
         for lote in lotes_disponibles:
-            # Calcular reservas existentes para este lote en el detalle actual
+            # Calcular reservas existentes para este lote
             reservas_lote = sum(
                 lote_item["cantidad"] 
                 for item in session['detalle_venta'] 
@@ -136,7 +136,7 @@ def registrar_venta():
             
             cantidad_restante -= cantidad_a_usar
             
-        # Buscar si ya existe este tipo de galleta en el detalle
+        # Buscar si ya existe este tipo de galleta
         item_existente = None
         for item in session['detalle_venta']:
             if item["id_galleta"] == tipo_galleta_id:
@@ -144,7 +144,7 @@ def registrar_venta():
                 break
         
         if item_existente:
-            # Actualizar el item existente
+            # Actualizar el item
             item_existente["cantidad"] += cantidad
             item_existente["subtotal"] = float(item_existente["cantidad"] * precio)
             
@@ -162,7 +162,7 @@ def registrar_venta():
                 if not lote_encontrado:
                     item_existente["lotes"].append(lote_nuevo)
         else:
-            # Crear un nuevo registro en detalle_venta
+            
             nueva_venta = {
                 "id_galleta": tipo_galleta_id,
                 "nombre": tipo_galleta.galleta,
@@ -209,11 +209,11 @@ def finalizar_venta():
 
         # Registrar detalles y actualizar existencias
         for detalle in session['detalle_venta']:
-            for lote_info in detalle['lotes']:  # Iterar sobre cada lote en el detalle
+            for lote_info in detalle['lotes']:
                 # Registrar detalle por cada lote usado
                 nuevo_detalle = DetalleVentaGalletas(
                     venta_id=nueva_venta.id_venta,
-                    lote_id=lote_info['lote_id'],  # Acceder al lote_id dentro de lote_info
+                    lote_id=lote_info['lote_id'],
                     cantidad=lote_info['cantidad'],
                     subtotal=lote_info['cantidad'] * detalle['precio_unitario']
                 )
@@ -252,7 +252,7 @@ def detalles_venta():
         # Consulta principal para obtener la venta
         venta = db.session.query(Venta).filter(Venta.id_venta == id_venta).first()
         
-        # Consulta para obtener los detalles con información relacionada
+        # obtener los detalles con información relacionada
         detalles_query = db.session.query(
             DetalleVentaGalletas,
             Galleta.galleta,
@@ -287,7 +287,7 @@ def detalles_venta():
             galletas_agrupadas[clave]['cantidad'] += detalle.cantidad
             galletas_agrupadas[clave]['subtotal'] += detalle.cantidad * precio_unitario
         
-        # Convertir el diccionario a una lista para pasarlo a la plantilla
+        # Convertir el diccionario a una lista
         detalles_agrupados = list(galletas_agrupadas.values())
 
         return render_template(
@@ -314,7 +314,7 @@ def obtener_galletas(tipo_venta_id):
 @role_required("ADMS", "CAJA") 
 def generar_ticket(venta_id):
     try:
-        # Obtener la información de la venta
+        # información de la venta
         venta = Venta.query.get_or_404(venta_id)
         detalles = DetalleVentaGalletas.query.filter_by(venta_id=venta_id).all()
 
@@ -345,14 +345,14 @@ def generar_ticket(venta_id):
                     'subtotal': detalle.subtotal
                 }
 
-        # Convertir el diccionario a lista para el template
+        # diccionario a lista
         items = list(items_agrupados.values())
 
         total = venta.total
         fecha_actual = datetime.now().strftime("%d/%m/%Y")
         hora_actual = datetime.now().strftime("%H:%M:%S")
 
-        # Renderizar HTML del ticket
+        # recargar HTML del ticket
         html = render_template(
             'ventas/ticket.html',
             fecha=fecha_actual,
@@ -362,7 +362,7 @@ def generar_ticket(venta_id):
             ticket_num=venta.ticket
         )
 
-        # Opciones para PDF
+        # Opciones PDF
         options = {
             'page-size': 'A7',
             'margin-top': '0mm',
@@ -383,7 +383,7 @@ def generar_ticket(venta_id):
         # Convertir PDF a Base64
         pdf_base64 = base64.b64encode(pdf_bytes).decode('utf-8')
 
-        # Guardar en la base de datos (suponiendo que `Venta` tiene un campo `ticket_pdf`)
+        # Guardar en la base de datos
         venta.ticket = pdf_base64
         db.session.commit()
 
@@ -448,15 +448,15 @@ def corte_caja():
             flash("Ya se ha realizado un corte de caja para esta fecha.", "danger")
             return redirect(url_for('venta.corte_caja'))
         
-        # Calcular el total de ventas para la fecha seleccionada
+        # Calcular el total de ventas para la fecha
         total_venta = db.session.query(db.func.sum(Venta.total)).filter(Venta.fecha == fecha_corte).scalar()
         
-        # Si no hay ventas en esa fecha, mostrar mensaje de error
+        # Si no hay ventas en esa fecha
         if total_venta is None:
             flash("No hay ventas registradas para esta fecha.", "danger")
             return redirect(url_for('venta.corte_caja'))
         
-        # Crear el nuevo registro de corte de caja
+        # nuevo registro de corte de caja
         nuevo_corte = CorteCaja(
             fecha=fecha_corte,
             totalVenta=total_venta,
@@ -522,12 +522,12 @@ def registrar_venta(id_orden, total, tipo_venta, detalles):
             tipoVenta=tipo_venta
         )
         db.session.add(nueva_venta)
-        db.session.flush()  # Para obtener el id_venta generado
+        db.session.flush()  # obtener el id_venta generado
 
-        # Registrar los detalles de la venta sin validar lotes
+        # detalles de la venta sin validar lotes
         items = []
         for detalle in detalles:
-            # Crear el detalle de venta sin verificar existencias
+            #detalle de venta sin verificar existencias
             nuevo_detalle = DetalleVentaGalletas(
                 venta_id=nueva_venta.id_venta,
                 lote_id=detalle['lote_id'],
@@ -536,7 +536,7 @@ def registrar_venta(id_orden, total, tipo_venta, detalles):
             )
             db.session.add(nuevo_detalle)
             
-            # Agregar información para el ticket
+            # información para el ticket
             galleta = db.session.query(Galleta).get(detalle['galleta_id'])
             precio_unitario = detalle['subtotal'] / detalle['cantidad']
             items.append({
@@ -546,11 +546,11 @@ def registrar_venta(id_orden, total, tipo_venta, detalles):
                 'subtotal': detalle['subtotal']
             })
         
-        # Ahora generar el ticket en base64
+        # el ticket en base64
         fecha_actual = datetime.now().strftime("%d/%m/%Y")
         hora_actual = datetime.now().strftime("%H:%M:%S")
         
-        # Renderizar HTML del ticket
+        # cargar HTML del ticket
         html = render_template(
             'ventas/ticket.html',
             fecha=fecha_actual,
@@ -575,10 +575,10 @@ def registrar_venta(id_orden, total, tipo_venta, detalles):
         ruta_wkhtmltopdf = r"C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe"
         config = pdfkit.configuration(wkhtmltopdf=ruta_wkhtmltopdf)
         
-        # Generar el PDF en memoria
+        # PDF en memoria
         pdf_bytes = pdfkit.from_string(html, False, options=options, configuration=config)
         
-        # Convertir PDF a Base64
+        # PDF a Base64
         pdf_base64 = base64.b64encode(pdf_bytes).decode('utf-8')
         
         # Actualizar el ticket en la venta con el PDF en base64
@@ -586,7 +586,7 @@ def registrar_venta(id_orden, total, tipo_venta, detalles):
         
         db.session.commit()
         flash("Venta registrada exitosamente.", "success")
-        return nueva_venta.id_venta  # Devolver el ID de la venta para poder redirigir si es necesario
+        return nueva_venta.id_venta  # Devolver el ID de la venta para poder redirigir
     
     except Exception as e:
         db.session.rollback()
@@ -603,13 +603,13 @@ def cobrar_pedido(id_orden):
         return redirect(url_for('venta.pedido_portal'))
 
     try:
-        # Obtener detalles del pedido
+        # detalles del pedido
         detalles = (db.session.query(DetalleVentaOrden, Galleta)
                     .join(Galleta, Galleta.id_galleta == DetalleVentaOrden.galletas_id)
                     .filter(DetalleVentaOrden.orden_id == id_orden)
                     .all())
 
-        # Crear registro de venta
+        # registro de venta
         ahora = datetime.now()
         nueva_venta = Venta(
             total=pedido.total,
@@ -624,12 +624,12 @@ def cobrar_pedido(id_orden):
         # Diccionario para acumular cantidades por galleta
         galletas_vendidas = {}
 
-        # Procesar cada detalle del pedido
+        # cada detalle del pedido
         for d, galleta in detalles:
             # Acumular cantidad para actualizar existencia en Galleta
             galletas_vendidas[galleta.id_galleta] = galletas_vendidas.get(galleta.id_galleta, 0) + d.cantidad
 
-            # Obtener lotes disponibles ordenados por fecha (más antiguos primero)
+            # lotes disponibles ordenados por fecha (más antiguos primero)
             lotes_disponibles = (db.session.query(LoteGalletas)
                                 .filter(LoteGalletas.galleta_id == galleta.id_galleta)
                                 .filter(LoteGalletas.existencia > 0)
@@ -667,7 +667,7 @@ def cobrar_pedido(id_orden):
             if cantidad_restante > 0:
                 raise Exception(f"No hay suficiente existencia para {galleta.galleta}")
 
-        # Actualizar existencias en la tabla Galleta
+        # Actualizar existencias de Galleta
         for galleta_id, cantidad in galletas_vendidas.items():
             galleta = db.session.query(Galleta).get(galleta_id)
             if galleta:
@@ -684,7 +684,7 @@ def cobrar_pedido(id_orden):
         for solicitud in solicitudes:
             solicitud.estatus = 2  # Estado "Vendido" o "Entregado"
 
-        # Confirmar todos los cambios
+        # Confirmar cambios
         db.session.commit()
         crear_ticket_pdf(nueva_venta.id_venta)
         flash("Pedido cobrado exitosamente", "success")
@@ -805,7 +805,7 @@ def detalles_pedido():
             galletas_agrupadas[clave]['cantidad'] += cantidad
             galletas_agrupadas[clave]['subtotal'] += subtotal
         
-        # Convertir el diccionario a una lista
+        # diccionario a una lista
         detalles_agrupados = list(galletas_agrupadas.values())
 
         return render_template(
@@ -823,14 +823,14 @@ def merma_galletas():
 
     if request.method == 'POST' and form.validate():
         try:
-            # Obtener datos del formulario
+            # datos del formulario
             lote_id = int(request.form.get('lote_merma'))
             cantidad = form.cantidad.data
             tipo_merma = form.tipo_merma.data
             fecha = form.fecha.data or date.today()
             descripcion = form.descripcion.data
 
-            # Obtener el lote correspondiente
+            # el lote correspondiente
             lote = LoteGalletas.query.get(lote_id)
             if not lote:
                 flash('Lote no encontrado.', 'danger')
@@ -841,7 +841,7 @@ def merma_galletas():
                 flash('No hay suficiente existencia en el lote seleccionado.', 'danger')
                 return redirect(url_for('venta.merma_galletas'))
 
-            # Crear la nueva merma
+            #nueva merma
             nueva_merma = MermaGalleta(
                 lote_id=lote_id,
                 cantidad=cantidad,
@@ -853,12 +853,12 @@ def merma_galletas():
             # Descontar la cantidad de la merma del lote
             lote.existencia -= cantidad
 
-            # Guardar los cambios en la base de datos
+            # Guardar los cambios
             db.session.add(nueva_merma)
             db.session.commit()
 
             flash('Merma registrada y existencia actualizada correctamente.', 'success')
-            return redirect(url_for('venta.merma_galletas'))  # Redirigir a la misma página o a otra
+            return redirect(url_for('venta.merma_galletas'))
 
         except Exception as e:
             db.session.rollback()
@@ -893,7 +893,7 @@ def obtener_lotes(galleta_id):
     if 'detalle_venta' not in session:
         session['detalle_venta'] = []
     
-    # Obtener todos los lotes válidos para esta galleta
+    # todos los lotes válidos para esta galleta
     lotes = (db.session.query(LoteGalletas)
             .options(db.joinedload(LoteGalletas.galleta))
             .filter(LoteGalletas.galleta_id == galleta_id)
@@ -901,7 +901,7 @@ def obtener_lotes(galleta_id):
             .all()
             )
     
-    # Obtener todas las reservas actuales para esta galleta
+    # todas las reservas actuales para esta galleta
     reservas = []
     for item in session['detalle_venta']:
         if item.get('id_galleta') == galleta_id:
@@ -913,19 +913,18 @@ def obtener_lotes(galleta_id):
     
     lotes_json = []
     for lote in lotes:
-        # Calcular reservas para este lote específico sumando todas las reservas
-        # que coincidan con este lote
+        # Calcular reservas para este lote específico sumando todas las reservas que coincidan con este lote
         reservado = sum(r["cantidad"] for r in reservas if r["lote_id"] == lote.id_lote)
         
         existencia_disponible = lote.existencia - reservado
         
-        # Solo incluir lotes con existencia disponible positiva
+        # Solo incluir lotes con existencia disponible
         if existencia_disponible > 0:
             lotes_json.append({
                 "id": lote.id_lote,
-                "existencia": existencia_disponible,  # Mostrar la existencia disponible
+                "existencia": existencia_disponible,
                 "fechaCaducidad": lote.fechaCaducidad.strftime('%Y/%m/%d'),
-                "existencia_real": lote.existencia  # Mantener referencia a la existencia real
+                "existencia_real": lote.existencia 
             })
     
     return jsonify(lotes_json)
