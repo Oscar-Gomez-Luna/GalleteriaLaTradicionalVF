@@ -51,7 +51,7 @@ def produccion():
     
 
 
-     # Cargar opciones para el select
+     # opciones para el select
     form.galleta_id.choices = [
         (g.id_galleta, g.galleta) for g in Galleta.query.filter_by(tipo_galleta_id=tipo_unidad).all()
     ]
@@ -66,7 +66,7 @@ def produccion():
     galleta_id = None  
 
     mostrar_modal_empaque = request.args.get("abrir_modal_empaque") == "1"
-    #Cantidades predefinidad del los empaques 
+    #Cantidades del los empaques 
 
     tipo_empaque = request.args.get("tipo_empaque")
     if tipo_empaque:
@@ -81,7 +81,7 @@ def produccion():
     
 
  
-    # Llenar campos de cantidad y costo al seleccionar una galleta
+    # campos de cantidad y costo al seleccionar una galleta
     if request.method == 'GET' and 'galleta_id' in request.args and 'abrir_modal_empaque' not in request.args:
         galleta_id = int(request.args.get('galleta_id'))
         form.galleta_id.data = galleta_id
@@ -103,8 +103,6 @@ def produccion():
         lote_merma = LoteGalletas.query.get(int(request.args['merma_lote_id']))
 
 
-
-    # Procesar envío del formulario
     if form.validate_on_submit():
         galleta = Galleta.query.get(form.galleta_id.data)
         receta = Receta.query.get(galleta.receta_id)
@@ -241,7 +239,7 @@ def produccion():
     galletas_dict = defaultdict(int)
     for lote in galletas:
         galletas_dict[lote['galleta']] += lote['existencia']
-        # Alerta: galletas con existencia total en 0 (por suma de todos los lotes)
+        # Alerta: galletas con existencia total en 0
     alertas_sin_existencia = []
 
     for nombre, total in galletas_dict.items():
@@ -249,7 +247,7 @@ def produccion():
             alertas_sin_existencia.append(nombre)
 
 
-    # Detectar galletas sin existencia
+    # galletas sin existencia
     todas_las_galletas = db.session.execute(text("""
         SELECT galleta FROM galletas 
         WHERE tipo_galleta_id = (
@@ -314,7 +312,6 @@ def eliminar_lote():
         flash("Lote no encontrado.", "danger")
         return redirect(url_for('produccion.produccion'))
 
-    #  Eliminar primero las mermas relacionadas
     MermaGalleta.query.filter_by(lote_id=lote.id_lote).delete()
 
     db.session.delete(lote)
@@ -379,8 +376,6 @@ def merma_insumo():
     return redirect(url_for('produccion.produccion'))
 
 
-
-
 @produccion_bp.route('/empaquetar', methods=['POST'])
 @login_required
 @role_required("ADMS", "PROD")
@@ -403,7 +398,7 @@ def empaquetar():
         flash("Galleta no encontrada.", "danger")
         return redirect(url_for("produccion.produccion"))
 
-    # Obtener los lotes disponibles de esa galleta
+    # Obtener los lotes disponibles
     lotes = LoteGalletas.query.filter_by(galleta_id=galleta_id)\
         .filter(LoteGalletas.existencia > 0)\
         .order_by(LoteGalletas.fechaProduccion.asc()).all()
@@ -414,7 +409,7 @@ def empaquetar():
         flash(f"No hay suficientes galletas para empaquetar. Se necesitan {total_galletas_necesarias} y solo hay {existencia_total}.", "danger")
         return redirect(url_for("produccion.produccion"))
 
-    # Descontar existencia FIFO
+    # Descontar existencia
     cantidad_restante = total_galletas_necesarias
     for lote in lotes:
         if cantidad_restante <= 0:
@@ -426,7 +421,7 @@ def empaquetar():
             cantidad_restante -= lote.existencia
             lote.existencia = 0
 
-    # ✅ Mapear tipo_empaque del formulario al nombre real
+    # Mapear tipo_empaque al nombre real
     nombres_tipo = {
         "unidad": "Unidad",
         "kilo": "Caja de Kilo",
@@ -447,7 +442,7 @@ def empaquetar():
         flash("Tipo de empaquetado no encontrado en base de datos.", "danger")
         return redirect(url_for("produccion.produccion"))
 
-    # Buscar la galleta destino del mismo nombre pero otro tipo
+    # galleta destino del mismo nombre pero otro tipo
     galleta_destino = Galleta.query.filter_by(
         galleta=galleta.galleta,
         tipo_galleta_id=tipo_id
