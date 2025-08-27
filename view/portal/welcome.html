@@ -1,10 +1,10 @@
 {% extends "portal/layout_portal.html" %}
 {% block links %}
     <link href="{{ url_for('static', filename='css/estilos_portal.css') }}" rel="stylesheet">
-    <!-- Animate.css para animaciones -->
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <style>
-        /* Estilos mejorados */
+
         .welcome-section {
             min-height: 100vh;
             display: flex;
@@ -461,7 +461,7 @@
         // Efecto de aparición
         setTimeout(() => {
             welcomeCard.style.animation = 'none';
-            welcomeCard.offsetHeight; // Trigger reflow
+            welcomeCard.offsetHeight; 
             welcomeCard.style.animation = 'pulse 2s ease-in-out';
             
             // Efecto de sombra pulsante
