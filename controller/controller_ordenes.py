@@ -34,7 +34,7 @@ from model.solicitud_produccion import SolicitudProduccion
 from forms.ordenMerma_form import MermaForm 
 from decimal import Decimal
 
-# Crear el Blueprint para orden
+# Blueprint para orden
 orden_bp = Blueprint("orden", __name__, url_prefix="/orden")
 
 def estado_a_texto(estado):
@@ -46,14 +46,14 @@ def estado_a_texto(estado):
 @login_required
 @role_required("ADMS", "PROD") 
 def obtener_detalle_orden(id_detalle):
-    """Obtiene el detalle completo de la orden"""
+    """detalle completo de la orden"""
     return (
         db.session.query(
             DetalleVentaOrden,
             Galleta,
             Receta,
             Orden,
-            TipoGalleta,  # Añadimos TipoGalleta a la consulta
+            TipoGalleta,
         )
         .join(Galleta, DetalleVentaOrden.galletas_id == Galleta.id_galleta)
         .join(Receta, Galleta.receta_id == Receta.idReceta)
@@ -61,7 +61,7 @@ def obtener_detalle_orden(id_detalle):
         .join(
             TipoGalleta,
             Galleta.tipo_galleta_id
-            == TipoGalleta.id_tipo_galleta,  # Unimos con TipoGalleta
+            == TipoGalleta.id_tipo_galleta,
         )
         .filter(DetalleVentaOrden.id_detalleVentaOrden == id_detalle)
         .first()
@@ -71,7 +71,7 @@ def obtener_detalle_orden(id_detalle):
 @login_required
 @role_required("ADMS", "PROD") 
 def parsear_ingredientes(ingredientes_raw):
-    """Convierte los ingredientes a una lista válida"""
+    """Convertir los ingredientes a una lista"""
     if isinstance(ingredientes_raw, str):
         try:
             return json.loads(ingredientes_raw)
@@ -92,7 +92,7 @@ def parsear_ingredientes(ingredientes_raw):
 def procesar_ingredientes(
     receta, cantidad_galletas, cantidad_pedido, presentacion=None, lotes_necesarios=1
 ):
-    """Procesa ingredientes multiplicando por los lotes necesarios"""
+    """Ingredientes multiplicados por los lotes necesarios"""
     print(f"\n=== PROCESAR INGREDIENTES ===")
     print(f"Presentación recibida: {presentacion}")
     print(f"Cantidad pedido: {cantidad_pedido}")
@@ -103,13 +103,13 @@ def procesar_ingredientes(
         if not receta.ingredientes:
             return ingredientes
 
-        # Convertir lotes_necesarios a Decimal para operaciones consistentes
+        # lotes_necesarios a Decimal para operaciones
         lotes_necesarios = Decimal(str(lotes_necesarios))
 
         ingredientes_raw = parsear_ingredientes(receta.ingredientes)
         for ingrediente in ingredientes_raw:
             try:
-                # Convertir la cantidad original a Decimal
+
                 cantidad_original = Decimal(str(ingrediente["cantidad"]))
                 cantidad_total = cantidad_original * lotes_necesarios
 
@@ -117,7 +117,7 @@ def procesar_ingredientes(
                     {
                         "cantidad_necesaria": float(
                             cantidad_total
-                        ),  # Convertir a float para compatibilidad
+                        ),
                         "unidad_original": ingrediente.get("unidad", "unidades"),
                         "presentacion": presentacion,
                         "cantidad_cajas": (
@@ -145,13 +145,12 @@ def procesar_ingredientes(
         print(f"¡ERROR en procesar_ingredientes! {str(e)}")
         raise
 
-    print("=== FIN DE PROCESAR INGREDIENTES ===\n")
     return ingredientes
 
 @login_required
 @role_required("ADMS", "PROD") 
 def verificar_actualizar_estatus_orden(id_orden):
-    """Verifica si la fecha de entrega ha pasado y actualiza el estatus a 3 (LOTE) si es necesario"""
+    """si la fecha de entrega ya paso actualiza el estatus a 3 (LOTE)"""
     try:
         # Obtener la orden con su fecha de entrega
         orden = Orden.query.get(id_orden)
@@ -162,13 +161,12 @@ def verificar_actualizar_estatus_orden(id_orden):
         hoy = datetime.now().date()
         fecha_entrega = orden.fechaEntrega.date()
 
-        # Verificar si la fecha de entrega ha pasado
+        # si la fecha de entrega ha pasado
         if fecha_entrega < hoy:
             print(
                 f"La orden {id_orden} ha pasado su fecha de entrega ({fecha_entrega})"
             )
 
-            # Actualizar todas las solicitudes relacionadas con esta orden
             solicitudes = (
                 db.session.query(SolicitudProduccion)
                 .join(
@@ -180,7 +178,7 @@ def verificar_actualizar_estatus_orden(id_orden):
                     DetalleVentaOrden.orden_id == id_orden,
                     SolicitudProduccion.estatus.in_(
                         [0, 1]
-                    ),  # Solo INACTIVO o TERMINADO
+                    ),
                 )
                 .all()
             )
@@ -193,7 +191,7 @@ def verificar_actualizar_estatus_orden(id_orden):
 
                 detalle_orden, galleta, receta, orden, tipo_galleta = detalle_completo
 
-                solicitud.estatus = 3  # LOTE
+                solicitud.estatus = 3
                 db.session.add(solicitud)
                 print(f"Actualizada solicitud {solicitud.idSolicitud} a LOTE")
 
@@ -203,7 +201,6 @@ def verificar_actualizar_estatus_orden(id_orden):
                     detalle_orden.cantidad, presentacion
                 )
 
-                # Insertar en lote_galletas
                 insertar_lote_galleta(
                     galleta.id_galleta, cantidad_total, solicitud.fechaCaducidad
                 )
@@ -268,7 +265,7 @@ def calcular_produccion_necesaria(
     cantidad_pedido, tipo_presentacion, inventario, cantidad_por_lote
 ):
     """Calcula la producción necesaria usando solo la presentación solicitada"""
-    # Convertir todo a galletas individuales según la presentación
+    # Convertir todo a galletas individuales
     tipo_presentacion = tipo_presentacion.lower()
     
     if tipo_presentacion == "caja de kilo":
@@ -290,10 +287,8 @@ def calcular_produccion_necesaria(
     else:  # Para unidades
         presentaciones_usadas = galletas_cubiertas
 
-    # Calcular el faltante
     faltante = max(0, galletas_solicitadas - galletas_cubiertas)
 
-    # Calcular lotes necesarios
     lotes_necesarios = math.ceil(faltante / cantidad_por_lote) if faltante > 0 else 0
 
     return {
@@ -312,7 +307,7 @@ def calcular_produccion_necesaria(
 @login_required
 @role_required("ADMS", "PROD")
 def obtener_inventario_tabla(nombre_galleta):
-    """Obtiene el inventario en formato de tabla para una galleta específica"""
+    """inventario en formato de tabla para una galleta"""
     query = text(
         """
         SELECT 
@@ -339,7 +334,7 @@ def obtener_inventario_tabla(nombre_galleta):
 @login_required
 @role_required("ADMS", "PROD")
 def procesar_ingredientes_sin_modificacion(receta):
-    """Procesa ingredientes mostrando exactamente las cantidades de la receta"""
+    """ingredientes con cantidades de la receta"""
     ingredientes = []
     try:
         if not receta.ingredientes:
@@ -348,7 +343,6 @@ def procesar_ingredientes_sin_modificacion(receta):
         ingredientes_raw = parsear_ingredientes(receta.ingredientes)
         for ingrediente in ingredientes_raw:
             try:
-                # Mantener todos los datos originales sin cambios
                 ingrediente.update(
                     {
                         "cantidad_necesaria": float(ingrediente["cantidad"]),
@@ -376,10 +370,10 @@ def procesar_ingredientes_sin_modificacion(receta):
 @login_required
 @role_required("ADMS", "PROD")
 def calcular_inventario_galletas(galleta_id):
-    """Calcula el inventario de galletas sumando todos los lotes válidos"""
+    """Calcula el inventario de galletas"""
     inventario = {"unidades": 0, "cajas_kilo": 0, "cajas_700": 0, "total_unidades": 0}
 
-    # Sumar existencias de todos los lotes no vencidos
+    # Sumar existencias de lotes no vencidos
     lotes = LoteGalletas.query.filter(
         LoteGalletas.galleta_id == galleta_id,
         LoteGalletas.existencia > 0,
@@ -401,7 +395,7 @@ def calcular_inventario_galletas(galleta_id):
 @login_required
 @role_required("ADMS", "PROD")
 def obtener_id_galleta_por_orden(id_detalle):
-    """Obtiene el id_galleta a partir del id_detalle usando tu estructura SQL"""
+    """Obtiene el id_galleta a partir del id_detalle"""
     resultado = db.session.execute(
         text(
             """
@@ -415,12 +409,6 @@ def obtener_id_galleta_por_orden(id_detalle):
     ).fetchone()
 
     return resultado[0] if resultado else None
-
-
-
-
-
-
 
 #ruta principal donde muestra los pedidos y llama las funciones anteirores para las fechas y los estatus y agregar a lotes
 @orden_bp.route("/")
@@ -455,7 +443,7 @@ def ordenes():
             .all()
         )
 
-        # Verificamos ordenes vencidas
+        # ordenes vencidas
         ordenes_procesadas = set()
 
         for _, _, _, _, _, id_orden in resultados:
@@ -520,16 +508,16 @@ def ordenes():
 @role_required("ADMS", "PROD") 
 def detalles_receta(id_detalle):
     try:
-        # Obtener datos básicos de la orden
+        # Obtener datos de la orden
         detalle, galleta, receta, orden, tipo_galleta = obtener_detalle_orden(
             id_detalle
         )
         presentacion = tipo_galleta.nombre if tipo_galleta else "Unidad"
 
-        # Obtener inventario en formato de tabla
+        # Obtener inventario
         inventario_tabla = obtener_inventario_tabla(galleta.galleta)
 
-        # Convertir a formato de diccionario para compatibilidad
+        # Convertir a formato de diccionario
         inventario = {
             "unidades": 0,
             "cajas_kilo": 0,
@@ -537,7 +525,6 @@ def detalles_receta(id_detalle):
             "total_unidades": 0,
         }
 
-        # Procesar resultados del inventario
         for item in inventario_tabla:
             tipo = item.tipo_galleta.lower()
             if "unidad" in tipo:
@@ -550,12 +537,12 @@ def detalles_receta(id_detalle):
                 inventario["cajas_700"] = item.total_existencia
                 inventario["total_unidades"] += item.total_existencia * 19
 
-        # Obtener cantidad por lote de la receta (valor por defecto 100 si no está definido)
+        # Obtener cantidad por lote de la receta
         cantidad_por_lote = (
             receta.cantidad_galletas if receta.cantidad_galletas else 100
         )
 
-        # Calcular producción necesaria
+        # producción necesaria
         produccion = calcular_produccion_necesaria(
             detalle.cantidad, presentacion, inventario, cantidad_por_lote
         )
@@ -563,7 +550,7 @@ def detalles_receta(id_detalle):
         # Procesar ingredientes SIN modificar cantidades
         ingredientes = procesar_ingredientes_sin_modificacion(receta)
 
-        # Calcular total de galletas para mostrar
+        # Calcular total de galletas
         if presentacion.lower() == "caja de kilo":
             total_galletas = detalle.cantidad * 27
         elif presentacion.lower() == "caja de 700 gramos":
@@ -621,7 +608,7 @@ def merma_orden():
                         (l.idLote, f"Lote #{l.idLote} (Cad: {l.fechaCaducidad})")
                         for l in lotes
                     ]
-                    form.id_lote.render_kw = {}  # Habilitar select
+                    form.id_lote.render_kw = {}
                 else:
                     form.id_lote.choices = []
                     form.id_lote.render_kw = {"disabled": True}
@@ -633,7 +620,6 @@ def merma_orden():
 
                 return render_template("Orden/Orden_merma.html", form=form)
 
-            # Convertir Decimal
             try:
                 cantidad_decimal = Decimal(str(form.cantidad.data))
             except:
@@ -662,7 +648,6 @@ def merma_orden():
                     flash("El lote seleccionado ya no está disponible", "error")
                     return redirect(url_for("orden.merma_orden"))
 
-                # Convertir a Decimal
                 lote_cantidad = Decimal(str(lote.cantidad))
                 if lote_cantidad < cantidad_decimal:
                     flash("No hay suficiente stock en el lote seleccionado", "error")
@@ -701,7 +686,7 @@ def merma_orden():
     return render_template("Orden/Orden_merma.html", active_page="ordenes", form=form)
 
 
-#ruta para registrar la merma 
+#registrar la merma 
 @orden_bp.route("/registrar_merma", methods=["GET", "POST"])
 @login_required
 @role_required("ADMS", "PROD") 
@@ -783,13 +768,13 @@ def registrar_merma():
     return render_template("Orden/Orden_merma.html", active_page="ordenes", form=form)
 
 
-#ruta para cambiar el estatus y registrar en solicitud de produccion insertando los datos
+#cambiar el estatus y registrar en solicitud de produccion insertando los datos
 @orden_bp.route("/completar/<int:id_detalle>", methods=['POST'])
 @login_required
 @role_required("ADMS", "PROD") 
 def completar_orden(id_detalle):
     try:
-        # Obtener el detalle completo de la orden
+        # detalle completo de la orden
         detalle_completo = obtener_detalle_orden(id_detalle)
         if not detalle_completo:
             flash("Orden no encontrada", "error")
@@ -798,10 +783,10 @@ def completar_orden(id_detalle):
         detalle, galleta, receta, orden, tipo_galleta = detalle_completo
         presentacion = tipo_galleta.nombre.lower() if tipo_galleta else "unidad"
 
-        # Obtener la cantidad_galletas de la receta asociada
+        # cantidad_galletas de la receta asociada
         cantidad_galletas_por_lote = (
             receta.cantidad_galletas if receta else 100
-        )  # Valor por defecto de 100 si no se encuentra receta
+        ) 
 
         # Verificar si ya fue producida
         solicitud_existente = SolicitudProduccion.query.filter(
@@ -816,22 +801,20 @@ def completar_orden(id_detalle):
         # Calcular la cantidad de productos solicitados
         galletas_solicitadas = detalle.cantidad
 
-        # Obtener inventario actual
+        # inventario actual
         inventario = calcular_inventario_galletas(galleta.id_galleta)
 
         # Verificar si hay suficiente inventario
         if inventario["total_unidades"] >= galletas_solicitadas:
             # Si hay suficiente inventario, registrar como producción completada
             try:
-                # Registrar la solicitud de producción como completada
                 solicitud = SolicitudProduccion(
                     detalleorden_id=id_detalle,
-                    estatus=1,  # Terminada
+                    estatus=1,
                     fechaCaducidad=datetime.now().date() + timedelta(days=7),
                 )
                 db.session.add(solicitud)
 
-                # Confirmar la transacción
                 db.session.commit()
 
                 flash(
@@ -845,7 +828,7 @@ def completar_orden(id_detalle):
                 return redirect(url_for("orden.detalles_receta", id_detalle=id_detalle))
 
         else:
-            # Si no hay suficiente inventario, proceder con la producción
+            # Si no hay suficiente inventario
             cantidad_faltante = galletas_solicitadas - inventario["total_unidades"]
 
             if presentacion == "caja de kilo":
@@ -867,17 +850,16 @@ def completar_orden(id_detalle):
                     cantidad_faltante = galletas_solicitadas - cajas_de_700_disponibles
 
             if cantidad_faltante == 0:
-                # Si no falta nada, simplemente se confirma que ya hay suficientes cajas
+                # Si no falta nada
                 flash(f"Ya hay suficientes {presentacion} disponibles.", "success")
             else:
-                # Si falta, producir la cantidad faltante
+                # Si falta
                 try:
-                    # **Nuevo ajuste para unidades: Respetar los lotes completos**
                     if presentacion == "unidad":
-                        # Usar cantidad_galletas de la receta para definir el tamaño del lote
+                        # Usar cantidad_galletas de la receta para definir el lote
                         lote_size = cantidad_galletas_por_lote
 
-                        # Calcular cuántos lotes completos se necesitan
+                        # Calcular lotes necesarios
                         lotes_necesarios = (
                             cantidad_faltante + lote_size - 1
                         ) // lote_size  # Redondear hacia arriba
@@ -887,33 +869,33 @@ def completar_orden(id_detalle):
                             galleta_id=galleta.id_galleta,
                             cantidad=cantidad_a_producir,
                             costo=cantidad_a_producir
-                            * Decimal("1.0"),  # Ajusta el costo según corresponda
+                            * Decimal("1.0"),
                             existencia=cantidad_a_producir,
                             fechaProduccion=datetime.now().date(),
                             fechaCaducidad=datetime.now().date() + timedelta(days=7),
                         )
 
                     elif presentacion == "caja de kilo":
-                        cantidad_a_producir = cantidad_faltante  # No se multiplica la cantidad de galletas producidas
+                        cantidad_a_producir = cantidad_faltante
 
                         lote_galletas = LoteGalletas(
                             galleta_id=galleta.id_galleta,
                             cantidad=cantidad_a_producir,
                             costo=cantidad_a_producir
-                            * Decimal("4.5"),  # Ajusta el costo según corresponda
+                            * Decimal("4.5"),
                             existencia=cantidad_a_producir,
                             fechaProduccion=datetime.now().date(),
                             fechaCaducidad=datetime.now().date() + timedelta(days=7),
                         )
 
                     elif presentacion == "caja de 700 gramos":
-                        cantidad_a_producir = cantidad_faltante  # No se multiplica la cantidad de galletas producidas
+                        cantidad_a_producir = cantidad_faltante
 
                         lote_galletas = LoteGalletas(
                             galleta_id=galleta.id_galleta,
                             cantidad=cantidad_a_producir,
                             costo=cantidad_a_producir
-                            * Decimal("3.2"),  # Ajusta el costo según corresponda
+                            * Decimal("3.2"),
                             existencia=cantidad_a_producir,
                             fechaProduccion=datetime.now().date(),
                             fechaCaducidad=datetime.now().date() + timedelta(days=7),
@@ -921,7 +903,7 @@ def completar_orden(id_detalle):
 
                     db.session.add(lote_galletas)
 
-                    # Registrar la solicitud de producción
+                    # Registrar la solicitud
                     solicitud = SolicitudProduccion(
                         detalleorden_id=id_detalle,
                         estatus=1,  # Terminada
@@ -929,17 +911,17 @@ def completar_orden(id_detalle):
                     )
                     db.session.add(solicitud)
 
-                    # **Corregir aquí**: Sumar la cantidad producida al inventario en la tabla Galleta
-                    galleta.existencia += cantidad_a_producir  # Se usa cantidad_a_producir para las cajas
+                    # Sumar la cantidad producida al inventario en la tabla Galleta
+                    galleta.existencia += cantidad_a_producir
 
-                    # Descontar los insumos necesarios de loteinsumo y de insumos
+                    # Descontar los insumos necesarios
                     ingredientes = procesar_ingredientes(
                         receta, cantidad_galletas_por_lote, cantidad_a_producir
                     )
 
                     for ingrediente in ingredientes:
                         if ingrediente.get("insumo"):
-                            # Descontar el ingrediente de loteinsumo
+                            
                             lote_insumo = (
                                 LoteInsumo.query.join(Insumos)
                                 .filter(Insumos.nombreInsumo == ingrediente["insumo"])
@@ -949,14 +931,13 @@ def completar_orden(id_detalle):
                             if lote_insumo:
                                 lote_insumo.cantidad -= ingrediente["cantidad_necesaria"]
 
-                            # Descontar el ingrediente de la tabla insumos
                             insumo = Insumos.query.filter(
                                 Insumos.nombreInsumo == ingrediente["insumo"]
                             ).first()
 
                             if insumo:
                                 if presentacion in ["caja de kilo", "caja de 700 gramos"]:
-                                    ingrediente["cantidad_necesaria"] *= 2  # Multiplicar por 2 solo los insumos
+                                    ingrediente["cantidad_necesaria"] *= 2
                                 insumo.total -= ingrediente["cantidad_necesaria"]
 
                     db.session.commit()
@@ -976,7 +957,6 @@ def completar_orden(id_detalle):
         return redirect(url_for("orden.ordenes"))
 
     except Exception as e:
-        # Manejo de error general
         flash(f"Error general: {str(e)}", "error")
         return redirect(url_for("orden.ordenes"))
 
@@ -991,11 +971,10 @@ def merma_galleta(galleta_id):
         galleta = Galleta.query.get_or_404(galleta_id)
         form.id_galleta.data = galleta_id
 
-        # CORRECCIÓN: Cambiar filter_by con existencia__gt por filter con expresión estándar
         lote = (
             LoteGalletas.query.filter(
                 LoteGalletas.galleta_id == galleta_id,
-                LoteGalletas.existencia > 0,  # Forma correcta para SQLAlchemy
+                LoteGalletas.existencia > 0,
             )
             .order_by(desc(LoteGalletas.id_lote))
             .first()
@@ -1082,13 +1061,11 @@ def get_lotes_galleta(galleta_id):
 def guardar_merma_galleta():
     form = MermaGalletaform(request.form)
 
-    # Habilitar temporalmente el campo id_lote para validación
     form.id_lote.render_kw = {}
 
-    # Validación manual equivalente a validate_on_submit()
     if request.method == "POST" and form.validate():
         try:
-            # Obtener datos del formulario
+
             lote_id = form.id_lote.data
             cantidad = float(form.cantidad.data)
             galleta_id = form.id_galleta.data
@@ -1117,7 +1094,6 @@ def guardar_merma_galleta():
             lote.existencia -= cantidad
             galleta.existencia -= cantidad
 
-            # Guardar cambios
             db.session.add(nueva_merma)
             db.session.commit()
 
