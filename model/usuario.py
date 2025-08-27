@@ -21,11 +21,11 @@ class Usuario(db.Model):
 
 
     def set_password(self, password):
-        """Encripta la contraseña y la almacena."""
+        """Encripta la contraseña"""
         self.contrasenia = generate_password_hash(password)
 
     def check_password(self, password):
-        """Verifica si la contraseña proporcionada coincide con la almacenada."""
+        """la contraseña proporcionada coincide con la almacenada."""
         return check_password_hash(self.contrasenia, password)
 
     def get_id(self):
