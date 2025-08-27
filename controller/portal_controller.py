@@ -15,7 +15,6 @@ portal_cliente_bp = Blueprint('portal_cliente', __name__,
                             url_prefix='/portal',
                             template_folder='view')
 
-# Configuración
 MODO_PRUEBA = False  # Cambiar a False en producción
 CLIENTE_PRUEBA_ID = 1  # ID del cliente de prueba
 
@@ -57,14 +56,14 @@ def index():
 @login_required
 @role_required('CLIE')
 def portal_cliente():
-    # Obtener el cliente actual (real o de prueba)
+    # Obtener el cliente actual
     cliente = obtener_cliente_actual()
     
     if not cliente:
         flash('No se encontró su perfil de cliente', 'error')
         return redirect(url_for('usuarios.index'))
     
-    # Obtener carrito desde cookies
+    # Obtener carrito
     carrito = get_cliente_carrito(cliente.idCliente)
     
     # Procesar formulario cuando se envía
@@ -82,7 +81,7 @@ def portal_cliente():
     
     from sqlalchemy.orm import joinedload
     
-    # Obtener tipos de galletas para el select
+    # Obtener tipos de galletas
     tipos_galletas = TipoGalleta.query.all()
     
     # Obtener galletas basadas en el filtro o todas si no hay filtro
@@ -105,7 +104,7 @@ def portal_cliente():
                          modo_prueba=MODO_PRUEBA)
 
 def obtener_id_cliente_actual():
-    """Obtiene el ID del cliente actual según el modo de operación"""
+    """Obtiene el ID del cliente actual"""
     if MODO_PRUEBA:
         return CLIENTE_PRUEBA_ID
     
@@ -117,7 +116,7 @@ def obtener_id_cliente_actual():
     return cliente.idCliente if cliente else None
 
 def obtener_cliente_actual():
-    """Obtiene el objeto Cliente actual según el modo de operación"""
+    """Obtiene el objeto Cliente actual"""
     if MODO_PRUEBA:
         return Cliente.query.get(CLIENTE_PRUEBA_ID)
     
