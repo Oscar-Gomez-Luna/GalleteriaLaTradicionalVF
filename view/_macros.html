@@ -89,7 +89,7 @@
 
 {% macro camposNuevosLogin(field, placeholder="", type="text") %}
     <div class="field-container">
-        <!-- Si el campo es un SelectField, lo manejamos de manera especial -->
+        <!-- Si el campo es un SelectField -->
         {% if field.type == "SelectField" %}
             <select name="{{ field.name }}"
                     id="{{ field.id if field.id else field.name }}"
@@ -100,7 +100,7 @@
                     </option>
                 {% endfor %}
             </select>
-        <!-- Si el campo es un RadioField, lo manejamos de manera especial -->
+        <!-- Si el campo es un RadioField-->
         {% elif field.type == "RadioField" %}
             <label>{{ field.label.text if field.label else "Selecciona una opción" }}:</label>
             <div class="radio-options">
@@ -112,7 +112,7 @@
                 {% endfor %}
             </div>
         {% else %}
-            <!-- Para otros tipos de campos, renderizamos directamente -->
+            <!-- Para otros tipos de campos -->
             <input type="{{ type }}"
                    name="{{ field.name }}"
                    id="{{ field.id if field.id else field.name }}"
