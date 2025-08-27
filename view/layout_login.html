@@ -19,7 +19,7 @@
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
-                    <!-- Solo mostramos mensajes que no sean errores de validación -->
+                    
                     {% if message not in ['El nombre de usuario es requerido', 'El correo es requerido', 'El teléfono es requerido', 'La contraseña es requerida'] %}
                         <script>
                             document.addEventListener('DOMContentLoaded', function() {
@@ -40,7 +40,6 @@
         {% endblock %}
     </div>
 
-    <!-- Incluir el script de SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.6/dist/sweetalert2.min.js"></script>
 </body>
 </html>
