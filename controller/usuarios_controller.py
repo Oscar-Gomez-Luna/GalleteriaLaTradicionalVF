@@ -165,7 +165,7 @@ def login():
             else:
                 if usuario:
                     if not usuario.seguridad:
-                        print(f"No existe registro en usuario_seguridad para idUsuario: {usuario.idUsuario}. Creando uno nuevo.")
+                        #print(f"No existe registro en usuario_seguridad para idUsuario: {usuario.idUsuario}. Creando uno nuevo.")
                         seguridad = UsuarioSeguridad(idUsuario=usuario.idUsuario, failed_login_attempts=0)
                         db.session.add(seguridad)
                         db.session.commit()
@@ -218,7 +218,7 @@ def register():
                 )
                 db.session.add(nueva_persona)
                 db.session.commit()
-                print(f"Persona insertada: {nueva_persona.idPersona}")
+                #print(f"Persona insertada: {nueva_persona.idPersona}")
 
                 nuevo_usuario = Usuario(
                     nombreUsuario=form_register.username.data,
@@ -229,7 +229,7 @@ def register():
                 nuevo_usuario.set_password(form_register.password.data)
                 db.session.add(nuevo_usuario)
                 db.session.commit()
-                print(f"Usuario insertado: {nuevo_usuario.idUsuario}")
+                #print(f"Usuario insertado: {nuevo_usuario.idUsuario}")
 
                 nueva_seguridad = UsuarioSeguridad(
                     idUsuario=nuevo_usuario.idUsuario,
@@ -237,7 +237,7 @@ def register():
                     password_last_changed=datetime.now()
                 )
                 db.session.add(nueva_seguridad)
-                print(f"Seguridad insertada: {nueva_seguridad.idUsuarioSeguridad}")
+                #print(f"Seguridad insertada: {nueva_seguridad.idUsuarioSeguridad}")
 
                 codigo_verificacion = secrets.token_urlsafe(16)
                 nueva_verificacion = VerificacionUsuario(
@@ -247,7 +247,7 @@ def register():
                     created_at=datetime.now()
                 )
                 db.session.add(nueva_verificacion)
-                print(f"Verificación insertada: {nueva_verificacion.idVerificacion}")
+                #print(f"Verificación insertada: {nueva_verificacion.idVerificacion}")
 
                 nuevo_cliente = Cliente(
                     idPersona=nueva_persona.idPersona,
@@ -271,7 +271,7 @@ def register():
             flash(f'Error al registrar: {str(e)}', 'error')
     else:
         print("Formulario no válido. Errores:", form_register.errors)
-    print(f"Intentando renderizar login.html desde: {os.path.join(TEMPLATE_DIR, 'login.html')}")
+    #print(f"Intentando renderizar login.html desde: {os.path.join(TEMPLATE_DIR, 'login.html')}")
     return render_template('login.html', form_login=form_login, form_register=form_register)
 
 @usuarios_bp.route('/change_password', methods=['GET', 'POST'])
@@ -344,7 +344,7 @@ def test_insert():
         )
         db.session.add(nueva_persona)
         db.session.commit()
-        print("Inserción de prueba exitosa")
+        #print("Inserción de prueba exitosa")
         return "Inserción OK"
     except Exception as e:
         db.session.rollback()
