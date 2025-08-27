@@ -34,19 +34,16 @@ def galletas():
     mostrar_modal = False
     merma_form = MermaGalletaForm()
 
-    # Mostrar modal si se pidió desde el botón
+    # Mostrar modal
     if request.method == 'POST' and 'abrir_modal_galleta' in request.form:
         mostrar_modal = True
 
-    # Cargar recetas activas
     recetas = Receta.query.filter_by(estatus=1).all()
     nueva_form.receta_id.choices = [(r.idReceta, r.nombreReceta) for r in recetas]
 
-    # Galletas tipo Unidad con existencia (para el modal)
     galletas_con_existencia = obtener_galletas_unidad_con_existencia()
     merma_form.galleta_id.choices = [(g.id_galleta, g.galleta) for g in galletas_con_existencia]
 
-    # Subconsulta para tabla de presentaciones
     subquery = db.session.query(
         LoteGalletas.galleta_id,
         func.sum(LoteGalletas.existencia).label("total_existencia")
@@ -72,8 +69,7 @@ def galletas():
             'costo': g.costo,
             'existencia': g.existencia
         })
-    # Consultar existencia de galletas por tipo: "Caja de Kilo"
-    # Para Caja de Kilo
+    # Consultar existencia "Caja de Kilo"
     caja_kilo = db.session.query(
         Galleta.galleta.label("nombre_galleta"),
         TipoGalleta.costo,
@@ -91,7 +87,7 @@ def galletas():
             'existencia': g.existencia
         })
 
-    # Repite igual para 700 gramos:
+    # 700 gramos:
     caja_700 = db.session.query(
         Galleta.galleta.label("nombre_galleta"),
         TipoGalleta.costo,
@@ -120,7 +116,7 @@ def galletas():
         galletas_unidad=galletas_unidad,
         galletas_caja_kilo=galletas_caja_kilo,
         galletas_caja_medio_kilo=galletas_caja_medio_kilo,
-        galletas=galletas_con_existencia,  # para el select del modal
+        galletas=galletas_con_existencia,
         active_page="galletas",
         usuario = current_user
     )
@@ -159,7 +155,6 @@ def agregar_galleta():
 def merma_galleta():
     form = MermaGalletaForm()
 
-    # Cargar galletas válidas al select del formulario
     galletas_con_existencia = obtener_galletas_unidad_con_existencia()
     form.galleta_id.choices = [(g.id_galleta, g.galleta) for g in galletas_con_existencia]
 
