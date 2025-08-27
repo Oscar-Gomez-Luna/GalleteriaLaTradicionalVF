@@ -5,15 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cambiar Contraseña - La Tradicional</title>
-    <!-- Incluir Bootstrap CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
-    <!-- Incluir tus estilos personalizados -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos_LAYOUT_galleria.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
     <style>
         body {
-            background-color: #F5F5DC; /* Fondo beige claro */
-            color: #5C4033; /* Texto marrón oscuro */
+            background-color: #F5F5DC;
+            color: #5C4033;
             font-family: 'Arial', sans-serif;
             display: flex;
             justify-content: center;
@@ -22,7 +20,7 @@
             margin: 0;
         }
         .change-password-container {
-            background-color: #FFFFFF; /* Fondo blanco para el formulario */
+            background-color: #FFFFFF;
             padding: 2rem;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -35,7 +33,7 @@
             margin-bottom: 1.5rem;
         }
         .change-password-container h2 {
-            color: #5C4033; /* Título marrón oscuro */
+            color: #5C4033;
             margin-bottom: 1.5rem;
         }
         .form-group {
@@ -48,12 +46,12 @@
         }
         .form-group input {
             width: 100%;
-            border: 1px solid #8B5A2B; /* Borde marrón medio */
+            border: 1px solid #8B5A2B;
             border-radius: 5px;
             font-size: 1rem;
         }
         .btn-primary {
-            background-color: #8B5A2B; /* Botón marrón medio */
+            background-color: #8B5A2B;
             border-color: #8B5A2B;
             color: #FFFFFF;
             padding: 0.5rem 1rem;
@@ -62,13 +60,13 @@
             transition: background-color 0.3s;
         }
         .btn-primary:hover {
-            background-color: #5C4033; /* Marrón más oscuro al pasar el mouse */
+            background-color: #5C4033;
             border-color: #5C4033;
         }
         .alert {
             margin-bottom: 1rem;
             color: #5C4033;
-            background-color: #FFF5E6; /* Fondo de alerta en tono claro */
+            background-color: #FFF5E6;
             border-color: #8B5A2B;
         }
         .back-link {
@@ -85,7 +83,7 @@
 </head>
 <body>
     <div class="change-password-container">
-        <!-- Incluir el logo -->
+        <!-- logo -->
         <img src="{{ url_for('static', filename='img/LOGO DEL GALLETAS.png') }}" alt="Logo La Tradicional">
         <h2>Cambiar Contraseña</h2>
         <!-- Mensajes flash -->
@@ -99,7 +97,7 @@
 
         <!-- Formulario de cambio de contraseña -->
         <form method="POST" action="{{ url_for('usuarios.change_password') }}">
-            <!-- Incluir el token CSRF -->
+
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <div class="form-group">
                 <label for="current_password">Contraseña Actual:</label>
@@ -120,7 +118,6 @@
         <a href="{{ url_for('dashboard.dashboard') }}" class="back-link">Volver al Dashboard</a>
     </div>
 
-    <!-- Incluir Bootstrap JS y dependencias -->
     <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 </body>
 </html>
