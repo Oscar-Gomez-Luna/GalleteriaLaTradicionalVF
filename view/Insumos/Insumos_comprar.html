@@ -159,19 +159,16 @@
                         throw new Error('Formato de unidades inválido');
                     }
                     
-                    // Guardar el valor seleccionado actual
                     const currentValue = unidadSelect.value;
                     
                     unidadSelect.innerHTML = data.unidades
                         .map(u => `<option value="${u}">${u}</option>`)
                         .join('');
                     
-                    // Restaurar el valor seleccionado si todavía existe
                     if (currentValue && data.unidades.includes(currentValue)) {
                         unidadSelect.value = currentValue;
                     }
                     
-                    // Actualizar el estado del campo peso
                     manejarCambioUnidad();
                 })
                 .catch(error => {
@@ -180,7 +177,6 @@
                 });
         }
     
-        // Event listeners
         unidadSelect.addEventListener('change', manejarCambioUnidad);
         insumoSelect.addEventListener('change', function() {
             actualizarUnidades(this.value);
@@ -190,7 +186,7 @@
         if (insumoSelect.value) {
             actualizarUnidades(insumoSelect.value);
         } else {
-            manejarCambioUnidad(); // Aplicar al cargar la página
+            manejarCambioUnidad();
         }
     });
     </script>
