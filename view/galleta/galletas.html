@@ -142,7 +142,7 @@
         <span class="close-mermas" onclick="cerrarModal('modalMermasGalleta')">&times;</span>
         <h2 style="text-align: center;">Merma de Galletas</h2>
 
-        <!-- Presentación dinámica (opcional) -->
+        <!-- Presentación dinámica -->
         <p id="presentacionTexto" style="text-align: center; font-weight: bold; margin-bottom: 10px;"></p>
 
         <form method="POST" action="{{ url_for('galletas.merma_galleta') }}" id="mermaFormGalletas">
@@ -214,7 +214,7 @@
     </div>
 
 
-        <!-- Botón centrado para agregar galleta -->
+        <!-- Botón para agregar galleta -->
         <div class="custom-extra-section">
             <div class="custom-button-container justify-content-center">
                 <form method="POST" action="{{ url_for('galletas.galletas') }}">
@@ -245,7 +245,7 @@
                 texto.innerText = '';
             }
         
-            // Asignar fecha de hoy en el campo fecha
+            // fecha de hoy en el campo fecha
             const fechaInput = document.getElementById('fecha');
             const hoy = new Date().toISOString().split('T')[0]; // formato yyyy-mm-dd
             fechaInput.value = hoy;
@@ -254,7 +254,7 @@
         function cerrarModal(id) {
             document.getElementById(id).style.display = 'none';
         }
-        // Lógica para ocultar mensajes automáticamente
+        // ocultar mensajes automáticamente
         const messages = document.querySelectorAll('.auto-hide');
         messages.forEach(function(message) {
             setTimeout(function() {
@@ -262,8 +262,8 @@
                 message.style.opacity = '0';
                 setTimeout(function() {
                     message.remove();
-                }, 500); // Espera a que termine la transición antes de eliminar
-            }, 5000); // 5 segundos
+                }, 500); //termina la transición antes de eliminar
+            }, 5000);
         });
         </script>
         
