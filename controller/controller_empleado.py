@@ -111,7 +111,7 @@ def registrar_empleado():
             contrasenia = f"{ap_materno}{nombre}12.".capitalize()
             contrasenia_hash = generate_password_hash(contrasenia)
 
-            # Creación de la persona
+            # crea la persona
             persona = Persona(
                 apPaterno=empleado_class.apPaterno.data,
                 apMaterno=empleado_class.apMaterno.data,
@@ -129,7 +129,7 @@ def registrar_empleado():
             db.session.commit()
             ultimo_id_persona = persona.idPersona
 
-            # Creación de usuario
+            # crea el usuario
             usuario = Usuario(
                 nombreUsuario=nombre_usuario,
                 contrasenia=contrasenia_hash,
@@ -140,7 +140,7 @@ def registrar_empleado():
             db.session.commit()
             ultimo_id_usuario = usuario.idUsuario
 
-            # Creación de empleado
+            # crea el empleado
             empleado = Empleado(
                 puesto=puesto,
                 curp=empleado_class.curp.data,
@@ -155,7 +155,7 @@ def registrar_empleado():
 
             flash('Empleado registrado correctamente.', 'success')
 
-            # Log de auditoría: quién registró al empleado
+            # Log de auditoria para saber quien registro al empleado
             log_auditoria(f"Registró un nuevo empleado: ID {empleado.idEmpleado}, NombreUsuario {usuario.nombreUsuario}")
 
             return redirect(url_for('administracion.usuario.empleados'))
@@ -199,7 +199,6 @@ def modificar_empleado():
         return redirect(url_for('administracion.usuario.empleados'))
     
     if request.method == 'GET':
-        # Cargar datos en el formulario
         empleado_class.nombre.data = empleado.persona.nombre
         empleado_class.apPaterno.data = empleado.persona.apPaterno
         empleado_class.apMaterno.data = empleado.persona.apMaterno
@@ -249,7 +248,7 @@ def modificar_empleado():
             db.session.commit()
             flash("Empleado actualizado correctamente", "success")
 
-            # Log de auditoría: quién modificó al empleado
+            # Log de auditoría para saber quien modificó al empleado
             log_auditoria(f"Modificó el empleado: ID {empleado.idEmpleado}, NombreUsuario {empleado.usuario.nombreUsuario}")
 
             return redirect(url_for('administracion.usuario.empleados'))
