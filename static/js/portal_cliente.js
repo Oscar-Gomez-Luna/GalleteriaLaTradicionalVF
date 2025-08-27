@@ -166,7 +166,7 @@ function limpiarCarrito() {
     }
 }
 
-// Hacer funciones accesibles globalmente
+//funciones accesibles globalmente
 window.cargarGalletas = cargarGalletas;
 window.agregarAlCarrito = agregarAlCarrito;
 window.eliminarDelCarrito = eliminarDelCarrito;
