@@ -7,7 +7,7 @@ function cerrarModalOrdenes() {
     document.getElementById('modalOrdenes').style.display = 'none';
 }
 
-// Lógica para ocultar mensajes automáticamente
+// ocultar mensajes automáticamente
 const messages = document.querySelectorAll('.auto-hide');
 messages.forEach(function(message) {
     setTimeout(function() {
@@ -15,6 +15,6 @@ messages.forEach(function(message) {
         message.style.opacity = '0';
         setTimeout(function() {
             message.remove();
-        }, 500); // Espera a que termine la transición antes de eliminar
-    }, 5000); // 5 segundos
+        }, 500); // termina la transición antes de eliminar
+    }, 5000);
 });
