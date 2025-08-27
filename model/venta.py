@@ -11,7 +11,7 @@ class Venta(db.Model):
     ticket = db.Column(db.Text)
     tipoVenta = db.Column(db.String(50), nullable=False)    
 
-    # Relación con detalleVentaGalletas (uno a muchos)
+    # Relación con detalleVentaGalletas
     detalles = db.relationship('DetalleVentaGalletas', backref='venta', lazy=True)
 
     def __repr__(self):
