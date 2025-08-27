@@ -17,10 +17,9 @@ from forms.insumosMerma_form import InsumosMerma
 from forms.comprarInsumos_form import ComprarInsumos
 
 
-# Crear el Blueprint para insumos
 insumo_bp = Blueprint("insumo", __name__, url_prefix="/insumos")
 
-#Metodo para decscontar los lotes caducados
+#Metodo para descontar los lotes caducados
 @login_required
 @role_required("ADMS", "PROD")
 def descontar_lotes_caducados():
@@ -37,7 +36,7 @@ def descontar_lotes_caducados():
             insumo = lote.insumo
             insumo.total -= lote.cantidad
             
-            # Poner la cantidad del lote a 0
+            # Poner la cantidad del lote a 0 si se caduco ya
             lote.cantidad = 0
             
             db.session.commit()
@@ -51,7 +50,7 @@ def descontar_lotes_caducados():
 @login_required
 @role_required("ADMS", "PROD")
 def insumos():
-    # Primero verificamos para descontar los lotes caducados
+
     descontar_lotes_caducados()
 
     if request.method == "POST":
@@ -67,7 +66,7 @@ def insumos():
 
     alertas = []
 
-    # 1. Alertas insumos por terminarse
+    # Alertas insumos por terminarse
     for insumo in lista_insumos:
         unidad = insumo.unidad.lower()
 
@@ -80,7 +79,7 @@ def insumos():
                 f"{insumo.nombreInsumo} está por terminarse (Quedan {insumo.total} unidades)"
             )
 
-    # 2. Alertas lotes caducar (7 días)
+    # Alertas lotes caducar (7 dia)
     fecha_limite_caducidad = datetime.now().date() + timedelta(days=7)
     lotes_por_caducar = (
         LoteInsumo.query.filter(
@@ -98,7 +97,7 @@ def insumos():
             f"Lote de {lote.insumo.nombreInsumo} caduca en {dias_restantes} días ({lote.fechaCaducidad.strftime('%d/%m/%Y')})"
         )
 
-    # 3. Alertas lotes caducados ya
+    # 3. Alertas lotes caducados
     lotes_caducados_hoy = LoteInsumo.query.filter(
         LoteInsumo.fechaCaducidad == datetime.now().date(),
         LoteInsumo.cantidad == 0
@@ -109,7 +108,7 @@ def insumos():
             f"Lote de {lote.insumo.nombreInsumo} caduco hoy y fue descontado del inventario"
         )
 
-    # Datos para el resumen de pagos
+    # Datos para pagos
     fecha_limite = datetime.now() - timedelta(days=7)
 
     compras_semana = (
@@ -150,7 +149,7 @@ def insumos():
         usuario = current_user
     )
 
-#ruta para registrar un nuevo insumo que trae el nombre del proveedor
+#registrar un nuevo insumo que trae el nombre del proveedor
 @insumo_bp.route("/registrar", methods=["GET", "POST"])
 @login_required
 @role_required("ADMS", "PROD")
@@ -158,11 +157,10 @@ def registrar_insumo():
     create_form = RegistrarInsumo(request.form)
 
     try:
-        # proveedores activos
+        # solo proveedor activos
         proveedor = Proveedor.query.filter_by(estatus=1).all()
         proveedor_options = [(p.id_proveedor, p.empresa) for p in proveedor]
 
-        # Opciones para los select
         create_form.id_proveedor.choices = proveedor_options
         create_form.unidad.choices = [
             ("Gramos", "Gramos"),
@@ -176,10 +174,10 @@ def registrar_insumo():
                 marca=create_form.marca.data,
                 unidad=create_form.unidad.data,
                 id_proveedor=create_form.id_proveedor.data,
-                total=0.0,  # Valor por defecto
+                total=0.0,
             )
 
-            # Añadir a la sesion que tenemos y guardar
+            # Añadir a la sesion y guardar
             db.session.add(nuevo_insumo)
             db.session.commit()
 
@@ -206,12 +204,12 @@ def registrar_insumo():
     )
 
 
-#abre lo de la ruta de comprar y guarda en la tabla temporal
+#comprar y guarda en la tabla temporal
 @insumo_bp.route("/comprar", methods=["GET", "POST"])
 @login_required
 @role_required("ADMS", "PROD")
 def comprar_insumos():
-    # Configuración inicial de unidades
+
     UNIDADES = [
         ("Kilogramos", "Kilogramos"),
         ("Gramos", "Gramos"),
@@ -220,15 +218,12 @@ def comprar_insumos():
         ("Unidad", "Unidad"),
     ]
     
-    # Obtener proveedores activos
     proveedores_activos = [(p.id_proveedor, p.empresa) for p in Proveedor.query.filter_by(estatus=1).all()]
     
-    # Inicializar formulario
     form = ComprarInsumos(request.form if request.method == "POST" else None)
     form.id_proveedor.choices = proveedores_activos
     form.unidad.choices = UNIDADES
 
-    # Validadores originales
     original_validators = {
         "unidad": form.unidad.validators.copy(),
         "cantidad": form.cantidad.validators.copy(),
@@ -241,11 +236,10 @@ def comprar_insumos():
     if "compras" not in session:
         session["compras"] = []
 
-    # Manejar parámetros GET o datos del formulario
     proveedor_id = request.args.get('proveedor_id', form.id_proveedor.data)
     insumo_id = request.args.get('insumo_id', form.id_insumo.data)
     
-    # Cargar insumos del proveedor seleccionado (si existe)
+    # Cargar insumos del proveedor
     if proveedor_id:
         form.id_proveedor.data = proveedor_id
         insumos_proveedor = Insumos.query.filter_by(id_proveedor=proveedor_id).order_by(Insumos.nombreInsumo).all()
@@ -254,9 +248,8 @@ def comprar_insumos():
         if insumo_id:
             form.id_insumo.data = insumo_id
 
-    # Manejar solicitudes POST
     if request.method == "POST":
-        # Cargar insumos del proveedor seleccionado
+
         if form.id_proveedor.data:
             form.id_insumo.choices = [
                 (i.id_insumo, i.nombreInsumo)
@@ -266,14 +259,13 @@ def comprar_insumos():
             ]
 
         if "filtrar_proveedor" in request.form:
-            # Desactivar validaciones temporales
+
             form.unidad.validators = []
             form.cantidad.validators = []
             form.peso.validators = []
             form.precio.validators = []
             form.id_insumo.validators = []
 
-            # Validar proveedor
             if form.id_proveedor.validate(form):
                 flash("Insumos del proveedor cargados correctamente", "info")
 
@@ -289,8 +281,7 @@ def comprar_insumos():
                 try:
                     insumo = Insumos.query.get(form.id_insumo.data)
                     proveedor = Proveedor.query.get(form.id_proveedor.data)
-                    
-                    # Validar unidad compatible
+
                     CONVERSIONES = {
                         'Gramos': ['Gramos', 'Kilogramos'],
                         'Kilogramos': ['Kilogramos', 'Gramos'],
@@ -302,26 +293,25 @@ def comprar_insumos():
                     if form.unidad.data not in CONVERSIONES.get(insumo.unidad, [insumo.unidad]):
                         flash("Unidad incompatible con el insumo seleccionado", "danger")
                         return redirect(url_for('insumo.comprar_insumos'))
-                    
-                    # Procesar cantidades con cálculo completo
+                        
                     cantidad = float(form.cantidad.data)
                     precio = float(form.precio.data)
                     peso = float(form.peso.data)
                     
-                    # Conversión de unidades con multiplicación por cantidad
+                    # Conversión de unidades con multiplicacion por cantidad
                     if form.unidad.data == "Kilogramos":
-                        peso_total = (peso * 1000) * cantidad  # Convertir a gramos y multiplicar por cantidad
+                        peso_total = (peso * 1000) * cantidad
                         unidad_almacen = "Gramos"
                     elif form.unidad.data == "Litros":
-                        peso_total = (peso * 1000) * cantidad  # Convertir a mililitros y multiplicar por cantidad
+                        peso_total = (peso * 1000) * cantidad
                         unidad_almacen = "Mililitros"
                     else:
-                        peso_total = peso * cantidad  # Multiplicar directamente por cantidad
+                        peso_total = peso * cantidad
                         unidad_almacen = form.unidad.data
 
                     precio_total = cantidad * precio
 
-                    # Crear objeto compra
+                    # Crear objeto
                     compra = {
                         "id_insumo": insumo.id_insumo,
                         "insumo": insumo.nombreInsumo,
@@ -341,16 +331,14 @@ def comprar_insumos():
                     session.modified = True
                     flash(f"{insumo.nombreInsumo} agregado al carrito", "success")
                     
-                    # Guardar valores proveedor e insumo
                     proveedor_id = form.id_proveedor.data
                     insumo_id = form.id_insumo.data
                     
-                    # Limpiar campos específicos
                     form.cantidad.data = ''
                     form.peso.data = ''
                     form.precio.data = ''
                     
-                    # Recargar página manteniendo proveedor e insumo
+                    # Recargar pag manteniendo proveedor e insumo
                     return redirect(url_for('insumo.comprar_insumos', 
                                         proveedor_id=proveedor_id, 
                                         insumo_id=insumo_id))
@@ -361,9 +349,9 @@ def comprar_insumos():
                 flash("Corrige los errores en el formulario", "danger")
 
         elif "comprar" in request.form and session["compras"]:
-            # Procesar todas las compras del carrito
+
             try:
-                # Crear registro de compra principal
+
                 nueva_compra = ComprasRealizadas(
                     id_proveedor=session["compras"][0]["proveedor_id"],
                     precio=sum(item["precio_total"] for item in session["compras"]),
@@ -374,9 +362,8 @@ def comprar_insumos():
                 db.session.add(nueva_compra)
                 db.session.flush()
 
-                # Procesar cada item
                 for item in session["compras"]:
-                    # Detalle de compra
+
                     detalle = DetalleCompra(
                         compra_id=nueva_compra.id_comprasRealizadas,
                         descripcion={
@@ -392,7 +379,6 @@ def comprar_insumos():
                     )
                     db.session.add(detalle)
 
-                    # Crear lote
                     nuevo_lote = LoteInsumo(
                         id_insumo=item["id_insumo"],
                         fechaIngreso=datetime.now().date(),
@@ -414,7 +400,7 @@ def comprar_insumos():
                 db.session.rollback()
                 flash(f"Error al registrar compra: {str(e)}", "danger")
 
-    # Restaurar validadores antes de renderizar
+    # Restaurar validadores antes de recargar
     form.unidad.validators = original_validators["unidad"]
     form.cantidad.validators = original_validators["cantidad"]
     form.peso.validators = original_validators["peso"]
@@ -446,8 +432,6 @@ def get_unidades(insumo_id):
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 500
 
-
-#guarda lo de la tabla temporal en la base de datos
 @insumo_bp.route("/comprar/lista", methods=["GET", "POST"])
 @login_required
 @role_required("ADMS", "PROD")
@@ -464,7 +448,6 @@ def insumos_comprar():
     ]
     form.unidad.choices = UNIDADES
 
-    # Cargar proveedor
     form.id_proveedor.choices = [
         (p.id_proveedor, p.empresa) for p in Proveedor.query.filter_by(estatus=1).all()
     ]
@@ -489,7 +472,6 @@ def insumos_comprar():
                 ]
                 flash("Insumos del proveedor cargados", "info")
 
-        # Agregar al carrito
         elif "guardar_compra" in request.form and form.validate():
             try:
                 proveedor = Proveedor.query.get(form.id_proveedor.data)
@@ -498,7 +480,6 @@ def insumos_comprar():
                 precio_unitario = float(form.precio.data)
                 peso = float(form.peso.data)
 
-                # Conversion
                 if form.unidad.data == "Kilogramos":
                     peso_total = peso * 1000
                 elif form.unidad.data == "Litros":
@@ -508,7 +489,6 @@ def insumos_comprar():
 
                 precio_total = cantidad * precio_unitario
 
-                # Agregar compra al carrito
                 compra = {
                     "id_insumo": insumo.id_insumo,
                     "insumo": insumo.nombreInsumo,
@@ -543,7 +523,6 @@ def insumos_comprar():
                     db.session.add(nueva_compra)
                     db.session.flush()
 
-                    # Registrar detalles
                     for item in session["compras"]:
                         detalle = DetalleCompra(
                             descripcion={
@@ -574,7 +553,7 @@ def insumos_comprar():
         active_page="insumos",
     )
 
-#ruta para limpiar el formulario de compra
+#limpiar el formulario
 @insumo_bp.route("/comprar/limpiar", methods=["GET", "POST"])
 @login_required
 @role_required("ADMS", "PROD")
@@ -585,7 +564,7 @@ def limpiar_compras():
     flash("Lista de compras limpiada correctamente", "success")
     return redirect(url_for("insumo.comprar_insumos"))
 
-#ruta que elimina el insumo a comprar de la tabla temporal
+#elimina el insumo a comprar de la tabla temporal
 @insumo_bp.route("/comprar/eliminar/<int:index>", methods=["POST"])
 @login_required
 @role_required("ADMS", "PROD")
@@ -597,24 +576,21 @@ def eliminar_compra(index):
             flash("Compra eliminada correctamente", "success")
     return redirect(url_for("insumo.comprar_insumos"))
 
-#abre la ruta y busca el orden de compra para que se vea la tabla con lo que se compro
+#busca el orden de compra para que se vea la tabla con lo que se compro
 @insumo_bp.route("/comprados", methods=["GET", "POST"])
 @insumo_bp.route("/comprados/<numero_orden>", methods=["GET"])
 @login_required
-@role_required("ADMS", "PROD")  # Nueva ruta para recibir el número de orden
+@role_required("ADMS", "PROD")  # recibir el número de orden
 def comprados_insumos(numero_orden=None):
     form = OrdenCompraForm(request.form if request.method == "POST" else None)
     
-    # Si viene número de orden por URL (GET)
     if numero_orden:
-        form.numero_orden.data = numero_orden  # Autocompletar el formulario
+        form.numero_orden.data = numero_orden
         return procesar_busqueda_orden(form)
     
-    # Si es POST (búsqueda manual)
     if request.method == "POST":
         return procesar_busqueda_orden(form)
     
-    # GET sin parámetros (formulario vacío)
     return render_template(
         "Insumos/Insumos_comprados.html",
         form=form,
@@ -658,7 +634,7 @@ def procesar_busqueda_orden(form):
         active_page="insumos",
     )
 
-#ruta para registrar y modificar los insumos que se compraron
+#registrar y modificar los insumos
 @insumo_bp.route("/registrar-compra", methods=["POST"])
 @login_required
 @role_required("ADMS", "PROD")
@@ -726,7 +702,6 @@ def registrar_insumos():
             "Insumos registrados correctamente y orden marcada como recibida", "success"
         )
 
-        # Cambiar para redirigir pag. principal
         return redirect(url_for("insumo.insumos"))
 
     except Exception as e:
@@ -734,7 +709,7 @@ def registrar_insumos():
         flash(f"Error al registrar insumos: {str(e)}", "danger")
         return redirect(url_for("insumo.comprados_insumos"))
 
-#abre la ruta de merma dependiendo del id del insumo que esta en la tabla
+#merma dependiendo del id del insumo que esta en la tabla
 @insumo_bp.route("/merma/registrar/<int:id_insumo>", methods=["GET", "POST"])
 @login_required
 @role_required("ADMS", "PROD")
