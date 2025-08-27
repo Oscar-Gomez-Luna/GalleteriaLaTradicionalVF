@@ -13,13 +13,12 @@ class GalletaForm(FlaskForm):
     submit = SubmitField('Registrar Galleta')
 
 
-# forms.py
 class NuevaGalletaForm(FlaskForm):
     receta_id = SelectField('Receta', coerce=int, validators=[DataRequired()])
     nombre_galleta = StringField('Nombre de la Galleta', validators=[DataRequired(), Length(min=3, max=100)])
     submit = SubmitField('Agregar')
 
-# Formulario para tipo de galleta (opcional si lo necesitas)
+# Formulario para tipo de galleta
 class TipoGalletaForm(FlaskForm):
     nombre = StringField('Nombre del Tipo', validators=[DataRequired(), Length(min=3, max=50)])
     costo = DecimalField('Costo por Tipo', validators=[DataRequired(), NumberRange(min=0.01)], places=2)
@@ -36,7 +35,7 @@ class RecetaForm(FlaskForm):
 
 class MermaGalletaForm(FlaskForm):
     galleta_id = SelectField('Galleta', coerce=int, validators=[DataRequired()])  # NUEVO CAMPO
-    lote_id = HiddenField()  # CAMBIO: de SelectField a HiddenField
+    lote_id = HiddenField() 
     cantidad = IntegerField('Cantidad de Merma', validators=[DataRequired(), NumberRange(min=1)])
     tipo_merma = SelectField('Tipo de Merma', choices=[
         ('producción', 'Durante producción'),
