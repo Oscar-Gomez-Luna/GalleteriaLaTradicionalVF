@@ -83,7 +83,7 @@ def send_email(to, subject, body):
         return False
 
 def verify_recaptcha(recaptcha_response):
-    url = 'https://www.google.com/recaptcha/api/siteverify'
+    url = 'INGRESA LA API DE reCAPTCHA DE GOOGLE'
     payload = {
         'secret': RECAPTCHA_SECRET_KEY,
         'response': recaptcha_response
