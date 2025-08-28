@@ -24,7 +24,7 @@ En cuanto a las areas encargadas por estudiante son:
     * Errores.
     * Auditoria.
 
-# [Carlos Lopez](https://github.com/nombre-de-usuario)
+# [Carlos Lopez](https://github.com/carlosraul9)
   * **Login:**
     * *Seguridad de inicio de sesión:*
       * Captcha.
@@ -52,7 +52,7 @@ En cuanto a las areas encargadas por estudiante son:
   * **Pagina de error 404.**
   * **Home principal.**
 
-# [Yael Lopez](https://github.com/nombre-de-usuario)
+# [Yael Lopez](https://github.com/IDGS-901-22001379)
   * **Producción:**
     * Empaquetar galletas dependiendo su presentación.
     * Alertas de preparación proximas a terminarse.
