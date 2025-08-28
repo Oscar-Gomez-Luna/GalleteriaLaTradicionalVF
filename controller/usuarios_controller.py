@@ -28,7 +28,7 @@ print(f"Template folder configurado como: {TEMPLATE_DIR}")
 usuarios_bp = Blueprint('usuarios', __name__, template_folder=TEMPLATE_DIR)
 
 # Configuración
-RECAPTCHA_SECRET_KEY = '6Lfzv_gqAAAAALxgoUOobpOFldn0VikXsHcuoGRl'
+RECAPTCHA_SECRET_KEY = 'INGRESA TU CLAVE SECCRETA'
 UNSAFE_PASSWORDS = [
     'password123',
     '12345678',
@@ -36,7 +36,7 @@ UNSAFE_PASSWORDS = [
     'abc12345',
     'letmein123'
 ]
-SCOPES = ['https://www.googleapis.com/auth/gmail.send']
+SCOPES = ['INGRESA TU API PARA MANDAR LOS CORREOS DE VERIFICACION (DE PREFENCIA LA DE GOOGLE)']
 CREDENTIALS_FILE = 'credentials.json'
 
 def validate_password(password):
