@@ -27,7 +27,8 @@ TEMPLATE_DIR = os.path.join(BASE_DIR, '..', 'view', 'usuarios')
 print(f"Template folder configurado como: {TEMPLATE_DIR}")
 usuarios_bp = Blueprint('usuarios', __name__, template_folder=TEMPLATE_DIR)
 
-# Configuración
+# Configuración 
+#NUEVA CLAVE SECRETA
 RECAPTCHA_SECRET_KEY = 'INGRESA TU CLAVE SECCRETA'
 UNSAFE_PASSWORDS = [
     'password123',
@@ -36,6 +37,7 @@ UNSAFE_PASSWORDS = [
     'abc12345',
     'letmein123'
 ]
+#NUEVA API AQUI
 SCOPES = ['INGRESA TU API PARA MANDAR LOS CORREOS DE VERIFICACION (DE PREFENCIA LA DE GOOGLE)']
 CREDENTIALS_FILE = 'credentials.json'
 
@@ -82,6 +84,7 @@ def send_email(to, subject, body):
         print(f'Error inesperado al enviar el correo: {e}')
         return False
 
+#NUEVA API AQUI
 def verify_recaptcha(recaptcha_response):
     url = 'INGRESA LA API DE reCAPTCHA DE GOOGLE'
     payload = {
