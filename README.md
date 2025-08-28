@@ -2,6 +2,8 @@
 
 Este proyecto fue elaborado por 5 estudiantes de desarrollo de software dividiendo de esta manera el proyecto, donde cada uno se hizo responsable de su area encargada, donde cada uno realizo sus archivos de controladores en pyhton usando flask, vistas (HTML y CSS), forms, orm y uso de Javascript.
 
+El contenido de archivos sencibles fue eliminado, remplazado por plantillas o instrucciones para que se pueda ejecutar de manera correcta, ademas de indicar que se debe de instalar para poder hacer funcionar este proyecto.
+
 En cuanto a las areas encargadas por estudiante son:
 
 # Oscar Gomez
