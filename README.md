@@ -2,11 +2,11 @@
 
 Este proyecto fue elaborado por 5 estudiantes de desarrollo de software dividiendo de esta manera el proyecto, donde cada uno se hizo responsable de su area encargada, donde cada uno realizo sus archivos de controladores en pyhton usando flask, vistas (HTML y CSS), forms, orm y uso de Javascript.
 
-El contenido de archivos sencibles fue eliminado, remplazado por plantillas o instrucciones para que se pueda ejecutar de manera correcta, ademas de indicar que se debe de instalar para poder hacer funcionar este proyecto.
+*El contenido de archivos sencibles fue eliminado, remplazado por plantillas o instrucciones para que se pueda ejecutar de manera correcta, ademas de indicar que se debe de instalar para poder hacer funcionar este proyecto.*
 
 En cuanto a las areas encargadas por estudiante son:
 
-# Oscar Gomez
+# [Oscar Gomez](https://github.com/nombre-de-usuario)
   * **En el apartado de administrador:**
     * CRUD de proveedores.
     * CRUD de usuarios (empleados).
@@ -24,7 +24,7 @@ En cuanto a las areas encargadas por estudiante son:
     * Errores.
     * Auditoria.
 
-# Carlos Lopez
+# [Carlos Lopez](https://github.com/nombre-de-usuario)
   * **Login:**
     * *Seguridad de inicio de sesión:*
       * Captcha.
@@ -38,7 +38,7 @@ En cuanto a las areas encargadas por estudiante son:
     * Grafico de barras de las galletas más vendidas.
     * Grafico de pastel de las presentaciones más vendidas.
 
-# Diego Landin
+# [Diego Landin](https://github.com/nombre-de-usuario)
   * **En el apartado de administrador:**
     * CRUD de usuarios (clientes).
     * *CRUD de recetas:*
@@ -52,7 +52,7 @@ En cuanto a las areas encargadas por estudiante son:
   * **Pagina de error 404.**
   * **Home principal.**
 
-# Yael Lopez
+# [Yael Lopez](https://github.com/nombre-de-usuario)
   * **Producción:**
     * Empaquetar galletas dependiendo su presentación.
     * Alertas de preparación proximas a terminarse.
@@ -61,10 +61,11 @@ En cuanto a las areas encargadas por estudiante son:
     * Merma de insumos.
   * **Producto terminado (Galletas):**
     * Galletas listas y sus diferentes presentaciones.
-    * Asociar galletas con recetas.
+    * Asociar galletas con recetas registradas.
+    * Agregar una galleta nueva con stock 0.
     * Merma de galletas.
 
-# Angel Ascencio
+# [Angel Ascencio](https://github.com/Angel-Ascencio)
   * **Insumos:**
       * Alertas de caducidad y existencia.
       * Registrar nuevos insumos.
