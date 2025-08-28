@@ -40,3 +40,8 @@ requests-oauthlib==2.0.0
 rsa==4.9
 uritemplate==4.1.1
 urllib3==2.3.0
+cffi==1.17.1
+cryptography==44.0.2
+pdfkit==1.0.0
+pycparser==2.22
+pycryptodome==3.21.0
