@@ -4,6 +4,11 @@ Este proyecto fue elaborado por 5 estudiantes de desarrollo de software dividien
 
 *El contenido de archivos sencibles fue eliminado, remplazado por plantillas o instrucciones para que se pueda ejecutar de manera correcta, ademas de indicar que se debe de instalar para poder hacer funcionar este proyecto.*
 
+Este proyecto se desarrollo en:
+*  Visual Studio Code 1.103.2
+*  Node.js 22.17.0
+*  MySQL Workbench 8.0 CE
+
 En cuanto a las areas encargadas por estudiante son:
 
 # [Oscar Gomez](https://github.com/nombre-de-usuario)
