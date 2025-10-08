@@ -29,7 +29,7 @@ En cuanto a las areas encargadas por estudiante son:
     * Errores.
     * Auditoria.
 
-# [Carlos Lopez](https://github.com/carlosraul9)
+# [Carlos Lopez](https://github.com/IDGS-901-22002224)
   * **Login:**
     * *Seguridad de inicio de sesión:*
       * Captcha.
